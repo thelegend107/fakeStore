@@ -18,10 +18,10 @@ const mainCategory = ref(categories[0]);
     <div class="background-image"></div>
     <div class="home">
         <div class="categories">
-            <h3 class="category" v-for="c in categories" :key="c.id"> {{ c.name }}</h3>
+            <h3 @click="mainCategory = categories[index]" class="category" v-for="(c,index) in categories" :key="c.id" :class="{categoryActive: c.id==mainCategory.id}"> {{ c.name }}</h3>
         </div>
         <Suspense>
-            <ProductList :category-id="mainCategory.id" />
+            <ProductList :key="mainCategory.id" :category-id="mainCategory.id" />
         </Suspense>
     </div>
 </template>
@@ -37,8 +37,31 @@ const mainCategory = ref(categories[0]);
 }
 
 .categories {
+    width: 100%;
+    background-color: var(--primary);
+    border-radius: 15px;
     display: flex;
     justify-content: center;
-    gap: 5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4vw;
+    min-width: 350px;
+
+    .category {
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .category:hover {
+        color: white;
+        border-bottom: 2px solid white;        
+    }
 }
+
+.categoryActive {
+    color: white;
+    border-bottom: 2px solid white;
+}
+
 </style>

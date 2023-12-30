@@ -57,6 +57,14 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <div class="list-footer">
+        <button @click="handlePageNavigation(-1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
+        <div class="footer-pagination">
+            <input v-on:change="getProductByCategoryPerPage" :min=1 :max="totalPages" v-model="currentPage" type="number" /> 
+            <p>/ {{ totalPages }}</p>
+        </div>
+        <button @click="handlePageNavigation(1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+    </div>
 </template>
 
 <style lang="scss" scoped>
