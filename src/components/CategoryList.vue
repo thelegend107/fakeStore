@@ -29,14 +29,20 @@ function handleCategoryNavigation(num) {
 
 <template>
     <div class="categories">
-        <h3 class="category" @click="emit('mainCategoryChange', index)" v-for="(c, index) in props.categories" :key="c.id" :class="{ categoryActive: c.id == props.mainCategory.id }">
+        <h3 class="category" @click="emit('mainCategoryChange', index)" v-for="(c, index) in props.categories" :key="c.id"
+            :class="{ categoryActive: c.id == props.mainCategory.id }">
             {{ c.name }}
         </h3>
     </div>
     <div class="categories-mobile">
-        <button @click="handleCategoryNavigation(-1)"><SvgIcon type="mdi" :path="mdiChevronLeft" /></button>
-        <h3 class="category" @click="emit('mainCategoryChange', categoryIndex)">{{ props.categories[categoryIndex].name }}</h3>
-        <button @click="handleCategoryNavigation(1)"><SvgIcon type="mdi" :path="mdiChevronRight" /></button>
+        <button @click="handleCategoryNavigation(-1)">
+            <SvgIcon type="mdi" :path="mdiChevronLeft" />
+        </button>
+        <h3 class="category" @click="emit('mainCategoryChange', categoryIndex)">{{ props.categories[categoryIndex].name }}
+        </h3>
+        <button @click="handleCategoryNavigation(1)">
+            <SvgIcon type="mdi" :path="mdiChevronRight" />
+        </button>
     </div>
 </template>
 
@@ -74,24 +80,23 @@ function handleCategoryNavigation(num) {
     }
 
     .categories {
-    width: 100%;
-    background-color: var(--primaryV);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 3vw;
+        width: 100%;
+        background-color: var(--primaryV);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 3vw;
 
-    .category {
-        padding: 0.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+        .category {
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    .category:hover {
-        color: white;
-        border-bottom: 2px solid white;
+        .category:hover {
+            color: white;
+            border-bottom: 2px solid white;
+        }
     }
-}
-}
-</style>
+}</style>
