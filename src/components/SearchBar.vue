@@ -14,7 +14,7 @@ function handleSearch(num) {
     if (num === 0)
         searchInput.value = "";
     
-    emit('searchRequest', searchInput.value);
+    emit('searchRequest', searchInput.value, searchToggle.value);
 };
 
 function handleSearchButton() {
@@ -32,7 +32,7 @@ const style = {
     <div class="searchBox" :style="searchToggle ? style : null">
         <transition name="slide-fade">
             <div class="searchBar" v-if="searchToggle">
-                <button class="close-btn" @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
+                <button @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
                 <input @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'search by ' + searchFields.join(', ')" />
             </div>
         </transition>
@@ -71,7 +71,4 @@ const style = {
         }
     }
 }
-
-.close-btn {
-    background-color: inherit;
-}</style>
+</style>

@@ -37,7 +37,7 @@ async function getProductByCategoryPerPage(arg=currentPage.value) {
     }
 }
 
-function handlePageNavigation(num) {
+async function handlePageNavigation(num) {
     if (currentPage.value == totalPages.value && num > 0)
         currentPage.value = 1;
     else if (currentPage.value == 1 && num < 0)
@@ -48,15 +48,15 @@ function handlePageNavigation(num) {
         currentPage.value--;
     }
 
-    getProductByCategoryPerPage();
+    await getProductByCategoryPerPage();
 }
 
-onMounted(() => {
-    getProductByCategoryPerPage();
+onMounted(async () => {
+    await getProductByCategoryPerPage();
 })
 
-watch(() => props.searchTerm, () => {
-    getProductByCategoryPerPage();
+watch(() => props.searchTerm, async () => {
+    await getProductByCategoryPerPage();
 })
 </script>
 <template>

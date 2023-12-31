@@ -11,7 +11,9 @@ defineProps({
     <div class="background-image"></div>
     <div class="home">
         <Suspense>
-            <ProductList :key="mainCategory.id" :category-id="mainCategory.id" :search-term="searchTerm" />
+            <template #default>
+                <ProductList :key="mainCategory.id" :category-id="mainCategory.id" :search-term="searchTerm" />
+            </template>
         </Suspense>
     </div>
 </template>

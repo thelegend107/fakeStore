@@ -5,14 +5,17 @@ import { ref } from 'vue';
 import SearchBar from './components/SearchBar.vue';
 
 const searchTerm = ref(null);
+const navShow = ref(true);
 const mainCategory = ref(categories[0]);
 
 function mainCategoryChange(categoryIndex) {
     mainCategory.value = categories[categoryIndex];
 }
 
-function handleSearchRequest(searchInput) {
+function handleSearchRequest(searchInput, searchToggle) {
     searchTerm.value = searchInput;
+
+    navShow.value = !searchToggle;
 }
 </script>
 
@@ -20,10 +23,12 @@ function handleSearchRequest(searchInput) {
     <header>
         <img alt="Vue logo" class="logo" src="@/assets/logo.svg" />
         <SearchBar @search-request="handleSearchRequest" />
-        <nav>
-            <p>Profile</p>
-            <p>Login</p>
-        </nav>
+        <transition name="slide-fade">
+            <nav v-if="navShow">
+                <p>Profile</p>
+                <p>Login</p>
+            </nav>
+        </transition>
     </header>
     <CategoryList @main-category-change="mainCategoryChange" :categories="categories" :main-category="mainCategory" />
     <main>
