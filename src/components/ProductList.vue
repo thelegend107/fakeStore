@@ -1,8 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
-import { getProductsByCategory } from './BestBuyApi';
+import { getProductsByCategory, getProductsForAllCategories } from './BestBuyApi';
+import ListPagination from './ListPagination.vue';
 
 const currentPage = ref(1);
 const pageSize = ref(12);
@@ -13,13 +12,28 @@ const props = defineProps({
 
 const products = ref([]);
 
-async function getProductByCategoryPerPage(){
-    await getProductsByCategory(props.categoryId, currentPage.value, pageSize.value)
-    .then((data) => {
-        products.value = data.products;
-        currentPage.value = data.currentPage;
-        totalPages.value = data.totalPages;
-    });
+async function getProductByCategoryPerPage(arg=currentPage.value) {
+    if (arg < 1)
+        arg = totalPages.value;
+    else if (arg > totalPages.value)
+        arg = 1;
+
+    if (props.categoryId == 'all') {
+        await getProductsForAllCategories(arg, pageSize.value)
+            .then((data) => {
+                products.value = data.products;
+                currentPage.value = data.currentPage;
+                totalPages.value = data.totalPages;
+            });
+    }
+    else {
+        await getProductsByCategory(props.categoryId, arg, pageSize.value)
+            .then((data) => {
+                products.value = data.products;
+                currentPage.value = data.currentPage;
+                totalPages.value = data.totalPages;
+            });
+    }
 }
 
 function handlePageNavigation(num) {
@@ -29,10 +43,10 @@ function handlePageNavigation(num) {
         currentPage.value = totalPages.value;
     else if (num > 0)
         currentPage.value++;
-    else{
+    else {
         currentPage.value--;
     }
-    
+
     getProductByCategoryPerPage();
 }
 
@@ -41,33 +55,43 @@ onMounted(() => {
 })
 </script>
 <template>
-    <div class="list-footer">
-        <button @click="handlePageNavigation(-1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-        <div class="footer-pagination">
-            <input v-on:change="getProductByCategoryPerPage" :min=1 :max="totalPages" v-model="currentPage" type="number" /> 
-            <p>/ {{ totalPages }}</p>
-        </div>
-        <button @click="handlePageNavigation(1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
-    </div>
-    <div class="products">
-        <div class="product" v-for="p in products" :key="p.sku">
-            <img :src="p.image" :alt="p.sku">
-            <div class="product-info">
-                <p v-for="n in p.name.split(' - ')" :key="n[0]">{{ n }}</p>
+    <div class="list-container">
+        <list-pagination 
+            @handle-page-navigation="handlePageNavigation"
+            @handle-page-navigation-input="getProductByCategoryPerPage"
+            :current-page="currentPage" 
+            :total-pages="totalPages"
+        >
+        </list-pagination>
+        
+        <div class="products">
+            <div class="product" v-for="p in products" :key="p.sku">
+                <img :src="p.image" :alt="p.sku">
+                <div class="product-info">
+                    <p v-for="n in p.name.split(' - ').slice(0, 2)" :key="n[0]">{{ n }}</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="list-footer">
-        <button @click="handlePageNavigation(-1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-        <div class="footer-pagination">
-            <input v-on:change="getProductByCategoryPerPage" :min=1 :max="totalPages" v-model="currentPage" type="number" /> 
-            <p>/ {{ totalPages }}</p>
-        </div>
-        <button @click="handlePageNavigation(1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+
+        <list-pagination 
+            @handle-page-navigation="handlePageNavigation"
+            @handle-page-navigation-input="getProductByCategoryPerPage"
+            :current-page="currentPage" 
+            :total-pages="totalPages"
+        >
+        </list-pagination>
     </div>
 </template>
 
 <style lang="scss" scoped>
+.list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
 .products {
     width: 100%;
     display: flex;
@@ -92,47 +116,6 @@ onMounted(() => {
         .product-info {
             padding: 1rem;
         }
-    }
-}
-
-.list-footer {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem;
-    background-color: var(--vt-c-black);
-    border-radius: 15px;
-
-    .footer-pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    input {
-        appearance: none;
-        font: inherit;
-        background-color: inherit;
-        display: flex;
-        text-align: center;
-        border: none;
-        outline: none;
-        color: white;
-        width: 3em;
-        border-radius: 15px;
-    }
-
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    /* Firefox */
-    input[type=number] {
-        -moz-appearance: textfield;
     }
 }
 </style>
