@@ -60,14 +60,14 @@ watch(() => props.searchTerm, async () => {
 })
 </script>
 <template>
+    <div class="list-container">
         <list-pagination 
             @handle-page-navigation="handlePageNavigation"
             @handle-page-navigation-input="getProductByCategoryPerPage"
             :current-page="currentPage" 
             :total-pages="totalPages">
         </list-pagination>
-
-    <div class="list-container">     
+        
         <div class="products">
             <div class="product" v-for="p in products" :key="p.sku">
                 <img :src="p.image" :alt="p.sku">
