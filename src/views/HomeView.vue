@@ -2,7 +2,8 @@
 import ProductList from '@/components/ProductList.vue';
 
 defineProps({
-    mainCategory: Object
+    mainCategory: Object,
+    searchTerm: String
 })
 </script>
 
@@ -10,7 +11,7 @@ defineProps({
     <div class="background-image"></div>
     <div class="home">
         <Suspense>
-            <ProductList :key="mainCategory.id" :category-id="mainCategory.id" />
+            <ProductList :key="mainCategory.id" :category-id="mainCategory.id" :search-term="searchTerm" />
         </Suspense>
     </div>
 </template>

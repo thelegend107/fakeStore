@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { getProductsByCategory, getProductsForAllCategories } from './BestBuyApi';
 import ListPagination from './ListPagination.vue';
 
@@ -7,7 +7,8 @@ const currentPage = ref(1);
 const pageSize = ref(12);
 const totalPages = ref(1);
 const props = defineProps({
-    categoryId: String
+    categoryId: String,
+    searchTerm: String
 })
 
 const products = ref([]);
@@ -19,19 +20,19 @@ async function getProductByCategoryPerPage(arg=currentPage.value) {
         arg = 1;
 
     if (props.categoryId == 'all') {
-        await getProductsForAllCategories(arg, pageSize.value)
+        await getProductsForAllCategories(arg, pageSize.value, props.searchTerm)
             .then((data) => {
                 products.value = data.products;
-                currentPage.value = data.currentPage;
                 totalPages.value = data.totalPages;
+                currentPage.value = data.currentPage;
             });
     }
     else {
-        await getProductsByCategory(props.categoryId, arg, pageSize.value)
+        await getProductsByCategory(props.categoryId, arg, pageSize.value, props.searchTerm)
             .then((data) => {
                 products.value = data.products;
-                currentPage.value = data.currentPage;
                 totalPages.value = data.totalPages;
+                currentPage.value = data.currentPage;
             });
     }
 }
@@ -51,6 +52,10 @@ function handlePageNavigation(num) {
 }
 
 onMounted(() => {
+    getProductByCategoryPerPage();
+})
+
+watch(() => props.searchTerm, () => {
     getProductByCategoryPerPage();
 })
 </script>

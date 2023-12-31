@@ -2,16 +2,27 @@
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiClose, mdiMagnify } from '@mdi/js';
 import { ref } from 'vue'
+import { searchFields } from './BestBuyApi';
 
 const searchToggle = ref(false);
 const searchInput = ref("");
 
-const handleSearchClick = (num) => {
-    searchToggle.value = !searchToggle.value;
+const emit = defineEmits(['searchRequest']);
 
+function handleSearch(num) {
+    searchToggle.value = !searchToggle.value;
     if (num === 0)
         searchInput.value = "";
+    
+    emit('searchRequest', searchInput.value);
 };
+
+function handleSearchButton() {
+    if (searchToggle.value)
+        handleSearch();
+    else
+        handleSearch(0);
+}
 
 const style = {
     backgroundColor: 'var(--primaryV)',
@@ -21,11 +32,11 @@ const style = {
     <div class="searchBox" :style="searchToggle ? style : null">
         <transition name="slide-fade">
             <div class="searchBar" v-if="searchToggle">
-                <button class="close-btn" @click="handleSearchClick(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
-                <input @keyup.esc="handleSearchClick(0)" @keyup.enter="handleSearchClick" v-model="searchInput" length="25" type="text" placeholder="Search" />
+                <button class="close-btn" @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
+                <input @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'search by ' + searchFields.join(', ')" />
             </div>
         </transition>
-        <button @click="handleSearchClick">
+        <button @click="handleSearchButton">
             <svg-icon type="mdi" :path="mdiMagnify" :size="25"></svg-icon>
             <transition name="slide-fade">
                 <p v-if="!searchToggle">{{ searchInput ? '"' + searchInput + '"' : "Search" }}</p>
