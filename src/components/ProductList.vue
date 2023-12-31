@@ -60,6 +60,13 @@ watch(() => props.searchTerm, async () => {
 })
 </script>
 <template>
+        <list-pagination 
+            @handle-page-navigation="handlePageNavigation"
+            @handle-page-navigation-input="getProductByCategoryPerPage"
+            :current-page="currentPage" 
+            :total-pages="totalPages">
+        </list-pagination>
+
     <div class="list-container">     
         <div class="products">
             <div class="product" v-for="p in products" :key="p.sku">
@@ -81,8 +88,7 @@ watch(() => props.searchTerm, async () => {
             @handle-page-navigation="handlePageNavigation"
             @handle-page-navigation-input="getProductByCategoryPerPage"
             :current-page="currentPage" 
-            :total-pages="totalPages"
-        >
+            :total-pages="totalPages">
         </list-pagination>
     </div>
 </template>
