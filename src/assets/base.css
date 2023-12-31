@@ -44,6 +44,7 @@
 }
 
 @font-face {
+  font-display: auto;
   font-family: 'roboto-font';
   src: url('./fonts/Roboto-Regular.ttf') format('truetype');
 }

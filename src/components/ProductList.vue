@@ -4,7 +4,7 @@ import { getProductsByCategory, getProductsForAllCategories } from './BestBuyApi
 import ListPagination from './ListPagination.vue';
 
 const currentPage = ref(1);
-const pageSize = ref(12);
+const pageSize = ref(10);
 const totalPages = ref(1);
 const props = defineProps({
     categoryId: String,
@@ -60,20 +60,19 @@ watch(() => props.searchTerm, async () => {
 })
 </script>
 <template>
-    <div class="list-container">
-        <list-pagination 
-            @handle-page-navigation="handlePageNavigation"
-            @handle-page-navigation-input="getProductByCategoryPerPage"
-            :current-page="currentPage" 
-            :total-pages="totalPages"
-        >
-        </list-pagination>
-        
+    <div class="list-container">     
         <div class="products">
             <div class="product" v-for="p in products" :key="p.sku">
                 <img :src="p.image" :alt="p.sku">
                 <div class="product-info">
                     <p v-for="n in p.name.split(' - ').slice(0, 2)" :key="n[0]">{{ n }}</p>
+                    <div class="salePrice">
+                        <div v-if="p.onSale">
+                            <strike style="color: lightcoral;">${{ p.regularPrice }}</strike>
+                            <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
+                        </div>
+                        <b class="price">${{ p.salePrice }}</b>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,25 +100,42 @@ watch(() => props.searchTerm, async () => {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     gap: 1rem;
 
     .product {
-        width: 250px;
+        width: 200px;
+        height: 400px;
+        overflow: hidden;
         border-radius: 10px;
         background-color: var(--vt-c-black);
         display: flex;
         flex-direction: column;
+        font-size: 12px;
         flex-grow: 1;
 
         img {
-            height: 250px;
-            width: 100%;
+            height: 230px;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
 
         .product-info {
-            padding: 1rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem 0.25rem 0.75rem;
+        }
+
+        .salePrice {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            .price {
+                font-size: large;
+            }
         }
     }
 }

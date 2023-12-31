@@ -38,7 +38,6 @@ const propertyArray = [
     'customerReviewAverage',
     'customerReviewCount',
     'image',
-    'largeFrontImage',
     'shipping'
 ]
 
