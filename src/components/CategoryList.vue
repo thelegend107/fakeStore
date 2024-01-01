@@ -58,10 +58,8 @@ function handleCategoryNavigation(num) {
     justify-content: space-between;
     text-align: center;
     align-items: center;
-    overflow: hidden;
-    gap: 3vw;
     color: white;
-    padding: 0 3vw;
+    padding: 0 1.5rem;
 
     .category {
         padding: 0.5rem;
@@ -85,8 +83,7 @@ function handleCategoryNavigation(num) {
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 3vw;
+        gap: 2.5vw;
 
         .category {
             padding: 0.5rem;
