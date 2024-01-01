@@ -12,11 +12,7 @@ defineProps({
     <div class="home">
         <Suspense>
             <template #default>
-                <ProductList 
-                    :key="mainCategory.id+searchTerm" 
-                    :category-id="mainCategory.id" 
-                    :search-term="searchTerm" 
-                />
+                <ProductList :key="mainCategory.id+searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
             </template>
         </Suspense>
     </div>
