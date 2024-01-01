@@ -10,7 +10,7 @@ defineProps({
 <template>
     <div class="background-image"></div>
     <div class="home">
-        <transition>
+        <transition mode="out-in">
             <Suspense>
                 <template #default>
                     <ProductList :key="mainCategory.id+searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
