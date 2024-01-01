@@ -10,11 +10,13 @@ defineProps({
 <template>
     <div class="background-image"></div>
     <div class="home">
-        <Suspense>
-            <template #default>
-                <ProductList :key="mainCategory.id+searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
-            </template>
-        </Suspense>
+        <transition>
+            <Suspense>
+                <template #default>
+                    <ProductList :key="mainCategory.id+searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
+                </template>
+            </Suspense>
+        </transition>
     </div>
 </template>
 

@@ -1,5 +1,9 @@
 @import './base.css';
 
+html {
+    scroll-behavior:smooth;
+}
+
 a {
     transition: all 0.3s ease;
     text-decoration: none;
@@ -101,4 +105,14 @@ button:hover {
 .slide-fade-leave-to {
     transform: translateX(20px);
     opacity: 0;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
