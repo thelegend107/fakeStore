@@ -4,7 +4,7 @@ import { categories } from '@/components/BestBuyApi';
 import { ref } from 'vue';
 import SearchBar from './components/SearchBar.vue';
 
-const searchTerm = ref(null);
+const searchTerm = ref('');
 const navShow = ref(true);
 const mainCategory = ref(categories[0]);
 
@@ -14,7 +14,6 @@ function mainCategoryChange(categoryIndex) {
 
 function handleSearchRequest(searchInput, searchToggle) {
     searchTerm.value = searchInput;
-
     navShow.value = !searchToggle;
 }
 </script>

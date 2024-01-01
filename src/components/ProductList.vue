@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { getProductsByCategory, getProductsForAllCategories } from './BestBuyApi';
 import ListPagination from './ListPagination.vue';
 
@@ -52,10 +52,6 @@ async function handlePageNavigation(num) {
 }
 
 onMounted(async () => {
-    await getProductByCategoryPerPage();
-})
-
-watch(() => props.searchTerm, async () => {
     await getProductByCategoryPerPage();
 })
 </script>
