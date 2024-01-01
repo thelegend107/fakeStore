@@ -25,7 +25,7 @@ function handleSearchButton() {
 }
 
 const style = {
-    backgroundColor: 'var(--primaryV)',
+    backgroundColor: 'black',
 }
 </script>
 <template>

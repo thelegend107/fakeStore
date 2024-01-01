@@ -52,19 +52,14 @@ function handleCategoryNavigation(num) {
 }
 
 .categories-mobile {
-    width: 100%;
-    background-color: var(--primaryV);
     display: flex;
     justify-content: space-between;
     text-align: center;
     align-items: center;
-    overflow: hidden;
-    gap: 3vw;
     color: white;
-    padding: 0 3vw;
+    padding-bottom: 0.5rem;
 
     .category {
-        padding: 0.5rem;
         transition: all 0.3s ease;
     }
 }
@@ -80,13 +75,10 @@ function handleCategoryNavigation(num) {
     }
 
     .categories {
-        width: 100%;
-        background-color: var(--primaryV);
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 3vw;
+        gap: 2.5vw;
 
         .category {
             padding: 0.5rem;
