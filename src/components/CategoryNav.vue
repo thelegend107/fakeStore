@@ -10,9 +10,12 @@ const props = defineProps({
 
 const emit = defineEmits(['mainCategoryChange'])
 
-const index = props.categories.findIndex(x => x.id === props.mainCategory.id);
 // Mobile version of categories
-const categoryIndex = ref(index >= 0 ? index : 0);
+const categoryIndex = ref(
+    props.categories.findIndex(x => x.id === props.mainCategory.id) >= 0 ? 
+    props.categories.findIndex(x => x.id === props.mainCategory.id) : 
+    0
+);
 const categorySize = props.categories.length;
 function handleCategoryNavigation(num) {
     if (categoryIndex.value == 0 && num < 0)
