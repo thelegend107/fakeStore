@@ -29,7 +29,7 @@ const style = {
     backgroundColor: 'var(--primaryV)',
 }
 
-onBeforeRouteUpdate(async (to) => {
+onBeforeRouteUpdate((to) => {
     if (to.name != 'shop') {
         searchInput.value = '';
         emit('searchRequest', searchInput.value, searchToggle.value);

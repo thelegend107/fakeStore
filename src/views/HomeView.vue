@@ -5,8 +5,9 @@ import { mdiSale, mdiArrowTopRight, mdiCircle, mdiChevronLeft, mdiChevronRight }
 import { ref } from 'vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 
-const tdProductIndex = ref(0);
 const emit = defineEmits(['goToCategory'])
+
+const tdProductIndex = ref(0);
 const topDealProducts = ref([]);
 
 getTopDealProducts(10).then((data) => {
