@@ -53,16 +53,16 @@ function handleCategoryNavigation(num) {
 
 .categories-mobile {
     width: 100%;
+    border-radius: 15px;
     background-color: var(--primaryV);
     display: flex;
     justify-content: space-between;
     text-align: center;
     align-items: center;
     color: white;
-    padding: 0 1.5rem;
+    padding: 0.5rem;
 
     .category {
-        padding: 0.5rem;
         transition: all 0.3s ease;
     }
 }
@@ -79,6 +79,7 @@ function handleCategoryNavigation(num) {
 
     .categories {
         width: 100%;
+        border-radius: 15px;
         background-color: var(--primaryV);
         display: flex;
         justify-content: center;

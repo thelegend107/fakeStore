@@ -22,9 +22,9 @@ watch(() => props.currentPage, (newPage)=> {
 </script>
 
 <template>
-    <div class="list-pagination-container">
+    <div class="pl-pagination-container">
         <button @click="emit('handlePageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-        <div class="list-pagination-info">
+        <div class="pl-pagination-info">
             <input v-on:change="emit('handlePageNavigationInput', currentPageInput)" v-model="currentPageInput" type="number" />
             <p>/ {{ props.totalPages }}</p>
         </div>
@@ -33,16 +33,17 @@ watch(() => props.currentPage, (newPage)=> {
 </template>
 
 <style lang="scss" scoped>
-.list-pagination-container {
-    width: 100%;
+.pl-pagination-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem;
     background-color: var(--vt-c-black);
     border-radius: 15px;
+    color: white;
+    width: 100%;
 
-    .list-pagination-info {
+    .pl-pagination-info {
         display: flex;
         align-items: center;
         justify-content: center;

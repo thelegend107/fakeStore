@@ -3,6 +3,7 @@ import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiClose, mdiMagnify } from '@mdi/js';
 import { ref } from 'vue'
 import { searchFields } from './BestBuyApi';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 const searchToggle = ref(false);
 const searchInput = ref("");
@@ -27,6 +28,13 @@ function handleSearchButton() {
 const style = {
     backgroundColor: 'var(--primaryV)',
 }
+
+onBeforeRouteUpdate(async (to) => {
+    if (to.name != 'shop') {
+        searchInput.value = '';
+        emit('searchRequest', searchInput.value, searchToggle.value);
+    }
+})
 </script>
 <template>
     <div class="searchBox" :style="searchToggle ? style : null">
