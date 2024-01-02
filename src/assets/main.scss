@@ -57,6 +57,7 @@ header {
     img {
         height: 2rem;
         width: auto;
+        cursor: pointer;
     }
 
     nav {
@@ -87,6 +88,16 @@ button {
 
 button:hover {
     opacity: 70%;
+}
+
+.salePrice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    .price {
+        font-size: large;
+    }
 }
 
 @media (hover: hover) {}
