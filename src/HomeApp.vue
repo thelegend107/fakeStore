@@ -38,11 +38,9 @@ function goToCategory(index) {
             </nav>
         </transition>
     </header>
-    <transition>
-        <router-view 
-            @go-to-category="goToCategory" 
-            :category-index="shopViewCategoryIndex" 
-            :search-term="shopViewSearchTerm">
-        </router-view>
-    </transition>
+    <router-view @go-to-category="goToCategory" :category-index="shopViewCategoryIndex" :search-term="shopViewSearchTerm" v-slot="{ Component }">
+        <transition mode="out-in">
+            <component :is="Component" />
+        </transition>
+    </router-view>
 </template>

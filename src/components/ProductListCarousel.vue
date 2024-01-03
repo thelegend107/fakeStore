@@ -34,7 +34,7 @@ function handeCarouselNavigation(num) {
                     <p>{{ p.name }}</p>
                     <div class="salePrice">
                         <div v-if="p.onSale">
-                            <strike style="color: lightcoral;">${{ p.regularPrice }}</strike>
+                            <s style="color: lightcoral;">${{ p.regularPrice }}</s>
                             <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
                         </div>
                         <b class="price">$ {{ p.salePrice }}</b>

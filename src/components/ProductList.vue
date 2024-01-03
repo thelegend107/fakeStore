@@ -71,7 +71,7 @@ onMounted(async () => {
                     <p v-for="n in p.name.split(' - ').slice(0, 2)" :key="n[0]">{{ n }}</p>
                     <div class="salePrice">
                         <div v-if="p.onSale">
-                            <strike style="color: lightcoral;">${{ p.regularPrice }}</strike>
+                            <s style="color: lightcoral;">${{ p.regularPrice }}</s>
                             <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
                         </div>
                         <b class="price">${{ p.salePrice }}</b>
