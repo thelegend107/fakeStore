@@ -4,16 +4,16 @@ import CategoryNav from '@/components/CategoryNav.vue';
 import { categories } from '@/components/BestBuyApi';
 import ProductList from '@/components/ProductList.vue';
 
+const props = defineProps({
+    searchTerm: String,
+    categoryIndex: Number
+})
+
 const mainCategory = ref(categories[0]);
 
 function mainCategoryChange(categoryIndex) {
     mainCategory.value = categories[categoryIndex];
 }
-
-const props = defineProps({
-    searchTerm: String,
-    categoryIndex: Number
-})
 
 if (props.categoryIndex) {
     mainCategoryChange(props.categoryIndex);

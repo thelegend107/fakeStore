@@ -16,6 +16,7 @@ const categoryIndex = ref(
     props.categories.findIndex(x => x.id === props.mainCategory.id) : 
     0
 );
+
 const categorySize = props.categories.length;
 function handleCategoryNavigation(num) {
     if (categoryIndex.value == 0 && num < 0)

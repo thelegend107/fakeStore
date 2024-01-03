@@ -8,11 +8,17 @@ const shopViewSearchTerm = ref('');
 const shopViewCategoryIndex = ref(null);
 const navShow = ref(true);
 
-function handleSearchRequest(searchInput, searchToggle) {
+function handleSearchRequest(searchInput, searchToggle, categoryIndexReset) {
     shopViewSearchTerm.value = searchInput;
     navShow.value = !searchToggle;
-    if (shopViewSearchTerm.value)
+
+    if (categoryIndexReset) {
+        shopViewCategoryIndex.value = 0;
+    }
+
+    if (shopViewSearchTerm.value) {
         router.push({name: 'shop'});
+    }
 }
 
 function goToCategory(index) {
