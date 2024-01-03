@@ -25,7 +25,9 @@ if (props.categoryIndex) {
         <div class="shop">
             <CategoryNav @main-category-change="mainCategoryChange" :categories="categories" :main-category="mainCategory" />
             <transition mode="out-in">
+                <Suspense>
                     <ProductList :key="mainCategory.id + searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
+                </Suspense>
             </transition>
         </div>
     </main>

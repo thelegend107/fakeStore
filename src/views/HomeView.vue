@@ -10,7 +10,9 @@ const emit = defineEmits(['goToCategory'])
 <template>
     <div class="home-container">
         <Section :subtext="'BEST BUY'" :title="'TOP DEALS'" :mdiIconPath="mdiSale" :primary="true">
-            <ProductListCarousel />
+            <Suspense>
+                <ProductListCarousel />
+            </Suspense>
         </Section>
         <Section :subtext="'BEST BUY'" :title="'CATEGORIES'" :mdiIconPath="mdiArrowTopRight">
             <menu>

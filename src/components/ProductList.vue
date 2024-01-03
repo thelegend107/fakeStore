@@ -13,14 +13,14 @@ const props = defineProps({
 
 const products = ref([]);
 
-function getProductByCategoryPerPage(arg=currentPage.value) {
+async function getProductByCategoryPerPage(arg=currentPage.value) {
     if (arg < 1)
         arg = totalPages.value;
     else if (arg > totalPages.value)
         arg = 1;
 
     if (props.categoryId == 'all') {
-        getProductsForAllCategories(arg, pageSize.value, props.searchTerm)
+        await getProductsForAllCategories(arg, pageSize.value, props.searchTerm)
             .then((data) => {
                 products.value = data.products;
                 totalPages.value = data.totalPages;
@@ -28,7 +28,7 @@ function getProductByCategoryPerPage(arg=currentPage.value) {
             });
     }
     else {
-        getProductsByCategory(props.categoryId, arg, pageSize.value, props.searchTerm)
+        await getProductsByCategory(props.categoryId, arg, pageSize.value, props.searchTerm)
             .then((data) => {
                 products.value = data.products;
                 totalPages.value = data.totalPages;
@@ -37,7 +37,7 @@ function getProductByCategoryPerPage(arg=currentPage.value) {
     }
 }
 
-function handlePageNavigation(num) {
+async function handlePageNavigation(num) {
     if (currentPage.value == totalPages.value && num > 0)
         currentPage.value = 1;
     else if (currentPage.value == 1 && num < 0)
@@ -48,11 +48,11 @@ function handlePageNavigation(num) {
         currentPage.value--;
     }
 
-    getProductByCategoryPerPage();
+    await getProductByCategoryPerPage();
 }
 
-onMounted(() => {
-    getProductByCategoryPerPage();
+onMounted(async () => {
+    await getProductByCategoryPerPage();
 })
 </script>
 <template>

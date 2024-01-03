@@ -7,7 +7,7 @@ import SvgIcon from '@jamescoyle/vue-icon';
 const itemIndex = ref(0);
 const topDealProducts = ref([]);
 
-getTopDealProducts(10).then((data) => {
+await getTopDealProducts(10).then((data) => {
     topDealProducts.value = data.products;
 });
 
