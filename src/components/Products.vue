@@ -1,12 +1,51 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-defineProps({
-    products: Array
+import { mdiCircle } from '@mdi/js';
+import SvgIcon from '@jamescoyle/vue-icon';
+
+const props = defineProps({
+    products: Array,
+    productIndex: {
+        type: Number,
+        default: 0
+    },
+    carousel: {
+        type: Boolean,
+        default: false
+    }
 })
+
+function carouselPaginationActive(carouselIndex) {
+    return carouselIndex == props.productIndex ? 'color: var(--primary)' : 'color: var(--primaryV)'
+}
 </script>
 
 <template>
-    <div class="products">
+    <div v-if="carousel" class="td">
+        <div class="td-p" v-for="p in products.filter((x, index) => index == productIndex)" :key="p.sku">
+            <img :src="p.image" :alt="p.sku">
+            <div class="td-p-info">
+                <p>{{ p.name }}</p>
+                <div class="salePrice">
+                    <div v-if="p.onSale">
+                        <s style="color: lightcoral;">${{ p.regularPrice }}</s>
+                        <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
+                    </div>
+                    <b class="price">$ {{ p.salePrice }}</b>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-pagination">
+            <SvgIcon class="cp-circle" v-for="(p, index) in products" 
+                :style="carouselPaginationActive(index)"
+                :key="p.sku" 
+                :type="'mdi'" 
+                :path="mdiCircle">
+            </SvgIcon>
+        </div>
+    </div>
+
+    <div v-else class="products">
         <div class="product" v-for="p in products" :key="p.sku">
             <img :src="p.image" :alt="p.sku">
             <div class="product-info">
@@ -53,6 +92,70 @@ defineProps({
             flex-direction: column;
             justify-content: space-between;
             padding: 0.5rem 0.75rem 0.25rem 0.75rem;
+        }
+    }
+}
+
+.td {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .td-p {
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem;
+        justify-content: center;
+
+        img {
+            object-fit: contain;
+            height: 150px;
+            width: auto;
+        }
+
+        .td-p-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .salePrice {
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            background-color: var(--primaryV);
+        }
+    }
+
+    .carousel-pagination {
+        display: flex;
+        justify-content: center;
+
+        .cp-circle {
+            border-radius: 100%;
+        }
+    }
+}
+
+@media (min-width: 1024px) and (min-height: 788px) {
+    .td {
+        .td-p {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            justify-content: center;
+
+            img {
+                display: flex;
+                width: 28vw;
+                border-radius: 15px;
+                height: 34vh;
+                object-fit: contain;
+            }
+        }
+        
+        .carousel-pagination {
+            gap: 1rem;
         }
     }
 }

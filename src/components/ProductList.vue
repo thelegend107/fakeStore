@@ -1,10 +1,10 @@
 <script setup>
 import { onBeforeMount, ref, watch } from 'vue';
-import debounce from 'lodash.debounce';
 import { getProductsByCategory } from './BestBuyApi';
 import Products from './Products.vue';
-import ProductListNav from './ProductListNav.vue';
+import ProductsNav from './ProductsNav.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
+import debounce from 'lodash.debounce';
 
 const pageSize = 10;
 const currentPage = ref(1);
@@ -65,22 +65,22 @@ watch(currentPage, async () => {
 </script>
 <template>
     <div class="pl-container">
-        <product-list-nav 
+        <ProductsNav
             @page-navigation="handlePageNavigation"
             @page-navigation-input="handlePageNavigationInput"
             :current-page="currentPage" 
             :total-pages="totalPages">
-        </product-list-nav>
+        </ProductsNav>
 
         <Products v-if="!loading" :products="products" />
         <loading-spinner v-else />
 
-        <product-list-nav 
+        <ProductsNav
             @page-navigation="handlePageNavigation"
             @page-navigation-input="handlePageNavigationInput"
             :current-page="currentPage" 
             :total-pages="totalPages">
-        </product-list-nav>
+        </ProductsNav>
     </div>
 </template>
 

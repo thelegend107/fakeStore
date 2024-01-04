@@ -6,12 +6,18 @@ import { ref, watch} from 'vue';
 
 const emit = defineEmits([
     'pageNavigation',
-    'pageNavigationInput'
+    'pageNavigationInput',
+    'carouselNavigation'
 ])
 
 const props = defineProps({
     currentPage: Number,
-    totalPages: Number
+    totalPages: Number,
+    carousel: {
+        type: Boolean,
+        default: false
+    },
+    carouselDirection: Number
 })
 
 const currentPageInput = ref(props.currentPage)
@@ -22,7 +28,7 @@ watch(() => props.currentPage, (newPage)=> {
 </script>
 
 <template>
-    <div class="pl-nav-container">
+    <div v-if="!carousel" class="pl-nav-container">
         <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
         <div class="pl-nav-info">
             <input v-on:change="emit('pageNavigationInput', currentPageInput)" v-model="currentPageInput" type="number" />
@@ -30,6 +36,11 @@ watch(() => props.currentPage, (newPage)=> {
         </div>
         <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
     </div>
+    
+    <button v-else @click="emit('carouselNavigation', props.carouselDirection)">
+        <SvgIcon v-if="carouselDirection < 0" class="left" type="mdi" :path="mdiChevronLeft" :size="35" />
+        <SvgIcon v-else class="right" type="mdi" :path="mdiChevronRight" :size="35" />
+    </button>
 </template>
 
 <style lang="scss" scoped>
