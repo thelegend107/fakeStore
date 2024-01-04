@@ -1,29 +1,37 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import CategoryNav from '@/components/CategoryNav.vue';
 import { categories } from '@/components/BestBuyApi';
 import ProductList from '@/components/ProductList.vue';
+
+const mainCategory = ref({});
 
 const props = defineProps({
     searchTerm: String,
     categoryIndex: Number
 })
 
-const mainCategory = ref(categories[0]);
-
-function mainCategoryChange(categoryIndex) {
+function handleMainCategoryChange(categoryIndex) {
     mainCategory.value = categories[categoryIndex];
 }
 
-if (props.categoryIndex) {
-    mainCategoryChange(props.categoryIndex);
-}
+// Before Rendering:
+// - If the parent component supplies a category index, push it through to the product list
+// - else default to the 'all' category
+onBeforeMount(() => {
+    if (props.categoryIndex) {
+        handleMainCategoryChange(props.categoryIndex);
+    }
+    else {
+        mainCategory.value = categories[0];
+    }  
+})
 </script>
 
 <template>
     <main>
         <div class="shop">
-            <CategoryNav @main-category-change="mainCategoryChange" :categories="categories" :main-category="mainCategory" />
+            <CategoryNav @main-category-change="handleMainCategoryChange" :categories="categories" :main-category="mainCategory" />
             <transition mode="out-in">
                 <Suspense>
                     <ProductList :key="mainCategory.id + searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
@@ -32,13 +40,3 @@ if (props.categoryIndex) {
         </div>
     </main>
 </template>
-
-<style lang="scss" scoped>
-.shop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 1rem;
-}
-</style>

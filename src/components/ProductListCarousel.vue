@@ -1,15 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { mdiCircle, mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 import { getTopDealProducts } from './BestBuyApi';
 import SvgIcon from '@jamescoyle/vue-icon';
 
 const itemIndex = ref(0);
 const topDealProducts = ref([]);
-
-await getTopDealProducts(10).then((data) => {
-    topDealProducts.value = data.products;
-});
 
 function handeCarouselNavigation(num) {
     if (itemIndex.value == topDealProducts.value.length - 1 && num > 0)
@@ -21,6 +17,12 @@ function handeCarouselNavigation(num) {
     else
         itemIndex.value--;
 }
+
+onBeforeMount(async () => {
+    await getTopDealProducts(10).then((data) => {
+        topDealProducts.value = data.products;
+    });
+})
 </script>
 <template>
     <div class="carousel">

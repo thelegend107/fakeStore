@@ -22,8 +22,8 @@ export const searchFields = [
 const currentYear = new Date().getFullYear() - 2;
 const baseUrl = 'https://api.bestbuy.com/v1/products'
 const apiKey = 'qhqws47nyvgze2mq3qx4jadt'
-const sort = 'sku.desc'
-const format = 'json'
+const defaultSort = 'sku.desc'
+const defaultFormat = 'json'
 const propertyArray = [
     'sku',
     'manufacturer',
@@ -45,42 +45,35 @@ const propertyArray = [
     'shipping'
 ];
 
-const show = propertyArray.join(',');
+const defaultShow = propertyArray.join(',');
 
 // Retrieves Top Deals on Best Buy products (default: Top 10)
 export async function getTopDealProducts(pageSize) {
-    let url = generateUrl(baseUrl, null, null);
+    let url = generateUrl(baseUrl, categories[0].id, null);
 
-    return callBestBuyProductsAPI(url, 'dollarSavings.desc', null, pageSize, null);
+    return await callBestBuyProductsAPI(url, 'dollarSavings.desc', defaultShow, null, pageSize);
 };
 
 // Retrieves Best Buy products by CategoryId
 export async function getProductsByCategory(categoryId, page, pageSize, searchTerm=null) {
     let url = generateUrl(baseUrl, categoryId, searchTerm);
 
-    return callBestBuyProductsAPI(url, null, null, pageSize, page);
-};
-
-// Retrieves Best Buy products in all categories specified
-export async function getProductsForAllCategories(page, pageSize, searchTerm=null) {
-    let url = generateUrl(baseUrl, null, searchTerm);
-
-    return callBestBuyProductsAPI(url, null, null, pageSize, page);
+    return await callBestBuyProductsAPI(url, defaultSort, defaultShow, page, pageSize);
 };
 
 // Retrieves Best Buy product by sku
 export async function getProductBySku(sku) {
-    let url = baseUrl + '/' + sku + '.' + format
+    let url = baseUrl + '/' + sku + '.' + defaultFormat
 
-    return callBestBuyProductsAPI(url, null, null, null, null);
+    return await callBestBuyProductsAPI(url, defaultSort, defaultShow, null, null);
 };
 
-async function callBestBuyProductsAPI(url, pSort=sort, pShow=show, pageSize=10, page=1) {
+async function callBestBuyProductsAPI(url, pSort=defaultSort, pShow=defaultShow, page=1, pageSize=10) {
     try {
         const { data } = await axios.get(url, {
             params: {
                 apiKey: apiKey,
-                format: format,
+                format: defaultFormat,
                 sort: pSort,
                 show: pShow,
                 pageSize: pageSize,
@@ -108,16 +101,16 @@ function generateUrl(baseUrl, categoryId, searchTerm) {
     url += '('
 
     // Categories
-    if (categoryId) {
-        url += '(categoryPath.id=' + categoryId + ')';
-    }
-    else {
+    if (categoryId == 'all') {
         let categoriesQueryParams = [];
         categories.forEach(c => {
             categoriesQueryParams.push('categoryPath.id=' + c.id);
         });
 
         url += '(' + categoriesQueryParams.join('|') + ')';
+    }
+    else {
+        url += '(categoryPath.id=' + categoryId + ')';
     }
 
     // Start Date

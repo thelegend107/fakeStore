@@ -1,42 +1,35 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { getProductsByCategory, getProductsForAllCategories } from './BestBuyApi';
+import { onBeforeMount, ref, watch } from 'vue';
+import debounce from 'lodash.debounce';
+import { getProductsByCategory } from './BestBuyApi';
+import Products from './Products.vue';
 import ProductListNav from './ProductListNav.vue';
+import LoadingSpinner from './LoadingSpinner.vue';
 
+const pageSize = 10;
 const currentPage = ref(1);
-const pageSize = ref(10);
 const totalPages = ref(1);
+
 const props = defineProps({
     categoryId: String,
     searchTerm: String
 })
 
 const products = ref([]);
+const loading = ref(true);
 
-async function getProductByCategoryPerPage(arg=currentPage.value) {
-    if (arg < 1)
-        arg = totalPages.value;
-    else if (arg > totalPages.value)
-        arg = 1;
+const getProducts = debounce(async (pageNumber=currentPage.value) => {
+    loading.value = true;
+    await getProductsByCategory(props.categoryId, pageNumber, pageSize.value, props.searchTerm)
+        .then((data) => {
+            products.value = data.products;
+            totalPages.value = data.totalPages;
+            currentPage.value = data.currentPage;
+            loading.value = false
+        });
+}, 500);
 
-    if (props.categoryId == 'all') {
-        await getProductsForAllCategories(arg, pageSize.value, props.searchTerm)
-            .then((data) => {
-                products.value = data.products;
-                totalPages.value = data.totalPages;
-                currentPage.value = data.currentPage;
-            });
-    }
-    else {
-        await getProductsByCategory(props.categoryId, arg, pageSize.value, props.searchTerm)
-            .then((data) => {
-                products.value = data.products;
-                totalPages.value = data.totalPages;
-                currentPage.value = data.currentPage;
-            });
-    }
-}
-
+// Handles product list navigation event
 async function handlePageNavigation(num) {
     if (currentPage.value == totalPages.value && num > 0)
         currentPage.value = 1;
@@ -47,42 +40,44 @@ async function handlePageNavigation(num) {
     else {
         currentPage.value--;
     }
-
-    await getProductByCategoryPerPage();
 }
 
-onMounted(async () => {
-    await getProductByCategoryPerPage();
+// Handles product list navigation input event
+async function handlePageNavigationInput(input) {
+    if (input >= totalPages.value)
+        currentPage.value = 1;
+    else if (input <= 1)
+        currentPage.value = totalPages.value;
+    else
+        currentPage.value = input;
+}
+
+// Retrieves products on component render
+onBeforeMount(async () => {
+    await getProducts();
+}),
+
+// Refreshes products on page change
+watch(currentPage, async () => {
+    loading.value = true;
+    await getProducts();
 })
 </script>
 <template>
     <div class="pl-container">
         <product-list-nav 
-            @handle-page-navigation="handlePageNavigation"
-            @handle-page-navigation-input="getProductByCategoryPerPage"
+            @page-navigation="handlePageNavigation"
+            @page-navigation-input="handlePageNavigationInput"
             :current-page="currentPage" 
             :total-pages="totalPages">
         </product-list-nav>
-        
-        <div class="products">
-            <div class="product" v-for="p in products" :key="p.sku">
-                <img :src="p.image" :alt="p.sku">
-                <div class="product-info">
-                    <p v-for="n in p.name.split(' - ').slice(0, 2)" :key="n[0]">{{ n }}</p>
-                    <div class="salePrice">
-                        <div v-if="p.onSale">
-                            <s style="color: lightcoral;">${{ p.regularPrice }}</s>
-                            <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
-                        </div>
-                        <b class="price">${{ p.salePrice }}</b>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <Products v-if="!loading" :products="products" />
+        <loading-spinner v-else />
 
         <product-list-nav 
-            @handle-page-navigation="handlePageNavigation"
-            @handle-page-navigation-input="getProductByCategoryPerPage"
+            @page-navigation="handlePageNavigation"
+            @page-navigation-input="handlePageNavigationInput"
             :current-page="currentPage" 
             :total-pages="totalPages">
         </product-list-nav>
@@ -96,38 +91,5 @@ onMounted(async () => {
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
-
-    .products {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 1rem;
-
-        .product {
-            width: 200px;
-            height: 400px;
-            overflow: hidden;
-            border-radius: 10px;
-            background-color: var(--vt-c-black);
-            display: flex;
-            flex-direction: column;
-            font-size: 12px;
-            flex-grow: 1;
-
-            img {
-                height: 230px;
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-            }
-
-            .product-info {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                padding: 0.5rem 0.75rem 0.25rem 0.75rem;
-            }
-        }
-    }
 }
 </style>

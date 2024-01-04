@@ -5,8 +5,8 @@ import { ref, watch} from 'vue';
 
 
 const emit = defineEmits([
-    'handlePageNavigation',
-    'handlePageNavigationInput'
+    'pageNavigation',
+    'pageNavigationInput'
 ])
 
 const props = defineProps({
@@ -22,18 +22,18 @@ watch(() => props.currentPage, (newPage)=> {
 </script>
 
 <template>
-    <div class="pl-pagination-container">
-        <button @click="emit('handlePageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-        <div class="pl-pagination-info">
-            <input v-on:change="emit('handlePageNavigationInput', currentPageInput)" v-model="currentPageInput" type="number" />
+    <div class="pl-nav-container">
+        <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
+        <div class="pl-nav-info">
+            <input v-on:change="emit('pageNavigationInput', currentPageInput)" v-model="currentPageInput" type="number" />
             <p>/ {{ props.totalPages }}</p>
         </div>
-        <button @click="emit('handlePageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+        <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.pl-pagination-container {
+.pl-nav-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -43,7 +43,7 @@ watch(() => props.currentPage, (newPage)=> {
     color: white;
     width: 100%;
 
-    .pl-pagination-info {
+    .pl-nav-info {
         display: flex;
         align-items: center;
         justify-content: center;
