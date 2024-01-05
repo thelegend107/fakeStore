@@ -18,6 +18,10 @@ export const searchFields = [
     'sku'
 ];
 
+// Number format defaults
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
 // API default values
 const currentYear = new Date().getFullYear() - 2;
 const baseUrl = 'https://api.bestbuy.com/v1/products'
@@ -82,6 +86,14 @@ async function callBestBuyProductsAPI(url, pSort=defaultSort, pShow=defaultShow,
         })
 
         data.totalPages = data.totalPages == 0 ? 1 : data.totalPages;
+        if (data.products.length > 0){
+            data.products.forEach(x => {
+                x.regularPrice = currency.format(x.regularPrice);
+                x.salePrice = currency.format(x.salePrice);
+                x.percentSavings = percentage.format(x.percentSavings/100);
+            });
+        }
+
         return data
 
     } catch (error) {

@@ -43,7 +43,7 @@ const emit = defineEmits(['goToCategory'])
             background-color: rgba(var(--primaryC), 0.5);
             backdrop-filter: 5px;
             list-style: none;
-            padding: 2.75dvi;
+            padding: 2.65dvi;
             transition: all 0.3s ease;
         }
 

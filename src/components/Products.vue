@@ -1,7 +1,8 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { mdiCircle } from '@mdi/js';
+import { mdiMinus, mdiCircle } from '@mdi/js';
 import SvgIcon from '@jamescoyle/vue-icon';
+import CustomerReview from './CustomerReview.vue';
 
 const props = defineProps({
     products: Array,
@@ -25,13 +26,23 @@ function carouselPaginationActive(carouselIndex) {
         <div class="td-p" v-for="p in products.filter((x, index) => index == productIndex)" :key="p.sku">
             <img :src="p.image" :alt="p.sku">
             <div class="td-p-info">
-                <p>{{ p.name }}</p>
+                <div class="td-p-details">
+                    <CustomerReview :average="p.customerReviewAverage" :count="p.customerReviewCount" />
+                    <h3>{{ p.name }}</h3>
+                    <div class="td-p-model-sku">
+                        <p>Model: {{ p.modelNumber }}</p>
+                        <p>SKU: {{ p.sku }}</p>
+                    </div>
+                </div>
                 <div class="salePrice">
                     <div v-if="p.onSale">
-                        <s style="color: lightcoral;">${{ p.regularPrice }}</s>
-                        <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
+                        <s style="color: lightcoral;">{{ p.regularPrice }}</s>
+                        <p style="display: flex; align-items: center; color: lightgreen;">
+                            <SvgIcon type="mdi" :path="mdiMinus" :size="11" />
+                            {{ p.percentSavings }}
+                        </p>
                     </div>
-                    <b class="price">$ {{ p.salePrice }}</b>
+                    <b class="price">{{ p.salePrice }}</b>
                 </div>
             </div>
         </div>
@@ -52,10 +63,10 @@ function carouselPaginationActive(carouselIndex) {
                 <p v-for="n in p.name.split(' - ').slice(0, 2)" :key="n[0]">{{ n }}</p>
                 <div class="salePrice">
                     <div v-if="p.onSale">
-                        <s style="color: lightcoral;">${{ p.regularPrice }}</s>
-                        <p style="color: lightgreen;">-%{{ p.percentSavings }}</p>
+                        <s style="color: lightcoral;">{{ p.regularPrice }}</s>
+                        <p style="display: flex; align-items: center; color: lightgreen;"><SvgIcon type="mdi" :path="mdiMinus" :size="11" />{{ p.percentSavings }}</p>
                     </div>
-                    <b class="price">${{ p.salePrice }}</b>
+                    <b class="price">{{ p.salePrice }}</b>
                 </div>
             </div>
         </div>
@@ -105,31 +116,49 @@ function carouselPaginationActive(carouselIndex) {
     .td-p {
         display: flex;
         flex-direction: column;
-        padding: 0.75rem;
+        padding: 1rem 1rem 0rem 1rem;
         justify-content: center;
+        gap: 1rem;
 
         img {
             object-fit: contain;
-            height: 150px;
-            width: auto;
+            height: 185px;
         }
 
         .td-p-info {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-        }
 
-        .salePrice {
-            padding: 0.25rem 0.5rem;
-            border-radius: 15px;
-            background-color: var(--primaryV);
+            .td-p-details {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                color: rgba(255,255,255,0.75);
+                h3 {
+                    color: white;
+                    font-weight: 700;
+                }
+            }
+
+            .td-p-model-sku {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .salePrice {
+                margin-top: 1rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 15px;
+                background-color: var(--primaryV);
+            }
         }
     }
 
     .carousel-pagination {
         display: flex;
         justify-content: center;
+        padding: 0.5rem 0rem;
 
         .cp-circle {
             border-radius: 100%;
@@ -144,6 +173,14 @@ function carouselPaginationActive(carouselIndex) {
             display: grid;
             grid-template-columns: 50% 50%;
             justify-content: center;
+            
+            .td-p-info {
+                .td-p-model-sku {
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+            }
+
 
             img {
                 display: flex;
