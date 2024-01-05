@@ -16,8 +16,7 @@ const props = defineProps({
     carousel: {
         type: Boolean,
         default: false
-    },
-    carouselDirection: Number
+    }
 })
 
 const currentPageInput = ref(props.currentPage)
@@ -36,11 +35,16 @@ watch(() => props.currentPage, (newPage)=> {
         </div>
         <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
     </div>
+    <div class="carousel" v-else>
+        <button @click="emit('carouselNavigation', -1)">
+            <SvgIcon type="mdi" :path="mdiChevronLeft" :size="35" />
+        </button>
+        <slot></slot>
+        <button @click="emit('carouselNavigation', 1)">
+            <SvgIcon type="mdi" :path="mdiChevronRight" :size="35" />
+        </button>
+    </div>
     
-    <button v-else @click="emit('carouselNavigation', props.carouselDirection)">
-        <SvgIcon v-if="carouselDirection < 0" class="left" type="mdi" :path="mdiChevronLeft" :size="35" />
-        <SvgIcon v-else class="right" type="mdi" :path="mdiChevronRight" :size="35" />
-    </button>
 </template>
 
 <style lang="scss" scoped>
@@ -83,6 +87,32 @@ watch(() => props.currentPage, (newPage)=> {
     /* Firefox */
     input[type=number] {
         -moz-appearance: textfield;
+    }
+}
+
+.carousel {
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    background-color: var(--primaryDark);
+    padding: 0.25rem;
+
+    button {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 100%;
+    }
+}
+
+@media (min-width: 1024px) and (min-height: 788px) {
+    .carousel {
+        padding: 1rem;
+
+        button {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 100%;
+        }
     }
 }
 </style>

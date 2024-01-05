@@ -1,6 +1,8 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
 import { getTopDealProducts } from './BestBuyApi';
+import { mdiCircle } from '@mdi/js';
+import SvgIcon from '@jamescoyle/vue-icon';
 import Products from './Products.vue';
 import ProductsNav from './ProductsNav.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
@@ -20,6 +22,14 @@ function handleCarouselNavigation(num) {
         productIndex.value--;
 }
 
+function carouselPaginationActive(carouselIndex) {
+    return carouselIndex == productIndex.value ? 'color: var(--primary)' : 'color: var(--primaryV)'
+}
+
+function handleCarouselPagination(index) {
+    productIndex.value = index;
+}
+
 onBeforeMount(async () => {
     await getTopDealProducts(10).then((data) => {
         topDealProducts.value = data.products;
@@ -29,40 +39,38 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <div class="carousel">
-        <ProductsNav @carousel-navigation="handleCarouselNavigation" :carousel="true" :carousel-direction="-1" />
-
-        <Products v-if="!loading" :products="topDealProducts" :product-index="productIndex" :carousel="true" />
+    <ProductsNav @carousel-navigation="handleCarouselNavigation" :carousel="true">
+        <Products v-if="!loading" :products="topDealProducts" :product-index="productIndex" :carousel="true">
+            <div class="carousel-pagination">
+                <SvgIcon class="cp-circle" v-for="(p, index) in topDealProducts"
+                    @click="handleCarouselPagination(index)"
+                    :style="carouselPaginationActive(index)"
+                    :key="p.sku" 
+                    :type="'mdi'" 
+                    :path="mdiCircle">
+                </SvgIcon>
+            </div>
+        </Products>
         <LoadingSpinner v-else />
-
-        <ProductsNav @carousel-navigation="handleCarouselNavigation" :carousel="true" :carousel-direction="1" />
-    </div>
+    </ProductsNav>
 </template>
 
 <style lang="scss" scoped>
-.carousel {
+.carousel-pagination {
     display: flex;
-    align-items: center;
-    border-radius: 15px;
-    background-color: var(--primaryDark);
-    padding: 0.25rem;
+    justify-content: center;
+    padding: 1rem 0rem;
 
-    button {
-        width: 2rem;
-        height: 2rem;
+    .cp-circle {
         border-radius: 100%;
+        cursor: pointer;
     }
 }
 
 @media (min-width: 1024px) and (min-height: 788px) {
-    .carousel {
-        padding: 1rem;
-
-        button {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 100%;
-        }
+    .carousel-pagination {
+        padding: 0.5rem 0rem;
+        gap: 1rem;
     }
 }
 </style>

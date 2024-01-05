@@ -1,10 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { mdiMinus, mdiCircle } from '@mdi/js';
+import { mdiMinus } from '@mdi/js';
 import SvgIcon from '@jamescoyle/vue-icon';
 import CustomerReview from './CustomerReview.vue';
 
-const props = defineProps({
+defineProps({
     products: Array,
     productIndex: {
         type: Number,
@@ -15,10 +15,6 @@ const props = defineProps({
         default: false
     }
 })
-
-function carouselPaginationActive(carouselIndex) {
-    return carouselIndex == props.productIndex ? 'color: var(--primary)' : 'color: var(--primaryV)'
-}
 </script>
 
 <template>
@@ -46,14 +42,9 @@ function carouselPaginationActive(carouselIndex) {
                 </div>
             </div>
         </div>
-        <div class="carousel-pagination">
-            <SvgIcon class="cp-circle" v-for="(p, index) in products" 
-                :style="carouselPaginationActive(index)"
-                :key="p.sku" 
-                :type="'mdi'" 
-                :path="mdiCircle">
-            </SvgIcon>
-        </div>
+        <slot v-if="carousel">
+
+        </slot>
     </div>
 
     <div v-else class="products">
@@ -121,8 +112,9 @@ function carouselPaginationActive(carouselIndex) {
         gap: 1rem;
 
         img {
+            flex-grow: 1;
             object-fit: contain;
-            height: 185px;
+            height: 145px;
         }
 
         .td-p-info {
@@ -154,27 +146,19 @@ function carouselPaginationActive(carouselIndex) {
             }
         }
     }
-
-    .carousel-pagination {
-        display: flex;
-        justify-content: center;
-        padding: 0.5rem 0rem;
-
-        .cp-circle {
-            border-radius: 100%;
-        }
-    }
 }
 
 @media (min-width: 1024px) and (min-height: 788px) {
     .td {
         .td-p {
-            padding: 1rem;
+            padding: 1rem 2rem;
             display: grid;
             grid-template-columns: 50% 50%;
             justify-content: center;
             
             .td-p-info {
+                flex-grow: 1;
+                justify-content: space-between;
                 .td-p-model-sku {
                     flex-direction: row;
                     justify-content: space-between;
@@ -189,10 +173,6 @@ function carouselPaginationActive(carouselIndex) {
                 height: 34vh;
                 object-fit: contain;
             }
-        }
-        
-        .carousel-pagination {
-            gap: 1rem;
         }
     }
 }
