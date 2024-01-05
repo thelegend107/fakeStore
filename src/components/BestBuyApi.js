@@ -12,12 +12,6 @@ export const categories = [
     { id: 'pcmcat241600050001', name: 'Home Audio' }
 ];
 
-// API search fields
-export const searchFields = [
-    'name',
-    'sku'
-];
-
 // Number format defaults
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -132,19 +126,10 @@ function generateUrl(baseUrl, categoryId, searchTerm) {
     if (searchTerm) {
         let searchTermArray = [];
         searchTerm = cleanUpSearchTerm(searchTerm);
-        searchFields.forEach(field => {
-            searchTerm.forEach(term => {
-                if (field == 'sku'){
-                    if (parseInt(term))
-                        searchTermArray.push(field + '=' + parseInt(term));
-                }
-                else {
-                    searchTermArray.push(field + '=' + term + '*');
-                }
-            });
-        })
-
-        url += '&(' + searchTermArray.join('|') + ')';
+        searchTerm.forEach(term => {
+            searchTermArray.push('search=' + term);
+        });
+        url += '&(' + searchTermArray.join('&') + ')';
     }
     
     url += ')';

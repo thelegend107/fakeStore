@@ -43,7 +43,6 @@ defineProps({
             </div>
         </div>
         <slot v-if="carousel">
-
         </slot>
     </div>
 
