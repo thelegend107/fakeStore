@@ -1,6 +1,10 @@
 @import './base.css';
 @import './spinner.scss';
 
+* {
+    touch-action: manipulation;
+}
+
 html {
     scroll-behavior: smooth;
 }
