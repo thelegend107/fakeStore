@@ -13,7 +13,7 @@ const emit = defineEmits(['closeShoppingCart']);
 </script>
 <template>
     <Transition>
-        <div class="overlay" v-if="show"></div>
+        <div @click="emit('closeShoppingCart')" class="overlay" v-if="show"></div>
     </Transition>
     <div class="shopping-cart flex-c" :style="props.show ? {} : {width: 0}">
         <div class="cart flex-c h-100" v-if="show">
@@ -96,7 +96,8 @@ const emit = defineEmits(['closeShoppingCart']);
 
         .cart-body {
             padding: 0 10px 0 0;
-            overflow-x: scroll;
+            overflow-x: hidden;
+            overflow-y: scroll;
             gap: 1rem;
             border-radius: 15px;
             .cart-item {
