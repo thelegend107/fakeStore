@@ -44,7 +44,6 @@ watch(() => props.currentPage, (newPage)=> {
             <SvgIcon type="mdi" :path="mdiChevronRight" :size="35" />
         </button>
     </div>
-    
 </template>
 
 <style lang="scss" scoped>

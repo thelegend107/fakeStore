@@ -2,7 +2,6 @@
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiClose, mdiMagnify } from '@mdi/js';
 import { ref } from 'vue'
-import { searchFields } from './BestBuyApi';
 import { onBeforeRouteUpdate } from 'vue-router';
 
 const searchToggle = ref(false);
@@ -38,10 +37,10 @@ onBeforeRouteUpdate((to) => {
 </script>
 <template>
     <div class="searchBox" :style="searchToggle ? style : null">
-        <transition name="slide-fade">
+        <transition name="slide-fade" mode="out-in">
             <div class="searchBar" v-if="searchToggle">
                 <button @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
-                <input @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'search by ' + searchFields.join(', ')" />
+                <input @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'enter search keywords...'" />
             </div>
         </transition>
         <button @click="handleSearchButton">
@@ -76,6 +75,7 @@ onBeforeRouteUpdate((to) => {
             width: 100%;
             height: 100%;
             outline: none;
+            font-size: 16px;
         }
     }
 }

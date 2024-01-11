@@ -1,21 +1,16 @@
 // Product API Provided by BestBuy
 // Link: https://bestbuyapis.github.io/bby-query-builder/
 import axios from 'axios';
+import { mdiDesktopTowerMonitor, mdiHeadphones, mdiLaptop, mdiSpeaker, mdiStore, mdiTelevision } from '@mdi/js';
 
 // API categories of interest
 export const categories = [
-    { id: 'all', name: 'All' },
-    { id: 'abcat0501000', name: 'Desktops & All-in-One Computers' },
-    { id: 'abcat0502000', name: 'Laptops' },
-    { id: 'abcat0101000', name: 'TVs' },
-    { id: 'abcat0204000', name: 'Headphones' },
-    { id: 'pcmcat241600050001', name: 'Home Audio' }
-];
-
-// API search fields
-export const searchFields = [
-    'name',
-    'sku'
+    { id: 'all', name: 'All', iconPath: mdiStore },
+    { id: 'abcat0501000', name: 'Desktops & All-in-One Computers', iconPath: mdiDesktopTowerMonitor },
+    { id: 'abcat0502000', name: 'Laptops', iconPath: mdiLaptop },
+    { id: 'abcat0101000', name: 'TVs', iconPath: mdiTelevision },
+    { id: 'abcat0204000', name: 'Headphones', iconPath: mdiHeadphones },
+    { id: 'pcmcat241600050001', name: 'Home Audio', iconPath: mdiSpeaker }
 ];
 
 // Number format defaults
@@ -88,6 +83,8 @@ async function callBestBuyProductsAPI(url, pSort=defaultSort, pShow=defaultShow,
         data.totalPages = data.totalPages == 0 ? 1 : data.totalPages;
         if (data.products.length > 0){
             data.products.forEach(x => {
+                x.unitPrice = x.regularPrice;
+                x.unitPriceAfterDiscount = x.salePrice;
                 x.regularPrice = currency.format(x.regularPrice);
                 x.salePrice = currency.format(x.salePrice);
                 x.percentSavings = percentage.format(x.percentSavings/100);
@@ -132,19 +129,10 @@ function generateUrl(baseUrl, categoryId, searchTerm) {
     if (searchTerm) {
         let searchTermArray = [];
         searchTerm = cleanUpSearchTerm(searchTerm);
-        searchFields.forEach(field => {
-            searchTerm.forEach(term => {
-                if (field == 'sku'){
-                    if (parseInt(term))
-                        searchTermArray.push(field + '=' + parseInt(term));
-                }
-                else {
-                    searchTermArray.push(field + '=' + term + '*');
-                }
-            });
-        })
-
-        url += '&(' + searchTermArray.join('|') + ')';
+        searchTerm.forEach(term => {
+            searchTermArray.push('search=' + term);
+        });
+        url += '&(' + searchTermArray.join('&') + ')';
     }
     
     url += ')';

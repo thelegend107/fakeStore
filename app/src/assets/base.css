@@ -86,7 +86,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-div, button, p, input, h1, h2, h3, h4, pre, select, option {
+div, p, button, input, h1, h2, h3, h4, pre, select, option {
   font-family: 'roboto-font';
   letter-spacing: 0.10rem;
 }

@@ -34,19 +34,19 @@ function handleCategoryNavigation(num) {
 
 <template>
     <div class="categories">
-        <h3 class="category" @click="emit('mainCategoryChange', index)" v-for="(c, index) in props.categories" :key="c.id"
-            :class="{ categoryActive: c.id == props.mainCategory.id }">
-            {{ c.name }}
+        <h3 class="category" @click="emit('mainCategoryChange', index)" v-for="(c, index) in props.categories" :key="c.id" :class="{ categoryActive: c.id == props.mainCategory.id }">
+            <p>{{ c.name }}</p>
         </h3>
     </div>
     <div class="categories-mobile">
         <button @click="handleCategoryNavigation(-1)">
-            <SvgIcon type="mdi" :path="mdiChevronLeft" />
+            <svg-icon type="mdi" :path="mdiChevronLeft" />
         </button>
-        <h3 class="category" @click="emit('mainCategoryChange', categoryIndex)">{{ props.categories[categoryIndex].name }}
+        <h3 class="category" @click="emit('mainCategoryChange', categoryIndex)">
+            {{ props.categories[categoryIndex].name }}
         </h3>
         <button @click="handleCategoryNavigation(1)">
-            <SvgIcon type="mdi" :path="mdiChevronRight" />
+            <svg-icon type="mdi" :path="mdiChevronRight" />
         </button>
     </div>
 </template>
@@ -68,6 +68,10 @@ function handleCategoryNavigation(num) {
     padding: 0.5rem;
 
     .category {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
         transition: all 0.3s ease;
     }
 }
