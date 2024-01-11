@@ -8,6 +8,7 @@ export const store = reactive({
         let existingProductIndex = this.cart.findIndex(x => x.product.sku == product.sku);
         if (existingProductIndex != -1){
             this.cart[existingProductIndex].quantity++;
+            this.cart[existingProductIndex] = recalculateCartItemTotals(this.cart[existingProductIndex]);
         }
         else {
             this.cart.push({

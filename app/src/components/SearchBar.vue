@@ -40,7 +40,7 @@ onBeforeRouteUpdate((to) => {
         <transition name="slide-fade" mode="out-in">
             <div class="searchBar" v-if="searchToggle">
                 <button @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
-                <input @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'enter search keywords...'" />
+                <input @focusout="handleSearch" @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'enter search keywords...'" />
             </div>
         </transition>
         <button @click="handleSearchButton">
