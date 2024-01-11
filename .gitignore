@@ -290,5 +290,4 @@ coverage
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?

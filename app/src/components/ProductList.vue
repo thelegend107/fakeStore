@@ -6,7 +6,7 @@ import ProductsNav from './ProductsNav.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
 import debounce from 'lodash.debounce';
 
-const pageSize = 10;
+const pageSize = ref(8);
 const currentPage = ref(1);
 const totalPages = ref(1);
 

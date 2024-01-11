@@ -36,8 +36,8 @@ defineProps({
 }
 
 .section {
-	height: 100%;
     color: rgba(255, 255, 255, 0.9);
+	flex-grow: 1;
 
 	.section-info {
 		display: flex;
@@ -55,5 +55,8 @@ defineProps({
         font-weight: 900;
         letter-spacing: 0.15rem;
     }
+}
+
+@media (min-width: 1024px) and (min-height: 788px) {
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup>
 import Section from '@/components/Section.vue';
 import ProductListCarousel from '@/components/ProductListCarousel.vue';
+import svgIcon from '@jamescoyle/vue-icon';
 import { categories } from '@/components/BestBuyApi';
 import { mdiSale, mdiArrowTopRight } from '@mdi/js';
 
@@ -16,7 +17,10 @@ const emit = defineEmits(['goToCategory'])
         </Section>
         <Section :subtext="'BEST BUY'" :title="'CATEGORIES'" :mdiIconPath="mdiArrowTopRight">
             <menu>
-                <li @click="emit('goToCategory', index)" v-for="(c, index) in categories" :key="c.id">{{ c.name }}</li>
+                <li @click="emit('goToCategory', index)" v-for="(c, index) in categories" :key="c.id">
+                    <svg-icon type="mdi" :path="c.iconPath" />
+                    <p>{{ c.name }}</p>
+                </li>
             </menu>
         </Section>
     </div>
@@ -24,7 +28,7 @@ const emit = defineEmits(['goToCategory'])
 
 <style lang="scss" scoped>
 .home-container {
-    height: calc((100vh - 49px));
+    min-height: calc(100vh - 49px);
     display: flex;
     flex-direction: column;
 
@@ -37,13 +41,17 @@ const emit = defineEmits(['goToCategory'])
         gap: 10px;
 
         li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             box-shadow: var(--box-shadow-1);
             border-radius: 15px;
             flex-grow: 1;
             background-color: rgba(var(--primaryC), 0.5);
             backdrop-filter: 5px;
             list-style: none;
-            padding: 2.65dvi;
+            padding: 2dvi 2.65dvi;
             transition: all 0.3s ease;
         }
 

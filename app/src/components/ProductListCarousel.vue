@@ -64,6 +64,11 @@ onBeforeMount(async () => {
     .cp-circle {
         border-radius: 100%;
         cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .cp-circle:hover {
+        background-color: var(--primary);
     }
 }
 
