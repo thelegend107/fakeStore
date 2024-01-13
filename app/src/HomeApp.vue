@@ -1,34 +1,31 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { store } from './store';
-import { mdiAccount, mdiCart } from '@mdi/js';
+import { mdiCart, mdiLoginVariant } from '@mdi/js';
 import svgIcon from '@jamescoyle/vue-icon';
-import SearchBar from './components/SearchBar.vue';
-import ShoppingCart from './components/ShoppingCart.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import ShoppingCart from '@/components/ShoppingCart.vue';
+import HeaderAccount from './components/HeaderAccount.vue';
+import { bestBuy } from '@/bestBuy';
+import { store } from '@/store';
+import { useSession } from './composables/session';
+import { useCart } from './composables/localStorage';
+
 const router = useRouter();
-const shopViewSearchTerm = ref('');
-const shopViewCategoryIndex = ref(null);
 const shoppingCartShow = ref(false);
 const navShow = ref(true);
 
-function handleSearchRequest(searchInput, searchToggle, categoryIndexReset) {
-    shopViewSearchTerm.value = searchInput;
+function handleSearchRequest(searchTerm, searchToggle) {
     navShow.value = !searchToggle;
-
-    if (categoryIndexReset) {
-        shopViewCategoryIndex.value = 0;
-    }
-
-    if (shopViewSearchTerm.value) {
+    if (searchTerm)
         router.push({name: 'shop'});
-    }
+
+    if (searchTerm != bestBuy.searchTerm)
+        bestBuy.searchRequest(searchTerm);
 }
 
-function goToCategory(index) {
-    shopViewCategoryIndex.value = index;
-    router.push({ name: 'shop'});
-}
+useSession();
+useCart();
 </script>
 
 <template>
@@ -37,7 +34,8 @@ function goToCategory(index) {
         <SearchBar @search-request="handleSearchRequest" />
         <transition name="slide-fade">
             <nav v-if="navShow">
-                <svg-icon class="header-action" type="mdi" :path="mdiAccount" />
+                <HeaderAccount v-if="store.session" :session="store.session" :firstname="store.customer.firstname" :lastname="store.customer.lastname" :avatarurl="store.customer.avatarurl" />
+                <svg-icon v-else @click="router.push({name: 'login'})" class="header-action" type="mdi" :path="mdiLoginVariant" />
                 <div @click="shoppingCartShow = !shoppingCartShow" class="header-action flex-r ai-c">
                     <svg-icon type="mdi" :path="mdiCart" />
                     <span v-if="store.cart.length > 0" class='cartCount'>{{ store.getCartItemCount() }}</span>
@@ -46,7 +44,7 @@ function goToCategory(index) {
         </transition>
     </header>
     <ShoppingCart @close-shopping-cart="shoppingCartShow = false" :show="shoppingCartShow" />
-    <router-view @go-to-category="goToCategory" :category-index="shopViewCategoryIndex" :search-term="shopViewSearchTerm" v-slot="{ Component }">
+    <router-view v-slot="{ Component }">
         <transition mode="out-in">
             <component :is="Component" />
         </transition>

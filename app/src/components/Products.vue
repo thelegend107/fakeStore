@@ -1,9 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { mdiCartPlus, mdiHeart, mdiMinus, mdiOpenInNew } from '@mdi/js';
-import { store } from '@/store';
-import SvgIcon from '@jamescoyle/vue-icon';
+import { productDescription, productNameBrand } from '../utils';
 import CustomerReview from './CustomerReview.vue';
+import { mdiCartPlus, mdiHeart, mdiMinus, mdiOpenInNew } from '@mdi/js';
+import SvgIcon from '@jamescoyle/vue-icon';
+
+const emit = defineEmits(['addToCart']);
 
 defineProps({
     products: Array,
@@ -16,51 +18,6 @@ defineProps({
         default: false
     }
 })
-
-function truncateString(string, productName=false) {
-    let maxLength = 50;
-    if (productName)
-        maxLength = 25;
-    
-    let totalLength = 0;
-    let stringArray = [];
-    let stringSplit = string.split(' ');
-
-    for (let i = 0; i < stringSplit.length; i++) {
-        totalLength += stringSplit[i].length;
-        if (totalLength > maxLength) {
-            break;
-        }
-        else {
-            stringArray.push(stringSplit[i]);
-        }
-    }
-
-    let truncatedString = stringArray.join(' ').trim();
-    if (truncatedString.lastIndexOf('-') > 0)
-        truncatedString = truncatedString.slice(0, truncatedString.lastIndexOf('-')).trim();
-
-    if (totalLength > maxLength)
-        truncatedString += '...';
-
-    return truncatedString;
-}
-
-function productNameBrand(name) {
-    return truncateString(name.split(' - ').shift(), true);
-}
-
-function productDescription(name) {
-    let nameArray = name.split(' - ');
-    let description = [];
-
-    for (let i = 1; i < nameArray.length; i++) {
-        nameArray[i];
-        description.push(nameArray[i]);
-    }
-
-    return truncateString(description.join(' - '));
-}
 </script>
 
 <template>
@@ -88,7 +45,7 @@ function productDescription(name) {
                         <b class="price">{{ p.salePrice }}</b>
                     </div>
                     <div class="product-actions">
-                        <button @click="store.addToCart(p, 1)" :style="{width: '100%'}">
+                        <button @click="emit('addToCart', p)" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiCartPlus" />
                             <p>Add to Cart</p>
                         </button>
@@ -120,7 +77,7 @@ function productDescription(name) {
                         <b class="price">{{ p.salePrice }}</b>
                     </div>
                     <div class="product-actions">
-                        <button @click="store.addToCart(p, 1)" :style="{width: '100%'}">
+                        <button @click="emit('addToCart', p)" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiCartPlus" :size="16" />
                             <p>Add to Cart</p>
                         </button>
@@ -139,7 +96,7 @@ function productDescription(name) {
 .product-actions {
     display: flex;
     justify-content: space-between;
-    gap: 5px;
+    gap: 0.75rem;
 }
 
 .products {
@@ -169,7 +126,7 @@ function productDescription(name) {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+            padding: 0.5rem 0.75rem;
             flex-grow: 1;
         }
 

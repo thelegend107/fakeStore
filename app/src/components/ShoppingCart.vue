@@ -45,12 +45,12 @@ const emit = defineEmits(['closeShoppingCart']);
                         </div>
                     </div>
                     <div class="flex-r jc-sb ai-c" style="gap: 0.5rem;">
+                        <button @click="store.removeFromCart(ci.product.sku)" class="w-100"><svgIcon type="mdi" :path="mdiTrashCan" /></button>
                         <div class="cartItem-qty flex-r ai-c jc-sb w-100">
                             <button @click="store.cartItemQtyDecrement(ci.product.sku)"><svgIcon type="mdi" :path="mdiMinus" /></button>
                             <p>{{ ci.quantity }}</p>
                             <button @click="store.cartItemQtyIncrement(ci.product.sku)"><svgIcon type="mdi" :path="mdiPlus" /></button>
                         </div>
-                        <button @click="store.removeFromCart(ci.product.sku)" class="w-100"><svgIcon type="mdi" :path="mdiTrashCan" /></button>
                     </div>
                 </li>
             </TransitionGroup>
@@ -58,7 +58,7 @@ const emit = defineEmits(['closeShoppingCart']);
                 <button v-if="store.cart.length" class="w-100">Checkout</button>
                 <div v-else class="flex-c ai-c w-100">
                     <p>Your cart is empty</p>
-                    <button @click="$router.push('shop'); emit('closeShoppingCart')">START SHOPPING</button>
+                    <button @click="$router.push({name: 'shop'}); emit('closeShoppingCart')">START SHOPPING</button>
                 </div>
             </div>
         </div>

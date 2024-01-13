@@ -1,8 +1,6 @@
 <script setup>
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
-import { ref, watch} from 'vue';
-
 
 const emit = defineEmits([
     'pageNavigation',
@@ -10,7 +8,7 @@ const emit = defineEmits([
     'carouselNavigation'
 ])
 
-const props = defineProps({
+const prop = defineProps({
     currentPage: Number,
     totalPages: Number,
     carousel: {
@@ -18,30 +16,35 @@ const props = defineProps({
         default: false
     }
 })
-
-const currentPageInput = ref(props.currentPage)
-
-watch(() => props.currentPage, (newPage)=> {
-    currentPageInput.value = newPage
-})
 </script>
 
 <template>
-    <div v-if="!carousel" class="pl-nav-container">
-        <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-        <div class="pl-nav-info">
-            <input v-on:change="emit('pageNavigationInput', currentPageInput)" v-model="currentPageInput" type="number" />
-            <p>/ {{ props.totalPages }}</p>
+    <div class="flex-c" v-if="!carousel" style="gap: 0.75rem;">
+        <div class="pl-nav-container">
+            <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
+            <div class="pl-nav-info">
+                <input v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+                <p>/ {{ prop.totalPages }}</p>
+            </div>
+            <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
         </div>
-        <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+        <slot></slot>
+        <div class="pl-nav-container">
+            <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
+            <div class="pl-nav-info">
+                <input v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+                <p>/ {{ prop.totalPages }}</p>
+            </div>
+            <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+        </div>
     </div>
     <div class="carousel" v-else>
         <button @click="emit('carouselNavigation', -1)">
-            <SvgIcon type="mdi" :path="mdiChevronLeft" :size="35" />
+            <SvgIcon class="icon" type="mdi" :path="mdiChevronLeft" :size="35" />
         </button>
         <slot></slot>
         <button @click="emit('carouselNavigation', 1)">
-            <SvgIcon type="mdi" :path="mdiChevronRight" :size="35" />
+            <SvgIcon class="icon" type="mdi" :path="mdiChevronRight" :size="35" />
         </button>
     </div>
 </template>

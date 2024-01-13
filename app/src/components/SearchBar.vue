@@ -1,6 +1,6 @@
 <script setup>
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiClose, mdiMagnify } from '@mdi/js';
+import { mdiCancel, mdiClose, mdiMagnify } from '@mdi/js';
 import { ref } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router';
 
@@ -11,13 +11,20 @@ const emit = defineEmits(['searchRequest']);
 
 function handleSearch(num) {
     searchToggle.value = !searchToggle.value;
-    if (num === 0)
+    if (num === 0) {
         searchInput.value = "";
+    }
     
     emit('searchRequest', searchInput.value, searchToggle.value);
 };
 
+function handleCancelSearch() {
+    searchInput.value = "";
+    emit('searchRequest', searchInput.value, searchToggle.value);
+}
+
 function handleSearchButton() {
+    setTimeout(() => document.getElementById("searchInput").focus(), 0);
     if (searchToggle.value)
         handleSearch();
     else
@@ -30,8 +37,7 @@ const style = {
 
 onBeforeRouteUpdate((to) => {
     if (to.name != 'shop') {
-        searchInput.value = '';
-        emit('searchRequest', searchInput.value, searchToggle.value, true);
+        handleCancelSearch();
     }
 })
 </script>
@@ -40,8 +46,13 @@ onBeforeRouteUpdate((to) => {
         <transition name="slide-fade" mode="out-in">
             <div class="searchBar" v-if="searchToggle">
                 <button @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
-                <input @focusout="handleSearch" @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'enter search keywords...'" />
+                <input id="searchInput" @focusout="handleSearch" @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'enter search keywords...'" />
             </div>
+        </transition>
+        <transition name="slide-fade">
+            <button @click="handleCancelSearch" v-if="!searchToggle && searchInput">
+                <svg-icon type="mdi" :path="mdiCancel" :size="25"></svg-icon>
+            </button>
         </transition>
         <button @click="handleSearchButton">
             <svg-icon type="mdi" :path="mdiMagnify" :size="25"></svg-icon>
@@ -58,6 +69,7 @@ onBeforeRouteUpdate((to) => {
     align-items: center;
     border-radius: 15px;
     flex-grow: 1;
+    gap: 5px;
 
     .searchBar {
         display: flex;

@@ -1,4 +1,5 @@
-@import './base.css';
+@import './base.scss';
+@import './toast.scss';
 @import './spinner.scss';
 
 * {
@@ -38,26 +39,28 @@ body {
     background-color: black;
 }
 
-.background-image {
+.background {
+    z-index: -1;
+    position: fixed;
     top: 0;
     left: 0;
-    position: fixed;
-    width: 100%;
     height: 100%;
-    background-image: url(pexels-tomáš-malík-4090329.jpg);
-    background-size: contain;
-    filter: grayscale(100%) blur(15px);
-    z-index: -1;
+    width: 100%;
+    background: var(--primaryDark);
 }
 
 header {
+    top: 0;
+    position: sticky;
     display: flex;
-    gap: 10px;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--primaryV);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    background-color: black;
+    z-index: 1;
+    gap: 0.5rem;
 
     img {
         height: 2rem;
@@ -69,7 +72,7 @@ header {
         display: flex;
         justify-content: end;
         align-items: center;
-        gap: 1rem;
+        gap: 10px;
     }
 }
 
@@ -86,7 +89,7 @@ button {
     padding-right: 3.5px;
     cursor: pointer;
     gap: 2.5px;
-    padding: 0.15rem 0.5rem;
+    padding: 0.25rem 0.5rem;
     transition: all 0.5s ease;
 }
 
@@ -122,6 +125,75 @@ button:hover {
     z-index: 1;
 }
 
+.card {
+    font-size: 16px;
+
+    .inputError, .inputError:focus {
+        border-color: var(--error);
+    }
+
+    input {
+        color: white;
+        background-color: black;
+        border: none;
+        outline: none;
+        border-bottom: 3px solid rgba(var(--primaryC), 0.4);
+        border-radius: 2.5px;
+        padding: 0.65rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    span {
+        display: flex;
+        align-items: center;
+        color: var(--error);
+        gap: 5px;
+    }
+
+    input:focus {
+        border-bottom: 3px solid rgba(var(--primaryC), 1);
+    }
+
+    p {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    button {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        height: 2rem;
+        width: 100%;
+    }
+
+    button:disabled {
+        border: 2px solid var(--primary);
+        background-color: black;
+        box-shadow: none;
+    }
+
+    button:disabled:hover {
+        box-shadow: none;
+        opacity: 100%;
+        cursor: not-allowed;
+    }
+
+    .separator {
+        display: flex;
+        align-items: center;
+        text-align: center;
+    }
+
+    .separator::before,
+    .separator::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid;
+    }
+}
+
 // Some common div settings that I always use
 .flex-r {
     display: flex;
@@ -135,6 +207,10 @@ button:hover {
 
 .jc-c {
     justify-content: center;
+}
+
+.jc-sa {
+    justify-content: space-around;
 }
 
 .jc-sb {
@@ -167,7 +243,11 @@ button:hover {
 
 @media (hover: hover) {}
 
-@media (min-width: 1024px) and (min-height: 788px) {}
+@media (min-width: 1024px) and (min-height: 788px) {
+    header {
+        padding: 0.5rem 2rem;
+    }
+}
 
 .v-enter-active,
 .v-leave-active {
@@ -204,4 +284,10 @@ button:hover {
     visibility: hidden;
     opacity: 0;
     transform: translateX(30px);
+}
+
+@media (min-width: 3840px) and (min-height: 2160px) {
+    main {
+        max-width: 3048px;
+    }
 }
