@@ -97,6 +97,18 @@ button:hover {
     opacity: 70%;
 }
 
+button:disabled {
+    border: 2px solid var(--primary);
+    background-color: black;
+    box-shadow: none;
+}
+
+button:disabled:hover {
+    box-shadow: none;
+    opacity: 100%;
+    cursor: not-allowed;
+}
+
 .shop {
     display: flex;
     justify-content: center;
@@ -125,14 +137,33 @@ button:hover {
     z-index: 1;
 }
 
+span {
+    color: var(--error);
+}
+
+input[type=number] {
+    appearance: textfield;
+}
+
+.account-s {
+    border-radius: 15px;
+    background-color: rgba($color: white, $alpha: 0.05);
+    padding: 1rem;
+}
+
 .card {
+    height: 100%;
     font-size: 16px;
+    
+    input:focus, select:focus {
+        border-bottom: 3px solid rgba(var(--primaryC), 1);
+    }
 
     .inputError, .inputError:focus {
         border-color: var(--error);
     }
 
-    input {
+    input, select {
         color: white;
         background-color: black;
         border: none;
@@ -143,41 +174,12 @@ button:hover {
         transition: all 0.3s ease;
     }
 
-    span {
-        display: flex;
-        align-items: center;
-        color: var(--error);
-        gap: 5px;
-    }
-
-    input:focus {
-        border-bottom: 3px solid rgba(var(--primaryC), 1);
-    }
-
-    p {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
     button {
         width: 100%;
         display: flex;
         gap: 0.5rem;
         height: 2rem;
         width: 100%;
-    }
-
-    button:disabled {
-        border: 2px solid var(--primary);
-        background-color: black;
-        box-shadow: none;
-    }
-
-    button:disabled:hover {
-        box-shadow: none;
-        opacity: 100%;
-        cursor: not-allowed;
     }
 
     .separator {
@@ -191,6 +193,14 @@ button:hover {
         content: '';
         flex: 1;
         border-bottom: 1px solid;
+    }
+
+    .card-slot {
+        background-color: rgba(255, 255, 255, 0.08);
+        box-shadow: var(--box-shadow-1);
+        gap: 1rem; 
+        border-radius: 15px; 
+        padding: 2rem;
     }
 }
 
@@ -244,6 +254,9 @@ button:hover {
 @media (hover: hover) {}
 
 @media (min-width: 1024px) and (min-height: 788px) {
+    .card {
+        height: 82vh;
+    }
     header {
         padding: 0.5rem 2rem;
     }

@@ -88,7 +88,7 @@ const prop = defineProps({
 
     /* Firefox */
     input[type=number] {
-        -moz-appearance: textfield;
+        appearance: textfield;
     }
 }
 

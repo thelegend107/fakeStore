@@ -1,16 +1,13 @@
 <script setup>
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { store } from '@/store';
-
-const router = useRouter();
 
 onMounted(async () => {
     await store.getCustomer();
 })
 </script>
 <template>
-    <div @click="router.push({name: 'account'})" class="h-account flex-r ai-c" style="gap: 10px;">
+    <div class="h-account flex-r ai-c" style="gap: 10px;">
         <img :src="store.getAvatarUrl(50)" width="25px" height="25px" />
         <div class="h-account-name flex-r ai-c" style="gap: 3.5px;">
             <p>{{ store.customer.firstname }}</p>
@@ -35,6 +32,10 @@ onMounted(async () => {
     }
 
     cursor: pointer;
+}
+
+.h-account:hover{
+    opacity: 70%;
 }
 
 .h-account-name {

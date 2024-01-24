@@ -20,8 +20,10 @@ function handleAddToCart(product, quantity) {
 <template>
     <div class="w-100">
         <ProductsNav @page-navigation="handlePageNavigation" @page-navigation-input="handlePageNavigationInput" :current-page="bestBuy.currentPage" :total-pages="bestBuy.totalPages">
-            <Products v-if="!bestBuy.loading" @add-to-cart="handleAddToCart" :products="bestBuy.products" />
-            <loading-spinner v-else />
+            <Transition mode="out-in">
+                <Products v-if="!bestBuy.loading" @add-to-cart="handleAddToCart" :products="bestBuy.products" />
+                <loading-spinner v-else />
+            </Transition>
         </ProductsNav>
     </div>
 </template>

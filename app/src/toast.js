@@ -8,6 +8,9 @@ updateGlobalOptions({
       opacity: '1',
       userSelect: 'initial',
     },
+    clearOnUrlChange: false,
+    pauseOnFocusLoss: false,
+    pauseOnHover: false,
     theme: 'dark',
 });
 

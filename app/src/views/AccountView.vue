@@ -1,12 +1,13 @@
 <script setup>
-import Account from '@/components/Account.vue';
-import Login from '@/components/Login.vue';
 import { store } from '@/store';
+import FallbackRouter from '@/components/FallbackRouter.vue'
+import Account from '@/components/Account.vue';
+
 </script>
 <template>
     <main>
         <div class="background"></div>
-        <Account v-if="store.session" />
-        <Login v-else />
+            <Account v-if="store.session" />
+            <FallbackRouter :session="store.session" v-else></FallbackRouter>
     </main>
 </template>

@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { productDescription, productNameBrand } from '../utils';
+import { productDescription, productNameBrand } from '@/store';
 import CustomerReview from './CustomerReview.vue';
 import { mdiCartPlus, mdiHeart, mdiMinus, mdiOpenInNew } from '@mdi/js';
 import SvgIcon from '@jamescoyle/vue-icon';
