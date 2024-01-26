@@ -12,6 +12,8 @@ const shopViewCategoryIndex = ref(null);
 const shoppingCartShow = ref(false);
 const navShow = ref(true);
 
+const envVariable = import.meta.env.VITE_SECRET_TEST;
+
 function handleSearchRequest(searchInput, searchToggle, categoryIndexReset) {
     shopViewSearchTerm.value = searchInput;
     navShow.value = !searchToggle;
@@ -33,7 +35,7 @@ function goToCategory(index) {
 
 <template>
     <header>
-        <img @click="router.push({name: 'home'})" alt="Vue logo" class="logo" src="@/assets/logo.svg" />
+        <img @click="router.push({name: 'home'}); console.log(envVariable)" alt="Vue logo" class="logo" src="@/assets/logo.svg" />
         <SearchBar @search-request="handleSearchRequest" />
         <transition name="slide-fade">
             <nav v-if="navShow">
