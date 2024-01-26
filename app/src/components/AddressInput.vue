@@ -5,7 +5,7 @@ import { useForm } from 'vee-validate';
 import { onMounted, ref } from 'vue';
 import { number, object, string } from 'yup';
 
-const emit = defineEmits(['address-upsert']);
+const emit = defineEmits(['address-upsert', 'address-upsert-cancel']);
 
 const prop = defineProps({
     addressId: Number
@@ -13,14 +13,14 @@ const prop = defineProps({
 
 const existingAddress = ref();
 
-const { meta, errors, handleSubmit, defineField } = useForm({
+const { meta, errors, setFieldError, handleSubmit, defineField } = useForm({
     validationSchema: object({
         address1: string().required(),
         address2: string().optional().nullable(),
         city: string().required(),
-        postalCode: number().required(),
+        postalCode: number('postalCode must be a number').required('postalCode must be a number'),
         stateId: number().required(),
-        countryId: number().required().min(0)
+        countryId: number().required()
     }),
 });
 
@@ -60,13 +60,13 @@ async function getStates() {
             .order('name', { ascending: true });
 
         if (error && status !== 406) throw error
-        if (data) {
+        if (data && data.length > 0) {
             states.value = data;
-            stateId.value = -1;
+            stateId.value = 0;
         }
         if (data && data.length == 0){
-            states.value = [{Id: 0, Name: 'N/A'}]
-            stateId.value = 0;
+            states.value = [{id: -1, name: 'N/A'}]
+            stateId.value = -1;
         }
     } catch (error) {
         alert(error.message)
@@ -88,6 +88,13 @@ async function getCountries() {
 }
 
 const onSubmit = handleSubmit((values) => {
+    if (values.stateId == -1)
+        values.stateId = null;
+
+    if (values.stateId == 0) {
+        setFieldError('stateId', 'please select a state');
+        return false;
+    }
     if (prop.addressId) { 
         values.id = existingAddress.value.id;
         values.createdAt = existingAddress.value.createdAt;
@@ -114,7 +121,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <form @submit.prevent="onSubmit" class="flex-c" style="gap: 1rem;">
+    <form @submit.prevent="onSubmit" class="flex-c jc-sb" style="gap: 1rem;">
         <div class="flex-c" style="gap: 0.5rem;">
             <div class="flex-c">
                 <label for="address1">Address 1:</label>
@@ -131,18 +138,20 @@ onMounted(async () => {
                 <input :class="{ inputError: errors.city }" type="text" v-model="city">
                 <span>{{ errors.city }}</span>
             </div>
-            <div class="flex-c w-100">
-                <label for="stateId">State:</label>
-                <select style="display: flex; flex-wrap: wrap;" :class="{ inputError: errors.stateId }" v-model="stateId" >
-                    <option style="display: flex; flex-wrap: wrap;" :value='-1' disabled selected hidden>Please select a state</option>
-                    <option style="display: flex; flex-wrap: wrap;" v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
-                </select>
-                <span>{{ errors.stateId }}</span>
-            </div>
-            <div class="flex-c w-100">
-                <label for="postalCode">Postal Code:</label>
-                <input  :class="{ inputError: errors.postalCode }" type="number" inputmode="numeric" v-model="postalCode">
-                <span>{{ errors.postalCode }}</span>
+            <div class="flex-r" style="gap: 10px; flex-wrap: wrap;">
+                <div class="flex-c" style="flex-grow: 1;">
+                    <label for="stateId">State:</label>
+                    <select style="display: flex; flex-wrap: wrap;" :class="{ inputError: errors.stateId }" v-model="stateId" >
+                        <option style="display: flex; flex-wrap: wrap;" :value='0' disabled selected hidden>Please select a state</option>
+                        <option style="display: flex; flex-wrap: wrap;" v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
+                    </select>
+                    <span>{{ errors.stateId }}</span>
+                </div>
+                <div class="flex-c" style="flex-grow: 1; max-width: 500px;">
+                    <label for="postalCode">Postal Code:</label>
+                    <input  :class="{ inputError: errors.postalCode }" type="number" inputmode="numeric" v-model="postalCode">
+                    <span>{{ errors.postalCode ? errors.postalCode.replace(', but the final value was: `NaN` (cast from the value `""`).', '') : null }}</span>
+                </div>
             </div>
             <div class="flex-c w-100">
                 <label for="countryId">Country:</label>
@@ -155,3 +164,6 @@ onMounted(async () => {
         <button type="submit" :disabled="!meta.valid" >{{ prop.addressId ? "Update " : "Add " }}Address</button>
     </form>
 </template>
+<style lang="scss" scoped>
+
+</style>

@@ -5,7 +5,6 @@ import FallbackRouter from '@/components/FallbackRouter.vue';
 </script>
 <template>
     <main>
-        <div class="background"></div>
         <Transition>
             <Suspense>
                 <Register v-if="!store.session"></Register>

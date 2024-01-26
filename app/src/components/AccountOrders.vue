@@ -1,5 +1,5 @@
 <template>
     <div class="flex-c">
-        <h1>ORDERS</h1>
+        <h1 class="bg-glass-rounded">ORDERS</h1>
     </div>
 </template>

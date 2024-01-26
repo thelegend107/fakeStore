@@ -6,7 +6,12 @@ export default function (key, initialValue) {
     const storageVal = window.localStorage.getItem(key);
 
     if (storageVal) {
-        val.value = JSON.parse(storageVal);
+        try {
+            val.value = JSON.parse(storageVal);
+        }
+        catch {
+            window.localStorage.setItem(key, val.value);
+        }
     }
 
     watch(val, val => {

@@ -32,10 +32,12 @@ function handleSearchRequest(searchTerm, searchToggle) {
             <nav v-if="navShow">
                 <HeaderAccount v-if="store.session" @click="if (!route.path.includes('account')) router.push({name: 'account'});" />
                 <svg-icon v-else @click="router.push({name: 'login'})" class="header-action" type="mdi" :path="mdiLoginVariant" />
-                <div @click="shoppingCartShow = !shoppingCartShow" class="header-action flex-r ai-c">
-                    <svg-icon type="mdi" :path="mdiCart" />
-                    <span v-if="store.cart.length > 0" class='cartCount'>{{ store.getCartItemCount() }}</span>
-                </div>
+                <Transition mode="out-in">
+                    <div @click="shoppingCartShow = !shoppingCartShow" v-if="!route.path.includes('checkout')" class="header-action flex-r ai-c">
+                        <svg-icon type="mdi" :path="mdiCart" />
+                        <span v-if="store.cart.length > 0" class='cartCount'>{{ store.getCartItemCount() }}</span>
+                    </div>
+                </Transition>
             </nav>
         </transition>
     </header>

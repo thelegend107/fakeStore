@@ -88,6 +88,7 @@ onBeforeRouteUpdate((to) => {
             height: 100%;
             outline: none;
             font-size: 16px;
+            padding: 0;
         }
     }
 }

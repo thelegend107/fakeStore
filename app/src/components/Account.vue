@@ -33,26 +33,24 @@ async function signOut() {
 </script>
 <template>
     <card :full-height="true">
-        <div class="flex-c h-100" style="gap: 1rem;">
-            <img :src="store.getAvatarUrl()" width="150" height="150" />
-            <nav class="account-s flex-r ai-c jc-c" style="gap: 1rem;">
-                <router-link class="flex-r ai-c" style="gap: 5px;" v-for="route in routeLinks" :to="route.path" :key="route.name">
-                    <svg-icon type="mdi" :path="route.iconPath"></svg-icon>
-                    <p>{{ route.name }}</p>
-                </router-link>
-            </nav>
-            <router-view class="jc-c h-100" v-slot="{ Component }">
-                <transition mode="out-in">
-                    <component :is="Component" />
-                </transition>
-            </router-view>
-            <hr>
-            <button @click="signOut"><svg-icon type="mdi" :path="mdiLogoutVariant" />{{ signingOut ? 'Logging out...' : 'Logout' }}</button>
-        </div>
+        <img :src="store.getAvatarUrl()" width="150" height="150" />
+        <nav class="bg-glass-rounded flex-r ai-c jc-c" style="gap: 1rem;">
+            <router-link class="flex-r ai-c" style="gap: 5px;" v-for="route in routeLinks" :to="route.path" :key="route.name">
+                <svg-icon type="mdi" :path="route.iconPath"></svg-icon>
+                <p>{{ route.name }}</p>
+            </router-link>
+        </nav>
+        <router-view class="jc-c h-100" v-slot="{ Component }">
+            <transition mode="out-in">
+                <component :is="Component" />
+            </transition>
+        </router-view>
+        <hr>
+        <button @click="signOut"><svg-icon type="mdi" :path="mdiLogoutVariant" />{{ signingOut ? 'Logging out...' : 'Logout' }}</button>
     </card>
 </template>
 <style lang="scss" scoped>
-.account-s {
+.bg-glass-rounded {
     padding: 0px;
 }
 

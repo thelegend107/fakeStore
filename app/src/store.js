@@ -1,7 +1,8 @@
 import { reactive } from 'vue'
-import { addressSelect, supabase } from './supabase';
+import { supabase, addressSelect } from './supabase';
 import uselocalStorage from './composables/useLocalStorage';
 import useSession from './composables/useSession';
+import { toastPrimary, toastType } from './toast';
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -23,6 +24,8 @@ export const store = reactive({
                 salePrice: currency.format(product.unitPriceAfterDiscount * quantity),
             });
         }
+
+        toastPrimary(`Product Item #${product.sku} has been added to the cart`, toastType.success);
     },
     cartItemQtyIncrement(sku) {
         let existingProductIndex = this.cart.findIndex(x => x.product.sku == sku);
@@ -53,6 +56,14 @@ export const store = reactive({
         });
 
         return count;
+    },
+    getCartTotal() {
+        let total = 0;
+        this.cart.forEach(x => {
+            total += x.product.unitPriceAfterDiscount * x.quantity
+        });
+
+        return currency.format(total);
     },
     customerClear() {
         this.customer = {};
@@ -87,7 +98,6 @@ export const store = reactive({
             if (error && status !== 406) throw error
 
             this.customer.addresses = data;
-            console.log(this.customer);
             return data;
         } catch (error) {
             alert(error.message)
@@ -106,8 +116,7 @@ export const store = reactive({
                     postalCode: a.postalCode,
                     stateId: a.stateId,
                     countryId: a.countryId,
-                    lastUpdated: new Date(),
-                    createdAt: a.id ? a.createdAt : new Date()
+                    lastUpdated: new Date()
                 }).select(addressSelect).single();
             
             if (error) throw error;

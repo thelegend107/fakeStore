@@ -4,9 +4,11 @@
 
 * {
     touch-action: manipulation;
+    transition: backdrop-filter 0.2s;
 }
 
 html {
+    color-scheme: dark;
     scroll-behavior: smooth;
 }
 
@@ -36,17 +38,9 @@ main {
 }
 
 body {
-    background-color: black;
-}
-
-.background {
-    z-index: -1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: var(--primaryDark);
+    background-image: url(./background.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 header {
@@ -131,6 +125,7 @@ button:disabled:hover {
 .overlay {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
@@ -138,41 +133,53 @@ button:disabled:hover {
 }
 
 span {
+    font-size: small;
     color: var(--error);
+}
+
+input:focus, select:focus {
+    border-bottom: 3px solid rgba(var(--primaryC), 1);
+}
+
+.inputError, .inputError:focus {
+    border-color: var(--error);
+}
+
+input, select {
+    color: white;
+    background-color: black;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid rgba(var(--primaryC), 0.4);
+    border-radius: 2.5px;
+    padding: 0.65rem 1rem;
+    transition: all 0.3s ease;
 }
 
 input[type=number] {
     appearance: textfield;
 }
 
-.account-s {
+.bg-glass-tinted {
+    background-color: rgba($color: #000000, $alpha: 0.7);
+    backdrop-filter: blur(25px);
+}
+
+.bg-glass {
+    background-color: rgba($color: white, $alpha: 0.08);
+    backdrop-filter: blur(25px) opacity(1);
+}
+
+.bg-glass-rounded {
     border-radius: 15px;
     background-color: rgba($color: white, $alpha: 0.05);
+    backdrop-filter: blur(25px) opacity(1);
     padding: 1rem;
 }
 
 .card {
     height: 100%;
     font-size: 16px;
-    
-    input:focus, select:focus {
-        border-bottom: 3px solid rgba(var(--primaryC), 1);
-    }
-
-    .inputError, .inputError:focus {
-        border-color: var(--error);
-    }
-
-    input, select {
-        color: white;
-        background-color: black;
-        border: none;
-        outline: none;
-        border-bottom: 3px solid rgba(var(--primaryC), 0.4);
-        border-radius: 2.5px;
-        padding: 0.65rem 1rem;
-        transition: all 0.3s ease;
-    }
 
     button {
         width: 100%;
@@ -182,26 +189,27 @@ input[type=number] {
         width: 100%;
     }
 
-    .separator {
-        display: flex;
-        align-items: center;
-        text-align: center;
-    }
-
-    .separator::before,
-    .separator::after {
-        content: '';
-        flex: 1;
-        border-bottom: 1px solid;
-    }
-
     .card-slot {
         background-color: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(25px) opacity(1);
         box-shadow: var(--box-shadow-1);
         gap: 1rem; 
         border-radius: 15px; 
         padding: 2rem;
     }
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid;
 }
 
 // Some common div settings that I always use
@@ -264,6 +272,7 @@ input[type=number] {
 
 .v-enter-active,
 .v-leave-active {
+    backdrop-filter: opacity(0);
     transition: opacity 0.5s ease;
 }
 

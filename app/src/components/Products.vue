@@ -62,7 +62,7 @@ defineProps({
     </div>
 
     <div v-else class="products">
-        <div class="product" v-for="p in products" :key="p.sku">
+        <div class="product bg-glass" v-for="p in products" :key="p.sku">
             <svg-icon class="product-favorite" type="mdi" :path="mdiHeart" :size="40" />
             <img :src="p.image" :alt="p.sku">
             <div class="product-info">
@@ -111,7 +111,6 @@ defineProps({
         height: 330px;
         overflow: hidden;
         border-radius: 10px;
-        background-color: var(--vt-c-black);
         display: flex;
         flex-direction: column;
         font-size: 12px;

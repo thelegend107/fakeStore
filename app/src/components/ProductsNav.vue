@@ -20,7 +20,7 @@ const prop = defineProps({
 
 <template>
     <div class="flex-c" v-if="!carousel" style="gap: 0.75rem;">
-        <div class="pl-nav-container">
+        <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info">
                 <input v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
@@ -29,7 +29,7 @@ const prop = defineProps({
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
         </div>
         <slot></slot>
-        <div class="pl-nav-container">
+        <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info">
                 <input v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
@@ -55,7 +55,6 @@ const prop = defineProps({
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem;
-    background-color: var(--vt-c-black);
     border-radius: 15px;
     color: white;
     width: 100%;
@@ -77,6 +76,7 @@ const prop = defineProps({
         color: white;
         width: 3em;
         border-radius: 15px;
+        padding: 0;
     }
 
     /* Chrome, Safari, Edge, Opera */

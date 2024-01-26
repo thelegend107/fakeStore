@@ -4,6 +4,7 @@ import HomeApp from '@/HomeApp.vue'
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ShopView from '@/views/ShopView.vue'
+import CheckoutView from '@/views/CheckoutView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 
@@ -29,6 +30,7 @@ const router = createRouter({
                     {path: '/account/addresses', name: 'account-addresses', component: AccountAddressesComponent },
                     {path: '/account/orders', name: 'account-orders', component: AccountOrdersComponent }
                 ]},
+                { path: '/checkout', name: 'checkout', component: CheckoutView },
                 { path: '/account/login', name: 'login', component: LoginView }, 
                 { path: '/account/register', name: 'register', component: RegisterView },
                 { path: '/account/confirmed', name: 'confirmed', component: AccountMessageComponent }

@@ -6,8 +6,7 @@ import Account from '@/components/Account.vue';
 </script>
 <template>
     <main>
-        <div class="background"></div>
-            <Account v-if="store.session" />
-            <FallbackRouter :session="store.session" v-else></FallbackRouter>
+        <Account v-if="store.session" />
+        <FallbackRouter :session="store.session" v-else></FallbackRouter>
     </main>
 </template>

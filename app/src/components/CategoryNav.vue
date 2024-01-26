@@ -33,12 +33,12 @@ function handleCategoryNavigation(num) {
 </script>
 
 <template>
-    <div class="categories">
+    <div class="categories bg-glass">
         <h3 class="category" @click="emit('mainCategoryChange', index)" v-for="(c, index) in props.categories" :key="c.id" :class="{ categoryActive: c.id == props.mainCategory.id }">
             <p>{{ c.name }}</p>
         </h3>
     </div>
-    <div class="categories-mobile">
+    <div class="categories-mobile bg-glass">
         <button @click="handleCategoryNavigation(-1)">
             <svg-icon type="mdi" :path="mdiChevronLeft" />
         </button>
@@ -89,7 +89,6 @@ function handleCategoryNavigation(num) {
     .categories {
         width: 100%;
         border-radius: 15px;
-        background-color: var(--primaryV);
         display: flex;
         justify-content: center;
         align-items: center;
