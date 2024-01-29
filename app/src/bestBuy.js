@@ -5,10 +5,6 @@ import { reactive } from "vue";
 import { mdiDesktopTowerMonitor, mdiHeadphones, mdiLaptop, mdiSpeaker, mdiStore, mdiTelevision } from '@mdi/js';
 import debounce from 'lodash.debounce';
 
-// Number format defaults
-const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-
 // API categories of interest
 export const categories = [
     { id: 'all', name: 'All', iconPath: mdiStore },
@@ -117,16 +113,6 @@ export const bestBuy = reactive({
             })
     
             data.totalPages = data.totalPages == 0 ? 1 : data.totalPages;
-    
-            if (data.products.length > 0) {
-                data.products.forEach(x => {
-                    x.unitPrice = x.regularPrice;
-                    x.unitPriceAfterDiscount = x.salePrice;
-                    x.regularPrice = currency.format(x.regularPrice);
-                    x.salePrice = currency.format(x.salePrice);
-                    x.percentSavings = percentage.format(x.percentSavings/100);
-                });
-            }
 
             if (primary) {
                 this.products = data.products;

@@ -8,7 +8,7 @@ onMounted(async () => {
 </script>
 <template>
     <div class="h-account bg-glass flex-r ai-c" style="gap: 10px;">
-        <img :src="store.getAvatarUrl(50)" width="25px" height="25px" />
+        <img :src="store.getAvatarUrl(47)" width="25" height="25" />
         <div class="h-account-name flex-r ai-c" style="gap: 3.5px;">
             <p>{{ store.customer.firstname }}</p>
             <p>{{ store.customer.lastname }}</p>
@@ -16,18 +16,23 @@ onMounted(async () => {
     </div>
 </template>
 <style lang="scss" scoped>
+.bg-glass::before {
+    border-radius: 25px;
+}
+
 .h-account {
-    background-color: var(--primary);
     color: white;
     padding: 0;
-    border-radius: 15px;
+    border-radius: 25px;
+    border: 2px solid var(--primaryV);
     transition: all 0.3s ease;
     cursor: pointer;
 
     img {
         display: flex;
         align-items: center;
-        border: 2px solid var(--primary);
+        height: 28px;
+        width: 28px;
         border-radius: 100%;
     }
 
@@ -35,6 +40,7 @@ onMounted(async () => {
 }
 
 .h-account:hover{
+    border: 2px solid var(--primary);
     opacity: 70%;
 }
 
@@ -44,7 +50,7 @@ onMounted(async () => {
 
 @media (min-width: 1024px) and (min-height: 788px) {
     .h-account {
-        padding: 0 0.5rem 0 0.1rem;
+        padding: 0 0.5rem 0 0rem;
     }
     .h-account-name {
         display: flex;

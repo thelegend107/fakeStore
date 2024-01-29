@@ -2,10 +2,13 @@
 <script setup>
 import { productDescription, productNameBrand } from '@/store';
 import CustomerReview from './CustomerReview.vue';
-import { mdiCartPlus, mdiHeart, mdiMinus, mdiOpenInNew } from '@mdi/js';
+import { mdiCartPlus, mdiMinus, mdiOpenInNew } from '@mdi/js';
 import SvgIcon from '@jamescoyle/vue-icon';
 
 const emit = defineEmits(['addToCart']);
+
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 defineProps({
     products: Array,
@@ -36,13 +39,13 @@ defineProps({
                 <div class="flex-c" style="gap: 0.5rem;">
                     <div class="salePrice">
                         <div v-if="p.onSale">
-                            <s style="color: lightcoral;">{{ p.regularPrice }}</s>
+                            <s style="color: lightcoral;">{{ currency.format(p.regularPrice) }}</s>
                             <p style="display: flex; align-items: center; color: lightgreen;">
                                 <SvgIcon type="mdi" :path="mdiMinus" :size="11" />
-                                {{ p.percentSavings }}
+                                {{ percentage.format(p.percentSavings/100) }}
                             </p>
                         </div>
-                        <b class="price">{{ p.salePrice }}</b>
+                        <b class="price">{{ currency.format(p.salePrice) }}</b>
                     </div>
                     <div class="product-actions">
                         <button @click="emit('addToCart', p)" :style="{width: '100%'}">
@@ -63,7 +66,6 @@ defineProps({
 
     <div v-else class="products">
         <div class="product bg-glass" v-for="p in products" :key="p.sku">
-            <svg-icon class="product-favorite" type="mdi" :path="mdiHeart" :size="40" />
             <img :src="p.image" :alt="p.sku">
             <div class="product-info">
                 <p>{{ productNameBrand(p.name) }}</p>
@@ -71,10 +73,10 @@ defineProps({
                 <div class="flex-c" style="gap: 0.5rem;">
                     <div class="salePrice" :style="{justifyContent: p.onSale ? 'space-between' : 'end'}">
                         <div v-if="p.onSale">
-                            <s style="color: lightcoral;">{{ p.regularPrice }}</s>
-                            <p style="display: flex; align-items: center; color: lightgreen;"><SvgIcon type="mdi" :path="mdiMinus" :size="11" />{{ p.percentSavings }}</p>
+                            <s style="color: lightcoral;">{{ currency.format(p.regularPrice) }}</s>
+                            <p style="display: flex; align-items: center; color: lightgreen;"><SvgIcon type="mdi" :path="mdiMinus" :size="11" />{{ percentage.format(p.percentSavings/100) }}</p>
                         </div>
-                        <b class="price">{{ p.salePrice }}</b>
+                        <b class="price">{{ currency.format(p.salePrice) }}</b>
                     </div>
                     <div class="product-actions">
                         <button @click="emit('addToCart', p)" :style="{width: '100%'}">

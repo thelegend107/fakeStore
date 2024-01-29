@@ -78,27 +78,27 @@ const onSubmit = handleSubmit(async values => {
             <h1 style="text-align: center; font-size: 75px;">Register.</h1>
             <div class="flex-c" style="gap: 0.5rem;">
                 <div class="flex-c">
-                    <p>Firstname: </p>
+                    <label>Firstname: </label>
                     <input :class="{ inputError: errors.firstName }" type="text" v-model="firstName">
                     <span>{{ errors.firstName }}</span>
                 </div>
                 <div class="flex-c">
-                    <p>Lastname: </p>
+                    <label>Lastname: </label>
                     <input :class="{ inputError: errors.lastName }" type="text" v-model="lastName">
                     <span>{{ errors.lastName }}</span>
                 </div>
                 <div class="flex-c">
-                    <p>Email: </p>
+                    <label>Email: </label>
                     <input :class="{ inputError: errors.email }" type="email" v-model="email">
                     <span>{{ errors.email }}</span>
                 </div>
                 <div class="flex-c">
-                    <p>Password: </p>
+                    <label>Password: </label>
                     <input :class="{ inputError: errors.password }" type="password" v-model="password">
                     <span>{{ errors.password }}</span>
                 </div>
                 <div class="flex-c">
-                    <p>Confirm Password: </p>
+                    <label>Confirm Password: </label>
                     <input :class="{ inputError: errors.confirmPassword }" type="password" v-model="confirmPassword">
                     <span>{{ errors.confirmPassword }}</span>
                 </div>

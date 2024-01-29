@@ -4,8 +4,6 @@ import uselocalStorage from './composables/useLocalStorage';
 import useSession from './composables/useSession';
 import { toastPrimary, toastType } from './toast';
 
-const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-
 export const store = reactive({
     cart: uselocalStorage('cart', []),
     session: useSession(),
@@ -20,8 +18,8 @@ export const store = reactive({
             this.cart.push({
                 product: product,
                 quantity: quantity,
-                regularPrice: currency.format(product.unitPrice * quantity),
-                salePrice: currency.format(product.unitPriceAfterDiscount * quantity),
+                subTotal: product.regularPrice * quantity,
+                total: product.salePrice * quantity
             });
         }
 
@@ -60,10 +58,10 @@ export const store = reactive({
     getCartTotal() {
         let total = 0;
         this.cart.forEach(x => {
-            total += x.product.unitPriceAfterDiscount * x.quantity
+            total += x.product.salePrice * x.quantity
         });
 
-        return currency.format(total);
+        return total;
     },
     customerClear() {
         this.customer = {};
@@ -140,8 +138,8 @@ export const store = reactive({
 });
 
 function recalculateCartItemTotals(cartItem) {
-    cartItem.regularPrice = currency.format(cartItem.product.unitPrice * cartItem.quantity);
-    cartItem.salePrice = currency.format(cartItem.product.unitPriceAfterDiscount * cartItem.quantity);
+    cartItem.subTotal = cartItem.product.regularPrice * cartItem.quantity;
+    cartItem.total = cartItem.product.salePrice * cartItem.quantity;
     return cartItem;
 }
 

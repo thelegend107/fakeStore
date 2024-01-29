@@ -8,7 +8,7 @@ defineProps({
 })
 </script>
 <template>
-    <div class="overlay-modal flex-r ai-c jc-c" style="flex-wrap: wrap;">
+    <div class="overlay flex-r ai-c jc-c" style="flex-wrap: wrap;">
         <div class="modal flex-c jc-c w-100" style="gap: 1rem; flex-wrap: wrap;">
             <div class="modal-header flex-r ai-c jc-sb">
                 <h2>{{ title }}</h2>
@@ -20,19 +20,11 @@ defineProps({
     </div>
 </template>
 <style lang="scss" scoped>
-.overlay-modal {
-    z-index: 1;
-    top: 0;
-    left: 0;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
 .modal {
     box-shadow: var(--box-shadow-1);
     max-width: 700px;
     border-radius: 15px;
-    background-color: rgba($color: white, $alpha: 0.08);
+    background-color: rgba($color: white, $alpha: 0.1);
     backdrop-filter: blur(25px);
     padding: 2rem;
 }

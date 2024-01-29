@@ -4,7 +4,6 @@
 
 * {
     touch-action: manipulation;
-    transition: backdrop-filter 0.2s;
 }
 
 html {
@@ -128,7 +127,7 @@ button:disabled:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;
 }
 
@@ -165,23 +164,48 @@ input[type=number] {
     backdrop-filter: blur(25px);
 }
 
-.bg-glass {
-    background-color: rgba($color: white, $alpha: 0.08);
+.bg-glass::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 15px;
     backdrop-filter: blur(25px) opacity(1);
+    background-color: rgba($color: white, $alpha: 0.1);
+}
+
+.bg-glass {
+    position: relative;
+    border-radius: 15px;
+}
+
+.bg-glass-rounded::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 15px;
+    backdrop-filter: blur(25px) opacity(1);
+    background-color: rgba($color: white, $alpha: 0.05);
 }
 
 .bg-glass-rounded {
-    border-radius: 15px;
-    background-color: rgba($color: white, $alpha: 0.05);
-    backdrop-filter: blur(25px) opacity(1);
+    position: relative;
     padding: 1rem;
+    border-radius: 15px;
 }
 
 .card {
     height: 100%;
     font-size: 16px;
 
-    button {
+    .card-button {
         width: 100%;
         display: flex;
         gap: 0.5rem;
@@ -189,9 +213,25 @@ input[type=number] {
         width: 100%;
     }
 
-    .card-slot {
+    //Backdrop-filter contrains the div children's position. 
+    //This fixes the constraining issue when using a position fixed.
+    .card-slot::before {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: '';
+        border-radius: 15px;
         background-color: rgba(255, 255, 255, 0.08);
+        position: absolute;
         backdrop-filter: blur(25px) opacity(1);
+        z-index: -1;
+    }
+
+    .card-slot {
+        display: flex;
+        flex-direction: column;
+        position: relative;
         box-shadow: var(--box-shadow-1);
         gap: 1rem; 
         border-radius: 15px; 
@@ -272,7 +312,6 @@ input[type=number] {
 
 .v-enter-active,
 .v-leave-active {
-    backdrop-filter: opacity(0);
     transition: opacity 0.5s ease;
 }
 

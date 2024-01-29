@@ -3,6 +3,7 @@ import { store } from '@/store';
 import svgIcon from '@jamescoyle/vue-icon';
 import { mdiMinus, mdiPlus, mdiTrashCan } from '@mdi/js';
 
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 </script>
 <template>
     <TransitionGroup tag="ul" name="list" class="cart-items" :class="store.cart.length ? 'h-100' : null">
@@ -19,8 +20,8 @@ import { mdiMinus, mdiPlus, mdiTrashCan } from '@mdi/js';
                     </div>
                     <hr>
                     <div class="cart-item-price" :class="ci.product.onSale ? 'jc-sb' : 'jc-e'" style="gap: 1rem;">
-                        <s v-if="ci.product.onSale" style="color: var(--error);">{{ ci.regularPrice }}</s>
-                        <p>{{ ci.salePrice }}</p>
+                        <s v-if="ci.product.onSale" style="color: var(--error);">{{ currency.format(ci.subTotal) }}</s>
+                        <p>{{ currency.format(ci.total) }}</p>
                     </div>
                 </div>
             </div>

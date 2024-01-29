@@ -1,4 +1,5 @@
 <script setup>
+import { vMaska } from 'maska';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 
@@ -23,7 +24,7 @@ const prop = defineProps({
         <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info">
-                <input v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+                <input v-maska data-maska="N" data-maska-tokens="N:[0-9]:multiple" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
@@ -32,7 +33,7 @@ const prop = defineProps({
         <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info">
-                <input v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+                <input v-maska data-maska="N" data-maska-tokens="N:[0-9]:multiple" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>

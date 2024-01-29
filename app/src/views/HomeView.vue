@@ -49,7 +49,7 @@ import { mdiSale, mdiArrowTopRight } from '@mdi/js';
             background-color: rgba(var(--primaryC), 0.5);
             backdrop-filter: 5px;
             list-style: none;
-            padding: 2dvi 2.65dvi;
+            padding: 1.5dvi 2.65dvi;
             transition: all 0.3s ease;
         }
 

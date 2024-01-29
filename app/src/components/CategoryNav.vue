@@ -59,7 +59,6 @@ function handleCategoryNavigation(num) {
 .categories-mobile {
     width: 100%;
     border-radius: 15px;
-    background-color: var(--primaryV);
     display: flex;
     justify-content: space-between;
     text-align: center;

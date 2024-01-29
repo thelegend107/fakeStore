@@ -44,12 +44,12 @@ const onSubmit = handleSubmit(async (values) => {
             <h1 style="text-align: center; font-size: 75px;">Login.</h1>
             <div class="flex-c" style="gap: 0.5rem">
                 <div class="flex-c">
-                    <p>Email:</p>
+                    <label>Email:</label>
                     <input :class="{ inputError: errors.email }" type="email" v-model="email" />
                     <span>{{ errors.email }}</span>
                 </div>
                 <div class="flex-c">
-                    <p>Password:</p>
+                    <label>Password:</label>
                     <input :class="{ inputError: errors.password }" type="password" v-model="password" />
                     <span>{{ errors.password }}</span>
                 </div>
