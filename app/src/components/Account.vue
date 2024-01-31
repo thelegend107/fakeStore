@@ -40,7 +40,7 @@ async function signOut() {
                 <p>{{ route.name }}</p>
             </router-link>
         </nav>
-        <router-view class="jc-c h-100" v-slot="{ Component }">
+        <router-view class="h-100" v-slot="{ Component }">
             <transition mode="out-in">
                 <component :is="Component" />
             </transition>

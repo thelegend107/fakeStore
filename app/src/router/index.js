@@ -14,7 +14,6 @@ import AccountAddressesComponent from '@/components/AccountAddresses.vue'
 import AccountOrdersComponent from '@/components/AccountOrders.vue'
 import AccountMessageComponent from '@/components/AccountMessage.vue'
 
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [

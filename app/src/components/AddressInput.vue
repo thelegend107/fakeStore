@@ -1,6 +1,6 @@
 <script setup>
 import { store } from '@/store';
-import { supabase, addressSelect } from '@/supabase';
+import { supabase } from '@/supabase';
 import { useForm } from 'vee-validate';
 import { onMounted, ref } from 'vue';
 import { number, object, string } from 'yup';
@@ -43,7 +43,7 @@ async function getCustomerAddressById (addressId) {
         const { user } = store.session;
         const { data, error, status } = await supabase
             .from('addresses')
-            .select(addressSelect)
+            .select("id,address1,address2,city,postalCode,stateId,countryId,createdAt")
             .eq('userId', user.id)
             .eq('id', addressId)
             .single();
@@ -97,8 +97,22 @@ const onSubmit = handleSubmit((values) => {
     if (prop.addressId) { 
         values.id = existingAddress.value.id;
         values.createdAt = existingAddress.value.createdAt;
+
+        if (
+            values.address1?.trim() == existingAddress.value.address1 &&
+            values.address2?.trim() == existingAddress.value.address2 &&
+            values.city?.trim() == existingAddress.value.city &&
+            values.postalCode == existingAddress.value.postalCode &&
+            values.stateId == existingAddress.value.stateId &&
+            values.countryId == existingAddress.value.countryId
+        ) {
+            emit('address-upsert-cancel');
+        }
+        else
+            emit('address-upsert', values);
     }
-    emit('address-upsert', values);
+    else
+        emit('address-upsert', values);
 });
 
 onMounted(async () => {

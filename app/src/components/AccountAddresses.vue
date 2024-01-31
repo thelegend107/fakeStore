@@ -20,39 +20,35 @@ async function deleteAddress(a) {
         
         if (error) throw error;
         if (status == 204) {
-            store.getCustomerAddresses();
             customerAddresses.value = customerAddresses.value.filter(x => x.id != a.id);
             toastPrimary("Address was deleted successfully!", toastType.success);
         };
     } catch (error) {
-        toastPrimary(error.message, toastType.error)
+        if (error.code == "23503") {
+            a.deleted = true;
+            await store.insertAddress(a).then(() => {
+                store.getCustomerAddresses();
+                customerAddresses.value = customerAddresses.value.filter(x => x.id != a.id);
+                toastPrimary("Address was deleted successfully!", toastType.success);
+            })
+        }
+        else toastPrimary(error, toastType.error);
     }
 }
 
 async function handleAddressUpsert(a) {
-    await store.upsertAddress(a).then(data => {
+    let updating = false;
+    if (a.id) {
+        await deleteAddress(a);
+        updating = true;
+    }
+    await store.insertAddress(a).then(data => {
         addressModalShow.value = false;
         store.getCustomerAddresses();
-        const addressIndex = customerAddresses.value.findIndex(x => x.id == data.id)
-        if (a.id && addressIndex >= 0) {
-            customerAddresses.value[addressIndex].id = data.id;
-            customerAddresses.value[addressIndex].userId = data.userId;
-            customerAddresses.value[addressIndex].address1 = data.address1;
-            customerAddresses.value[addressIndex].address2 = data.address2;
-            customerAddresses.value[addressIndex].city = data.city;
-            customerAddresses.value[addressIndex].postalCode = data.postalCode;
-            customerAddresses.value[addressIndex].stateId = data.stateId;
-            customerAddresses.value[addressIndex].countryId = data.countryId;
-            customerAddresses.value[addressIndex].country = data.country;
-            customerAddresses.value[addressIndex].state = data.state;
-            customerAddresses.value[addressIndex].lastUpdated = data.lastUpdated;
-            customerAddresses.value[addressIndex].createdAt = data.createdAt;
-            toastPrimary("Address was updated successfully!", toastType.success);
-        }
-        else {
-            customerAddresses.value.push(data);
-            toastPrimary("Address was added successfuly!", toastType.success); 
-        }
+        customerAddresses.value.push(data);
+
+        if (updating) toastPrimary("Address was updated successfully!", toastType.success);
+        else toastPrimary("Address was added successfuly!", toastType.success);
     }).finally(() => {
         addressId.value = null;
     })
@@ -66,8 +62,8 @@ onMounted(async () => {
 </script>
 <template>
     <div class="flex-c jc-sb" style="gap: 1rem;">
-        <transition-group mode="out-in" tag="div" name="list" class="flex-c" style="gap: 0.25rem;">
-            <div class="bg-glass-rounded flex-r ai-c jc-sb" v-for="a in customerAddresses" :key="a">
+        <transition-group mode="out-in" tag="div" name="list" class="flex-c" style="gap: 0.25rem;overflow-x: hidden; overflow-y:scroll;">
+            <div class="bg-glass-rounded flex-r ai-c jc-sb" v-for="a in customerAddresses" :key="a.id">
                 <p>{{ displayAddress(a) }}</p>
                 <div class="flex-r" style="gap: 0.25rem;">
                     <svg-icon @click="addressId = a.id; addressModalShow=true;" class="address-action" type="mdi" :path="mdiPencilCircle" :size="25" />
@@ -80,22 +76,10 @@ onMounted(async () => {
         </button>
         <transition>
             <modal v-if="addressModalShow" @close-modal="addressModalShow = false" :title="addressId ? 'Update Address' : 'New Address'">
-                <template #body><address-input @address-upsert="handleAddressUpsert" :address-id="addressId" /></template>
+                <template #body>
+                    <address-input @address-upsert="handleAddressUpsert" @address-upsert-cancel="addressModalShow = false; addressId = null" :address-id="addressId" />
+                </template>
             </modal>
         </transition>
     </div>
 </template>
-<style lang="scss" scoped>
-.address-action {
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.address-action:hover {
-    opacity: 70%;
-}
-
-.delete:hover {
-    color: var(--error);
-}
-</style>

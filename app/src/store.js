@@ -3,6 +3,8 @@ import { supabase, addressSelect } from './supabase';
 import uselocalStorage from './composables/useLocalStorage';
 import useSession from './composables/useSession';
 import { toastPrimary, toastType } from './toast';
+import Order from '@/models/Order';
+import { PayPalItem, PayPalItemCategory } from './models/PayPalItem';
 
 export const store = reactive({
     cart: uselocalStorage('cart', []),
@@ -91,6 +93,7 @@ export const store = reactive({
                 .from('addresses')
                 .select(addressSelect)
                 .eq('userId', user.id)
+                .eq('deleted', false)
                 .order('id', { ascending: true });
     
             if (error && status !== 406) throw error
@@ -101,12 +104,11 @@ export const store = reactive({
             alert(error.message)
         }
     },
-    async upsertAddress(a) {
+    async insertAddress(a) {
         try {
             const { user } = store.session;
             const { data, error } = await supabase.from('addresses')
                 .upsert({
-                    id: a.id,
                     userId: user.id,
                     address1: a.address1,
                     address2: a.address2,
@@ -114,6 +116,7 @@ export const store = reactive({
                     postalCode: a.postalCode,
                     stateId: a.stateId,
                     countryId: a.countryId,
+                    deleted: a.deleted,
                     lastUpdated: new Date()
                 }).select(addressSelect).single();
             
@@ -121,6 +124,74 @@ export const store = reactive({
             return data;
         } catch (error) {
             alert(error.message);
+        }
+    },
+    async upsertOrder(order, orderItems) {
+        try {
+            const { user } = store.session;
+            order.userId = user.id;
+
+            const { data: orderData, error: orderError } = await supabase.from('orders').upsert(order).select().single();
+            if (orderError) throw orderError;
+
+            orderItems.forEach(i => {
+                i.userId = user.id;
+                i.orderId = orderData.id;
+                i = removeEmptyPropsFromObj(i);
+            });
+
+            const { data: orderItemsData, error: orderItemsError } = await supabase.from('orderItems').upsert(orderItems).select();
+            if (orderItemsError) throw orderItemsError;
+
+            return { orderData, orderItemsData };
+        } catch (error) {
+            alert(error.message)
+        }
+    },
+    async getCustomerOrders() {
+        try {
+            const { user } = this.session;
+            const { data, error, status } = await supabase
+                .from('orders')
+                .select(
+                    getObjectSelect(new Order()) + 
+                    `, billingAddress:billingAddressId(${addressSelect})` + 
+                    `, shippingAddress:shippingAddressId(${addressSelect})`)
+                .eq('userId', user.id)
+                .order('id', { ascending: false });
+    
+            if (error && status !== 406) throw error
+            return data;
+        } catch (error) {
+            alert(error.message)
+        }
+    },
+    async getCustomerOrderById(orderId) {
+        try {
+            const { user } = this.session;
+            const { data, error, status } = await supabase
+                .from('orders')
+                .select(
+                    getObjectSelect(new Order()) + 
+                    `, billingAddress:billingAddressId(${addressSelect})` + 
+                    `, shippingAddress:shippingAddressId(${addressSelect})`)
+                .eq('userId', user.id)
+                .eq('id', orderId)
+                .order('id', { ascending: false });
+    
+            if (error && status !== 406) throw error
+            return data;
+        } catch (error) {
+            alert(error.message)
+        }
+    },
+    async getOrderItemsByOrderId(orderId) {
+        try {
+            const {data, error} = await supabase.from('orderItems').select().eq('orderId', orderId);
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            alert(error);
         }
     },
     getAvatarUrl(size = 150) {
@@ -134,6 +205,29 @@ export const store = reactive({
         if (size && Number.parseInt(size))
             url += '&size=' + Number.parseInt(size);
         return url;
+    },
+    getPayPalCartItems() {
+        let paypalItems = [];
+
+        this.cart.forEach(i => {
+            let paypalItem = new PayPalItem();
+            paypalItem.name =  truncateString(i.product.name, false, 120);
+            paypalItem.sku = i.product.sku;
+            paypalItem.quantity = i.quantity;
+            paypalItem.category = PayPalItemCategory.PHYSICAL_GOODS;
+            paypalItem.unitAmount = {
+                currency_code: 'USD',
+                value: i.product.salePrice
+            };
+            paypalItem.tax = {
+                currency_code: 'USD',
+                value: 0.0
+            };
+
+            paypalItems.push(paypalItem);
+        })
+
+        return paypalItems;
     }
 });
 
@@ -143,8 +237,7 @@ function recalculateCartItemTotals(cartItem) {
     return cartItem;
 }
 
-function truncateString(string, productName=false) {
-    let maxLength = 50;
+export function truncateString(string, productName=false, maxLength=50) {
     if (productName)
         maxLength = 25;
     
@@ -197,4 +290,20 @@ export function displayAddress(obj) {
     if (obj.country) addressArray.push(obj.country.ISO3)
 
     return addressArray.join(', ')
+}
+
+function getObjectSelect(obj) {
+    let props = [];
+    Object.keys(obj).forEach((key) => {
+        props.push(key)
+    });
+    
+    return props.join(',');
+}
+
+function removeEmptyPropsFromObj(obj) {
+    Object.keys(obj).forEach( 
+        (key) => (obj[key] === null || obj[key] == undefined) && delete obj[key]);
+    
+    return obj;
 }
