@@ -7,9 +7,10 @@ import { onMounted, ref } from 'vue';
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-const emit = defineEmits(['back-to-orders'])
+const emit = defineEmits(['orderDetails-back'])
 const prop = defineProps({
-    order: Object
+    order: Object,
+    guest: Boolean
 })
 const orderItems = ref([]);
 
@@ -21,9 +22,9 @@ onMounted(async () => {
     <div>
         <div class="flex-c" style="gap: 0.25rem;overflow-x: hidden;overflow-y: scroll;">
             <div class="action-buttons flex-r jc-sb bg-glass-rounded ai-c" style="padding: 0.25rem 1rem 0.25rem 0.25rem; color: white;">
-                <div @click="emit('back-to-orders')" class="flex-r order-action" style="gap: 5px;">
+                <div @click="emit('orderDetails-back')" class="flex-r order-action" style="gap: 5px;">
                     <svg-icon type="mdi" :path="mdiArrowLeftBoldCircle" />
-                    <p>back</p>
+                    <p>{{ guest ? 'home' : 'back' }}</p>
                 </div>
                 <p>Order #{{ order.id }}</p>
                 <p>{{ new Date(order.createdAt).toLocaleDateString() }}</p>
@@ -31,6 +32,7 @@ onMounted(async () => {
             <div class="order-details bg-glass-rounded">
                 <h2>Order Details</h2>
                 <div>
+                    <p v-if="order.email">Email: {{ order.email }}</p>
                     <p v-if="order.referenceId.startsWith('*')">Credit Card: {{ order.referenceId.replaceAll(' ','') }}</p>
                     <p v-else>PO Number: {{ order.referenceId }}</p>
                 </div>

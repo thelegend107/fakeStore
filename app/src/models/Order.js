@@ -10,5 +10,6 @@ export default class Order {
         this.lastUpdated = undefined;
         this.createdAt = undefined;
         this.referenceId = undefined;
+        this.email = undefined;
     }
 }

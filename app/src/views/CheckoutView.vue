@@ -5,8 +5,7 @@ import CartItems from '@/components/CartItems.vue';
 import { store } from '@/store';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiCart } from '@mdi/js';
-import GuestCheckout from '@/components/GuestCheckout.vue';
-import AccountCheckout from '@/components/AccountCheckout.vue';
+import Checkout from '@/components/Checkout.vue';
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -31,9 +30,10 @@ onBeforeMount(() => {
             </div>
             <div class="grid-column flex-c bg-glass-b">
                 <div class="flex-c h-100">
-                    <h1>Checkout</h1>
-                    <account-checkout v-if="store.session" />
-                    <guest-checkout v-else />
+                    <Transition mode="out-in">
+                        <checkout v-if="store.session" />
+                        <checkout v-else :guest="true" />
+                    </Transition>
                 </div>
             </div>
         </div>

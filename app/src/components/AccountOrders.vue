@@ -51,7 +51,7 @@ onMounted(async () => {
             </div>
         </transition-group>
         <h2 class="bg-glass-rounded" style="padding: 1rem;" v-else-if="!ordersExist">There is no orders to display...</h2>
-        <order-details @back-to-orders="handleBackToOrders" v-else :order="showOrder" style="overflow-y:scroll;"></order-details>
+        <order-details @order-details-back="handleBackToOrders" v-else :order="showOrder" style="overflow-y:scroll;"></order-details>
     </transition>
 </template>
 <style lang="scss" scoped>

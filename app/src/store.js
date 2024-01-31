@@ -106,10 +106,9 @@ export const store = reactive({
     },
     async insertAddress(a) {
         try {
-            const { user } = store.session;
             const { data, error } = await supabase.from('addresses')
                 .upsert({
-                    userId: user.id,
+                    userId: this.session ? this.session.user.id : null,
                     address1: a.address1,
                     address2: a.address2,
                     city: a.city,
@@ -128,14 +127,13 @@ export const store = reactive({
     },
     async upsertOrder(order, orderItems) {
         try {
-            const { user } = store.session;
-            order.userId = user.id;
+            order.userId = this.session ? store.session.user.id : undefined;
 
             const { data: orderData, error: orderError } = await supabase.from('orders').upsert(order).select().single();
             if (orderError) throw orderError;
 
             orderItems.forEach(i => {
-                i.userId = user.id;
+                i.userId = this.session ? store.session.user.id : undefined;
                 i.orderId = orderData.id;
                 i = removeEmptyPropsFromObj(i);
             });
@@ -166,18 +164,18 @@ export const store = reactive({
             alert(error.message)
         }
     },
-    async getCustomerOrderById(orderId) {
+    async getGuestOrderById(orderId, email) {
         try {
-            const { user } = this.session;
             const { data, error, status } = await supabase
                 .from('orders')
                 .select(
                     getObjectSelect(new Order()) + 
                     `, billingAddress:billingAddressId(${addressSelect})` + 
                     `, shippingAddress:shippingAddressId(${addressSelect})`)
-                .eq('userId', user.id)
+                .is('userId', null)
                 .eq('id', orderId)
-                .order('id', { ascending: false });
+                .eq('email', email.toLowerCase())
+                .single()
     
             if (error && status !== 406) throw error
             return data;
@@ -256,7 +254,7 @@ export function truncateString(string, productName=false, maxLength=50) {
     }
 
     let truncatedString = stringArray.join(' ').trim();
-    if (truncatedString.lastIndexOf('-') > 0)
+    if (truncatedString.lastIndexOf('-') > 0 && truncatedString.indexOf('-') != truncatedString.lastIndexOf('-'))
         truncatedString = truncatedString.slice(0, truncatedString.lastIndexOf('-')).trim();
 
     if (totalLength > maxLength)

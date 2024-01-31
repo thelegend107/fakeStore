@@ -8,7 +8,7 @@ defineProps({
 })
 </script>
 <template>
-    <div class="overlay flex-r ai-c jc-c" style="flex-wrap: wrap;">
+    <div @click="$emit('close-modal')" class="overlay flex-r ai-c jc-c" style="flex-wrap: wrap;">
         <div class="modal flex-c jc-c w-100" style="gap: 1rem; flex-wrap: wrap;">
             <div class="modal-header flex-r ai-c jc-sb">
                 <h2>{{ title }}</h2>

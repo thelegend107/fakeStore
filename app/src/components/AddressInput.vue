@@ -59,7 +59,7 @@ async function getStates() {
     try {
         const { data, error, status } = await supabase
             .from('state')
-            .select('id, name')
+            .select('id, name, stateCode')
             .eq('countryId', countryId.value)
             .order('name', { ascending: true });
 
@@ -80,7 +80,7 @@ async function getCountries() {
     try {
         const { data, error, status } = await supabase
             .from('country')
-            .select('id, name, ISO2, emoji')
+            .select('id, name, ISO2, ISO3, emoji')
             .order('name', { ascending: true });
 
         if (error && status !== 406) throw error
@@ -93,6 +93,15 @@ async function getCountries() {
 const onSubmit = handleSubmit((values) => {
     if (values.stateId == 1 && states.value.findIndex(x => x.name == 'N/A'))
         values.stateId = null;
+    else {
+        let stateIndex = states.value.findIndex(x => x.id == values.stateId)
+        if (stateIndex != -1)
+            values.state = states.value[stateIndex];
+    }
+
+    let countryIndex = countries.value.findIndex(x => x.id == values.countryId)
+    if (countryIndex != -1)
+        values.country = countries.value[countryIndex];
 
     if (prop.addressId) { 
         values.id = existingAddress.value.id;
