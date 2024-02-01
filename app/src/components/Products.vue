@@ -52,7 +52,7 @@ defineProps({
                             <SvgIcon type="mdi" :path="mdiCartPlus" />
                             <p>Add to Cart</p>
                         </button>
-                        <button :style="{width: '100%'}">
+                        <button @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiOpenInNew" />
                             <p>View Details</p>
                         </button>
@@ -83,7 +83,7 @@ defineProps({
                             <SvgIcon type="mdi" :path="mdiCartPlus" :size="16" />
                             <p>Add to Cart</p>
                         </button>
-                        <button :style="{width: '100%'}">
+                        <button @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiOpenInNew" :size="16" />
                             <p>View Details</p>
                         </button>
@@ -95,12 +95,6 @@ defineProps({
 </template>
 
 <style lang="scss" scoped>
-.product-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.75rem;
-}
-
 .products {
     display: flex;
     flex-wrap: wrap;
@@ -136,6 +130,14 @@ defineProps({
             display: flex;
             position: absolute;
             align-self: flex-end;
+        }
+
+        .product-actions {
+            button {
+                height: 1.75rem;
+                font-size: 12px;
+                display: flex;
+            }
         }
     }
 }
@@ -190,6 +192,14 @@ defineProps({
                 border-radius: 15px;
                 background-color: var(--primaryV);
             }
+
+            .product-actions {
+                gap: 0.5rem;
+                flex-direction: column;
+                button {
+                    height: 2rem;
+                }
+            }
         }
     }
 }
@@ -209,6 +219,19 @@ defineProps({
                     flex-direction: row;
                     justify-content: space-between;
                 }
+                .product-actions {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    gap: 0.75rem;
+                    
+                    button {
+                        font-size: 15px;
+                        display: flex;
+                        gap: 0.5rem;
+                        height: 3rem;
+                    }
+                }
             }
 
             img {
@@ -217,14 +240,6 @@ defineProps({
                 border-radius: 15px;
                 height: 34vh;
                 object-fit: contain;
-            }
-            .product-actions {
-                button {
-                    font-size: 15px;
-                    display: flex;
-                    gap: 0.5rem;
-                    height: 3rem;
-                }
             }
         }
     }

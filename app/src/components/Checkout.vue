@@ -25,7 +25,7 @@ const addressModalBilling = ref(false);
 const addressModalShow = ref(false);
 const sameAsShippingAddress = ref(true);
 
-const months = [];
+const months = ref([]);
 const years = [];
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + 1;
@@ -34,8 +34,24 @@ for (let i=currentYear; i <= currentYear+10; i++) {
     years.push(i);
 }
 
-for (let i=currentMonth; i <= 12; i++) {
-    months.push(i);
+for (let i=1; i <= 12; i++) {
+    months.value.push(i);
+}
+
+function creditCardExpYearChange(year) {
+    months.value = [];
+    if (year == currentYear) {
+        for (let i=currentMonth; i <= 12; i++) {
+            months.value.push(i);
+        }
+
+        if (cardExpMonth.value < currentMonth)
+            cardExpMonth.value = 0;
+    }
+    else
+        for (let i=1; i <= 12; i++) {
+            months.value.push(i);
+        }
 }
 
 const paymentMethods = ref([
@@ -69,7 +85,7 @@ const { meta, errors, defineField, handleSubmit } = useForm({
         }),
         cardNumber: string().when('paymentMethodId', {
             is: 1,
-            then: (schema) => schema.required('card number is required').matches(/^(\d+ \d+ \d+ \d+)|(\d+ \d+ \d+)/, 'card has to be a number').min(17).max(19)
+            then: (schema) => schema.required('card number is required').matches(/^[2,3,4,5]/, 'card has to be VISA, MASTERCARD, or AMEX').matches(/^(\d+ \d+ \d+ \d+)|(\d+ \d+ \d+)/, 'card has to be a number').min(17).max(19)
         }),
         cardExpMonth: number().when('paymentMethodId', {
             is: 1,
@@ -94,7 +110,7 @@ const { meta, errors, defineField, handleSubmit } = useForm({
         billingAddressId: 0,
         shippingAddressId: 0,
         cardExpMonth: 0,
-        cardExpYear: 0
+        cardExpYear: 0,
     }
 })
 
@@ -123,7 +139,7 @@ function newAddressSelect(billing) {
 }
 
 async function handleAddressUpsert(a) {
-    await store.insertAddress(a).then(async (data) => {
+    await store.upsertAddress(a).then(async (data) => {
         addressModalShow.value = false;
         customerAddress.value = await store.getCustomerAddresses();
 
@@ -163,10 +179,10 @@ const placeOrder = handleSubmit(async () => {
         let baIndex = customerAddress.value.findIndex(x => x.id == billingAddressId.value);
         let saIndex = customerAddress.value.findIndex(x => x.id == shippingAddressId.value);
 
-        gBillingAddress = await store.insertAddress(customerAddress.value[saIndex]);
+        gBillingAddress = await store.upsertAddress(customerAddress.value[saIndex]);
 
         if (!sameAsShippingAddress.value && gBillingAddress)
-            gShippingAddress = await store.insertAddress(customerAddress.value[baIndex]);
+            gShippingAddress = await store.upsertAddress(customerAddress.value[baIndex]);
         else
             gShippingAddress = gBillingAddress;
 
@@ -340,7 +356,7 @@ watch((sameAsShippingAddress), (newVal) => {
                                     <span>{{ errors.cardExpMonth }}</span>
                                 </div>
                                 <div class="flex-c" style="flex-grow: 1;">
-                                    <select :class="{ inputError: errors.cardExpYear }" v-model="cardExpYear">
+                                    <select v-on:change="creditCardExpYearChange(cardExpYear)" :class="{ inputError: errors.cardExpYear }" v-model="cardExpYear">
                                         <option value=0 disabled selected hidden>YYYY</option>
                                         <option v-for="y in years" :key="y">{{ y }}</option>
                                     </select>

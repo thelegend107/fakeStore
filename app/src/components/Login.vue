@@ -41,7 +41,7 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
     <card class="card" :centered="true">
         <form @submit.prevent="onSubmit">
-            <h1 style="text-align: center; font-size: 75px;">Login.</h1>
+            <h1 style="text-align: center; font-size: 75px;color:rgba(255, 255, 255, 0.55);">Login.</h1>
             <div class="flex-c" style="gap: 0.5rem">
                 <div class="flex-c">
                     <label>Email:</label>

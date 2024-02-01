@@ -14,6 +14,8 @@ import AccountAddressesComponent from '@/components/AccountAddresses.vue'
 import AccountOrdersComponent from '@/components/AccountOrders.vue'
 import AccountMessageComponent from '@/components/AccountMessage.vue'
 import GuestOrderView from '@/views/GuestOrderView.vue'
+import ErrorView from '@/views/ErrorView.vue'
+import ProductView from '@/views/ProductView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,19 +26,21 @@ const router = createRouter({
             children: [
                 { path: '/', name: 'home', component: HomeView },
                 { path: '/shop/:categoryId?', name: 'shop', component: ShopView },
+                { path: '/shop/product/:productId?', name: 'product', component: ProductView },
                 { path: '/about', name: 'about', component: AboutView },
                 { path: '/account', component: AccountView, children: [
                     {path: '/account', name: 'account', component: AccountInfoComponent },
                     {path: '/account/addresses', name: 'account-addresses', component: AccountAddressesComponent },
-                    {path: '/account/orders', name: 'account-orders', component: AccountOrdersComponent }
+                    {path: '/account/orders', name: 'account-orders', component: AccountOrdersComponent },
                 ]},
                 { path: '/guestorder/:email/:orderId', name: 'guest-order', component: GuestOrderView },
                 { path: '/checkout', name: 'checkout', component: CheckoutView },
                 { path: '/account/login', name: 'login', component: LoginView }, 
                 { path: '/account/register', name: 'register', component: RegisterView },
-                { path: '/account/confirmed', name: 'confirmed', component: AccountMessageComponent }
+                { path: '/account/confirmed', name: 'confirmed', component: AccountMessageComponent },
+                { path: "/:catchAll(.*)", name: "NotFound", component: ErrorView}
             ]
-        }
+        },
     ]
 })
 

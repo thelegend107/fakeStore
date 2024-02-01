@@ -39,7 +39,10 @@ const propertyArray = [
     'customerReviewAverage',
     'customerReviewCount',
     'image',
-    'shipping'
+    'shippingWeight',
+    'warrantyLabor',
+    'warrantyParts',
+    'includedItemList'
 ];
 
 const defaultShow = propertyArray.join(',');
@@ -55,13 +58,20 @@ export const bestBuy = reactive({
 
     async getTopDeals(pageSize=10) {
         this.loading = true;
-        return await this.callBestBuyProductsAPI(categories[0].id, "", "dollarSavings.desc", 1, pageSize, false);
+        return await this.callBestBuyProductsAPI(null, categories[0].id, "", "dollarSavings.desc", 1, pageSize, false);
+    },
+
+    async getProduct(productSku) {
+        this.loading = true;
+        return await this.callBestBuyProductsAPI(productSku);
     },
 
     goToCategory(categoryIndex) {
         this.loading = true;
-        this.mainCategory = categories[categoryIndex];
-        this.currentPage = 1;
+        if (this.mainCategory.id != categories[categoryIndex].id) {
+            this.mainCategory = categories[categoryIndex];
+            this.currentPage = 1;
+        }
         this.reloadProductsFaster();
     },
 
@@ -97,8 +107,14 @@ export const bestBuy = reactive({
         this.reloadProducts();
     },
 
-    async callBestBuyProductsAPI(category=this.mainCategory.id, searchTerm=this.searchTerm, pSort=defaultSort, page=this.currentPage, pageSize=this.pageSize, primary=true) {
-        let url = generateUrl(baseUrl, category, searchTerm);
+    async callBestBuyProductsAPI(productSku=null, category=this.mainCategory.id, searchTerm=this.searchTerm, pSort=defaultSort, page=this.currentPage, pageSize=this.pageSize, primary=true) {
+        let url = '';
+
+        if (productSku) {
+            url = baseUrl + '/' + productSku + '.' + defaultFormat;
+        }
+        else
+            url = generateUrl(baseUrl, category, searchTerm);
     
         try {
             const { data } = await axios.get(url, {
@@ -116,7 +132,6 @@ export const bestBuy = reactive({
 
             if (primary) {
                 this.products = data.products;
-                this.currentPage = data.currentPage;
                 this.totalPages = data.totalPages;
                 this.loading = false
             }

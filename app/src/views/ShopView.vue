@@ -18,7 +18,7 @@ onBeforeMount(async () => {
         handleCategoryChange(categoryIndex);
     }
     else
-        handleCategoryChange();
+        handleCategoryChange(categoryIndex);
 })
 </script>
 

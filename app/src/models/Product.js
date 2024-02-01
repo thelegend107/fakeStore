@@ -20,7 +20,10 @@ export default class Product {
             this.customerReviewAverage = undefined,
             this.customerReviewCount = undefined,
             this.image = undefined,
-            this.productVariations = undefined,
+            this.shippingWeight = undefined,
+            this.warrantyLabor = undefined,
+            this.warrantyParts = undefined,
+            this.includedItemList = undefined,
             this.shipping = undefined
         }
     }

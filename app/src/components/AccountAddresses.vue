@@ -26,10 +26,9 @@ async function deleteAddress(a) {
     } catch (error) {
         if (error.code == "23503") {
             a.deleted = true;
-            await store.insertAddress(a).then(() => {
+            await store.upsertAddress(a).then(() => {
                 store.getCustomerAddresses();
                 customerAddresses.value = customerAddresses.value.filter(x => x.id != a.id);
-                toastPrimary("Address was deleted successfully!", toastType.success);
             })
         }
         else toastPrimary(error, toastType.error);
@@ -41,8 +40,9 @@ async function handleAddressUpsert(a) {
     if (a.id) {
         await deleteAddress(a);
         updating = true;
+        a.deleted = false;
     }
-    await store.insertAddress(a).then(data => {
+    await store.upsertAddress(a).then(data => {
         addressModalShow.value = false;
         store.getCustomerAddresses();
         customerAddresses.value.push(data);
