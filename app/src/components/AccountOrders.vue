@@ -2,7 +2,7 @@
 import { store } from '@/store';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiInformation } from '@mdi/js';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import OrderDetails from './OrderDetails.vue';
 import { useRouter } from 'vue-router';
 
@@ -24,7 +24,7 @@ function handleBackToOrders() {
     showOrder.value = null;
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
     customerOrders.value = await store.getCustomerOrders();
     if (!customerOrders.value.length > 0)
         ordersExist.value = false;

@@ -2,7 +2,7 @@
 import { displayAddress, store, truncateString } from '@/store';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiArrowLeftBoldCircle } from '@mdi/js';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -14,7 +14,7 @@ const prop = defineProps({
 })
 const orderItems = ref([]);
 
-onMounted(async () => {
+onBeforeMount(async () => {
     orderItems.value = await store.getOrderItemsByOrderId(prop.order.id);
 })
 </script>

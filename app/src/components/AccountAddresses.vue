@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { store, displayAddress } from '@/store';
 import { toastPrimary, toastType } from '@/toast';
 import { supabase } from '@/supabase';
@@ -54,7 +54,7 @@ async function handleAddressUpsert(a) {
     })
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await store.getCustomerAddresses().then(addresses => {
         customerAddresses.value = addresses;
     });

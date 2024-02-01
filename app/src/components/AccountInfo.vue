@@ -3,7 +3,7 @@ import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiSync } from '@mdi/js';
 import { store } from '@/store';
 import { useForm } from 'vee-validate';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { object, string } from 'yup';
 import { toastPrimary, toastType } from '@/toast';
 import { supabase } from '@/supabase';
@@ -22,7 +22,7 @@ const [firstname] = defineField('firstname');
 const [lastname] = defineField('lastname');
 const [username] = defineField('username');
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await store.getCustomer().then(customer => {
         username.value = customer.username;
         firstname.value = customer.firstname;
