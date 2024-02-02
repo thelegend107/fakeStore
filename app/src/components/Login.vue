@@ -66,6 +66,13 @@ const onSubmit = handleSubmit(async (values) => {
                     <svg-icon type="mdi" :path="mdiAccountPlus" :size="25" />
                     <p>Register</p>
                 </button>
+                <div class="bg-glass-rounded" style="margin-top: 1rem;">
+                    <h3 style="color: white;">Don't want to register?</h3>
+                    <div style="padding-left: 1rem;">
+                        <p>- Username: test@email.com</p>
+                        <p>- Password: G9#tu8DTyO5U^qy9</p>
+                    </div>
+                </div>
             </div>
         </form>
     </card>

@@ -12,7 +12,7 @@ import AccountMessage from './AccountMessage.vue';
 
 const router = useRouter();
 const routes = router.getRoutes();
-const loginRouteIndex = routes.findIndex(x => x.name == 'login');
+const loginRouteIndex = routes.findIndex(x => x.name == 'account');
 const emailRedirectTo = window.location.origin + routes[loginRouteIndex].path;
 const accountConfirm = ref(false);
 const accountAlreadyExists = ref(false);
