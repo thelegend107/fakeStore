@@ -144,8 +144,11 @@ input:focus, select:focus {
     border-color: var(--error);
 }
 
-input, select {
+input {
     font-size: 16px;
+}
+
+input, select {
     color: white;
     background-color: black;
     border: none;
