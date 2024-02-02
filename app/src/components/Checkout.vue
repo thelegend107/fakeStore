@@ -310,9 +310,9 @@ watch((sameAsShippingAddress), (newVal) => {
             </div>
             <div class="account-billing flex-c w-100">
                 <label>Billing Address:</label>
-                <select :class="{ inputError: errors.billingAddressId || billingAddressId == 0 }" v-model="billingAddressId">
+                <select v-on:change="$event.target.value == -1 ? newAddressSelect(true) : null" :class="{ inputError: errors.billingAddressId || billingAddressId == 0 }" v-model="billingAddressId">
                     <option :value='0' disabled selected hidden>Please select an address</option>
-                    <option @select="newAddressSelect(true)">------ New Address ------</option>
+                    <option :value='-1'>------ New Address ------</option>
                     <option v-for="a in customerAddress" :key="a.id" :value="a.id">{{ displayAddress(a) }}</option>
                 </select>
                 <span>{{ errors.billingAddressId }}</span>
@@ -325,9 +325,9 @@ watch((sameAsShippingAddress), (newVal) => {
             <Transition>
                 <div v-if="!sameAsShippingAddress" class="account-shipping flex-c w-100">
                     <label>Shipping Address:</label>
-                    <select :class="{ inputError: errors.shippingAddressId || shippingAddressId == 0 }" v-model="shippingAddressId">
+                    <select v-on:change="$event.target.value == -1 ? newAddressSelect(false) : null" :class="{ inputError: errors.shippingAddressId || shippingAddressId == 0 }" v-model="shippingAddressId">
                         <option :value='0' disabled selected hidden>Please select an address</option>
-                        <option @select="newAddressSelect(false)">------ New Address ------</option>
+                        <option :value='-1'>------ New Address ------</option>
                         <option v-for="a in customerAddress" :key="a.id" :value="a.id">{{ displayAddress(a) }}</option>
                     </select>
                     <span>{{ errors.shippingAddressId }}</span>
