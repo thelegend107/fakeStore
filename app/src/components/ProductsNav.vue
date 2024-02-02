@@ -23,8 +23,8 @@ const prop = defineProps({
     <div class="flex-c" v-if="!carousel" style="gap: 0.75rem;">
         <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-            <div class="pl-nav-info">
-                <input v-maska data-maska="N" data-maska-tokens="N:[0-9]:multiple" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+            <div class="pl-nav-info bg-glass">
+                <input v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
@@ -32,8 +32,8 @@ const prop = defineProps({
         <slot></slot>
         <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-            <div class="pl-nav-info">
-                <input v-maska data-maska="N" data-maska-tokens="N:[0-9]:multiple" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+            <div class="pl-nav-info bg-glass">
+                <input v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
@@ -64,6 +64,7 @@ const prop = defineProps({
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0rem 2rem;
     }
 
     input {

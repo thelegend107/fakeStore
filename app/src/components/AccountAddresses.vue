@@ -12,14 +12,14 @@ const addressId = ref();
 const addressModalShow = ref(false);
 const customerAddresses = ref([]);
 
-async function deleteAddress(a) {
+async function deleteAddress(a, updatingAddress=false) {
     try {
         const { status, error } = await supabase.from('addresses')
             .delete()
             .eq('id', a.id);
         
         if (error) throw error;
-        if (status == 204) {
+        if (status == 204 && !updatingAddress) {
             customerAddresses.value = customerAddresses.value.filter(x => x.id != a.id);
             toastPrimary("Address was deleted successfully!", toastType.success);
         };
@@ -28,7 +28,10 @@ async function deleteAddress(a) {
             a.deleted = true;
             await store.upsertAddress(a).then(() => {
                 store.getCustomerAddresses();
-                customerAddresses.value = customerAddresses.value.filter(x => x.id != a.id);
+                if (!updatingAddress) {
+                    customerAddresses.value = customerAddresses.value.filter(x => x.id != a.id);
+                    toastPrimary("Address was deleted successfully!", toastType.success);
+                }
             })
         }
         else toastPrimary(error, toastType.error);
@@ -36,19 +39,36 @@ async function deleteAddress(a) {
 }
 
 async function handleAddressUpsert(a) {
-    let updating = false;
+    let addressIndex = -1;
     if (a.id) {
-        await deleteAddress(a);
-        updating = true;
-        a.deleted = false;
+        addressIndex = customerAddresses.value.findIndex(x => x.id == a.id)
+        const { data, error } = await supabase.from('orders').select().or(`billingAddressId.eq.${a.id},shippingAddressId.eq.${a.id}`);
+        
+        if (data && data.length > 0 && !error) {
+            await deleteAddress(customerAddresses.value[addressIndex], true);
+            a.deleted = false;
+            a.id = undefined;
+        }
     }
+
     await store.upsertAddress(a).then(data => {
         addressModalShow.value = false;
         store.getCustomerAddresses();
-        customerAddresses.value.push(data);
+        
+        if (addressIndex > -1) {
+            if (a.id) {
+                customerAddresses.value[addressIndex] = data;
+            } 
+            else {
+                customerAddresses.value = customerAddresses.value.filter(x => x.id != customerAddresses.value[addressIndex].id);
+                customerAddresses.value.push(data);
+            }
 
-        if (updating) toastPrimary("Address was updated successfully!", toastType.success);
-        else toastPrimary("Address was added successfuly!", toastType.success);
+            toastPrimary("Address was updated successfully!", toastType.success);
+        } else {
+            customerAddresses.value.push(data);
+            toastPrimary("Address was added successfuly!", toastType.success)
+        }
     }).finally(() => {
         addressId.value = null;
     })

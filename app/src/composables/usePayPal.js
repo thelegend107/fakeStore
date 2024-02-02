@@ -1,3 +1,8 @@
+// Works but the button is ugly... tailored for a white themed website.
+// I would need to use the actual PayPal API to get the user a PayPal session in a new tab.
+// Might have to look into how to track that new tab, and if the user completed the checkout process on that new tab or cancelled.
+// Using this button does track the new tab and has an overlay on the whole website until the user done checking out with PayPal. 
+// Which is a pretty nice functionality that you would want to replicate if you use the API directly.
 import { onBeforeMount } from 'vue'
 import { loadScript } from '@paypal/paypal-js'
 import { toastPrimary, toastType } from '@/toast'

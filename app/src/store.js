@@ -108,7 +108,7 @@ export const store = reactive({
         try {
             const { data, error } = await supabase.from('addresses')
                 .upsert({
-                    id: a.deleted ? a.id : undefined,
+                    id: a.id,
                     userId: this.session ? this.session.user.id : null,
                     address1: a.address1,
                     address2: a.address2,

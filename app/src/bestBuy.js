@@ -78,6 +78,7 @@ export const bestBuy = reactive({
     searchRequest(searchTerm) {
         this.loading = true;
         this.searchTerm = searchTerm;
+        this.currentPage = 1;
         this.reloadProductsFaster();
     },
 
