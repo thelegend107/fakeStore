@@ -15,6 +15,8 @@ import router from '@/router';
 import Modal from './Modal.vue';
 import AddressInput from './AddressInput.vue';
 
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
 const title = ref('Checkout');
 const prop = defineProps({
     guest: Boolean
@@ -331,7 +333,7 @@ watch((sameAsShippingAddress), (newVal) => {
                     <span>{{ errors.shippingAddressId }}</span>
                 </div>
             </Transition>
-            <div class="payment-method flex-c w-100" style="gap: 0.5rem;">
+            <div class="payment-method flex-c w-100" style="gap: 0.5rem; margin-bottom: 0.5rem;">
                 <label>Payment Method:</label>
                 <div class="flex-r ai-c" style="gap: 0.5rem;">
                     <button type="button" @click="paymentMethodId = p.id" class="w-100" v-for="p in paymentMethods" :key="p.id" :class="{selected: p.id == paymentMethodId}">
@@ -375,11 +377,18 @@ watch((sameAsShippingAddress), (newVal) => {
                     </div>
                 </Transition>
             </div>
-            <button style="margin-top: auto; height: 3.5rem;" type="submit" :disabled="!meta.valid">Place Order</button>
+            <button class="flex-c" style="margin-top: auto; height: 4rem; gap: 0.25rem;" type="submit" :disabled="!meta.valid">
+                <p>Place Order</p>
+                <p class="btn-total">{{ currency.format(store.getCartTotal()) }}</p>
+            </button>
         </form>
     </div>
 </template>
 <style lang="scss" scoped>
+.btn-total {
+    display: flex;
+}
+
 .payment-method {
     .selected, .selected:hover {
         background-color: var(--primary);
@@ -406,6 +415,9 @@ watch((sameAsShippingAddress), (newVal) => {
 }
 
 @media (min-width: 1024px) and (min-height: 788px) {
+    .btn-total {
+        display: none;
+    }
     .payment-method {
         button {
             p {
