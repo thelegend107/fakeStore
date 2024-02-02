@@ -24,7 +24,7 @@ const prop = defineProps({
         <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info bg-glass">
-                <input v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+                <input inputmode="numeric" v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
@@ -33,7 +33,7 @@ const prop = defineProps({
         <div class="pl-nav-container bg-glass">
             <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info bg-glass">
-                <input v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
+                <input inputmode="numeric" v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
             <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
@@ -68,6 +68,7 @@ const prop = defineProps({
     }
 
     input {
+        font-size: 16px;
         appearance: none;
         font: inherit;
         background-color: inherit;
