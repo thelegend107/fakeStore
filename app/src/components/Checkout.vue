@@ -312,7 +312,7 @@ watch((sameAsShippingAddress), (newVal) => {
                 <label>Billing Address:</label>
                 <select :class="{ inputError: errors.billingAddressId || billingAddressId == 0 }" v-model="billingAddressId">
                     <option :value='0' disabled selected hidden>Please select an address</option>
-                    <option @click="newAddressSelect(true)">------ New Address ------</option>
+                    <option @select="newAddressSelect(true)">------ New Address ------</option>
                     <option v-for="a in customerAddress" :key="a.id" :value="a.id">{{ displayAddress(a) }}</option>
                 </select>
                 <span>{{ errors.billingAddressId }}</span>
@@ -327,7 +327,7 @@ watch((sameAsShippingAddress), (newVal) => {
                     <label>Shipping Address:</label>
                     <select :class="{ inputError: errors.shippingAddressId || shippingAddressId == 0 }" v-model="shippingAddressId">
                         <option :value='0' disabled selected hidden>Please select an address</option>
-                        <option @click="newAddressSelect(false)">------ New Address ------</option>
+                        <option @select="newAddressSelect(false)">------ New Address ------</option>
                         <option v-for="a in customerAddress" :key="a.id" :value="a.id">{{ displayAddress(a) }}</option>
                     </select>
                     <span>{{ errors.shippingAddressId }}</span>
