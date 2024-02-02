@@ -1,4 +1,5 @@
-@import './base.css';
+@import './base.scss';
+@import './toast.scss';
 @import './spinner.scss';
 
 * {
@@ -6,6 +7,7 @@
 }
 
 html {
+    color-scheme: dark;
     scroll-behavior: smooth;
 }
 
@@ -35,29 +37,23 @@ main {
 }
 
 body {
-    background-color: black;
-}
-
-.background-image {
-    top: 0;
-    left: 0;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-image: url(pexels-tomáš-malík-4090329.jpg);
-    background-size: contain;
-    filter: grayscale(100%) blur(15px);
-    z-index: -1;
+    background-image: url(./background.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 header {
+    top: 0;
+    position: sticky;
     display: flex;
-    gap: 10px;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--primaryV);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    background-color: black;
+    z-index: 1;
+    gap: 0.5rem;
 
     img {
         height: 2rem;
@@ -69,7 +65,7 @@ header {
         display: flex;
         justify-content: end;
         align-items: center;
-        gap: 1rem;
+        gap: 10px;
     }
 }
 
@@ -86,12 +82,24 @@ button {
     padding-right: 3.5px;
     cursor: pointer;
     gap: 2.5px;
-    padding: 0.15rem 0.5rem;
+    padding: 0.25rem 0.5rem;
     transition: all 0.5s ease;
 }
 
 button:hover {
     opacity: 70%;
+}
+
+button:disabled {
+    border: 2px solid var(--primary);
+    background-color: black;
+    box-shadow: none;
+}
+
+button:disabled:hover {
+    box-shadow: none;
+    opacity: 100%;
+    cursor: not-allowed;
 }
 
 .shop {
@@ -116,10 +124,158 @@ button:hover {
 .overlay {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;
+}
+
+span {
+    font-size: small;
+    color: var(--error);
+}
+
+input:focus, select:focus {
+    border-bottom: 3px solid rgba(var(--primaryC), 1);
+}
+
+.inputError, .inputError:focus {
+    border-color: var(--error);
+}
+
+input, select {
+    color: white;
+    background-color: black;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid rgba(var(--primaryC), 0.4);
+    border-radius: 2.5px;
+    padding: 0.65rem 1rem;
+    transition: all 0.3s ease;
+}
+
+input[type=number] {
+    appearance: textfield;
+}
+
+.bg-glass-tinted {
+    background-color: rgba($color: #000000, $alpha: 0.7);
+    backdrop-filter: blur(25px);
+}
+
+.bg-glass::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 15px;
+    backdrop-filter: blur(25px) opacity(1);
+    background-color: rgba($color: white, $alpha: 0.1);
+}
+
+.bg-glass {
+    position: relative;
+    border-radius: 15px;
+}
+
+.bg-glass-rounded::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 15px;
+    backdrop-filter: blur(25px) opacity(1);
+    background-color: rgba($color: white, $alpha: 0.05);
+}
+
+.bg-glass-rounded {
+    position: relative;
+    padding: 1rem;
+    border-radius: 15px;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    
+    button {
+        font-size: 15px;
+        display: flex;
+        gap: 0.5rem;
+        height: 3rem;
+    }
+}
+
+.card {
+    height: 100%;
+    font-size: 16px;
+
+    .card-button {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        height: 2rem;
+        width: 100%;
+    }
+
+    //Backdrop-filter contrains the div children's position. 
+    //This fixes the constraining issue when using a position fixed.
+    .card-slot::before {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        content: '';
+        border-radius: 15px;
+        background-color: rgba(255, 255, 255, 0.08);
+        position: absolute;
+        backdrop-filter: blur(25px) opacity(1);
+        z-index: -1;
+    }
+
+    .card-slot {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        box-shadow: var(--box-shadow-1);
+        gap: 1rem; 
+        border-radius: 15px; 
+        padding: 2rem;
+    }
+}
+
+.address-action, .order-action {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.address-action:hover, .order-action:hover {
+    opacity: 70%;
+}
+
+.delete:hover {
+    color: var(--error);
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid;
 }
 
 // Some common div settings that I always use
@@ -135,6 +291,10 @@ button:hover {
 
 .jc-c {
     justify-content: center;
+}
+
+.jc-sa {
+    justify-content: space-around;
 }
 
 .jc-sb {
@@ -167,7 +327,14 @@ button:hover {
 
 @media (hover: hover) {}
 
-@media (min-width: 1024px) and (min-height: 788px) {}
+@media (min-width: 1024px) and (min-height: 788px) {
+    .card {
+        height: 82vh;
+    }
+    header {
+        padding: 0.5rem 2rem;
+    }
+}
 
 .v-enter-active,
 .v-leave-active {
@@ -204,4 +371,10 @@ button:hover {
     visibility: hidden;
     opacity: 0;
     transform: translateX(30px);
+}
+
+@media (min-width: 3840px) and (min-height: 2160px) {
+    main {
+        max-width: 3048px;
+    }
 }

@@ -1,24 +1,22 @@
 <script setup>
 import Section from '@/components/Section.vue';
 import ProductListCarousel from '@/components/ProductListCarousel.vue';
+import { categories, bestBuy } from '@/bestBuy';
 import svgIcon from '@jamescoyle/vue-icon';
-import { categories } from '@/components/BestBuyApi';
 import { mdiSale, mdiArrowTopRight } from '@mdi/js';
-
-const emit = defineEmits(['goToCategory'])
 </script>
 
 <template>
     <div class="home-container">
-        <Section :subtext="'BEST BUY'" :title="'TOP DEALS'" :mdiIconPath="mdiSale" :primary="true">
+        <Section class="topDeals" :subtext="'BEST BUY'" :title="'TOP DEALS'" :mdiIconPath="mdiSale" :primary="true">
             <Suspense>
                 <ProductListCarousel />
             </Suspense>
         </Section>
         <Section :subtext="'BEST BUY'" :title="'CATEGORIES'" :mdiIconPath="mdiArrowTopRight">
             <menu>
-                <li @click="emit('goToCategory', index)" v-for="(c, index) in categories" :key="c.id">
-                    <svg-icon type="mdi" :path="c.iconPath" />
+                <li @click="bestBuy.goToCategory(index); $router.push({name: 'shop', params: {categoryId: c.id} })" v-for="(c, index) in categories" :key="c.id">
+                    <svg-icon class="icon" type="mdi" :path="c.iconPath" />
                     <p>{{ c.name }}</p>
                 </li>
             </menu>
@@ -28,7 +26,7 @@ const emit = defineEmits(['goToCategory'])
 
 <style lang="scss" scoped>
 .home-container {
-    min-height: calc(100vh - 49px);
+    min-height: calc(100vh - 50px);
     display: flex;
     flex-direction: column;
 
@@ -51,7 +49,7 @@ const emit = defineEmits(['goToCategory'])
             background-color: rgba(var(--primaryC), 0.5);
             backdrop-filter: 5px;
             list-style: none;
-            padding: 2dvi 2.65dvi;
+            padding: 1.5dvi 2.65dvi;
             transition: all 0.3s ease;
         }
 

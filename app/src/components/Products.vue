@@ -1,9 +1,14 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { mdiCartPlus, mdiHeart, mdiMinus, mdiOpenInNew } from '@mdi/js';
-import { store } from '@/store';
-import SvgIcon from '@jamescoyle/vue-icon';
+import { productDescription, productNameBrand } from '@/store';
 import CustomerReview from './CustomerReview.vue';
+import { mdiCartPlus, mdiMinus, mdiOpenInNew } from '@mdi/js';
+import SvgIcon from '@jamescoyle/vue-icon';
+
+const emit = defineEmits(['addToCart']);
+
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const percentage = new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 defineProps({
     products: Array,
@@ -16,51 +21,6 @@ defineProps({
         default: false
     }
 })
-
-function truncateString(string, productName=false) {
-    let maxLength = 50;
-    if (productName)
-        maxLength = 25;
-    
-    let totalLength = 0;
-    let stringArray = [];
-    let stringSplit = string.split(' ');
-
-    for (let i = 0; i < stringSplit.length; i++) {
-        totalLength += stringSplit[i].length;
-        if (totalLength > maxLength) {
-            break;
-        }
-        else {
-            stringArray.push(stringSplit[i]);
-        }
-    }
-
-    let truncatedString = stringArray.join(' ').trim();
-    if (truncatedString.lastIndexOf('-') > 0)
-        truncatedString = truncatedString.slice(0, truncatedString.lastIndexOf('-')).trim();
-
-    if (totalLength > maxLength)
-        truncatedString += '...';
-
-    return truncatedString;
-}
-
-function productNameBrand(name) {
-    return truncateString(name.split(' - ').shift(), true);
-}
-
-function productDescription(name) {
-    let nameArray = name.split(' - ');
-    let description = [];
-
-    for (let i = 1; i < nameArray.length; i++) {
-        nameArray[i];
-        description.push(nameArray[i]);
-    }
-
-    return truncateString(description.join(' - '));
-}
 </script>
 
 <template>
@@ -79,20 +39,20 @@ function productDescription(name) {
                 <div class="flex-c" style="gap: 0.5rem;">
                     <div class="salePrice">
                         <div v-if="p.onSale">
-                            <s style="color: lightcoral;">{{ p.regularPrice }}</s>
+                            <s style="color: lightcoral;">{{ currency.format(p.regularPrice) }}</s>
                             <p style="display: flex; align-items: center; color: lightgreen;">
                                 <SvgIcon type="mdi" :path="mdiMinus" :size="11" />
-                                {{ p.percentSavings }}
+                                {{ percentage.format(p.percentSavings/100) }}
                             </p>
                         </div>
-                        <b class="price">{{ p.salePrice }}</b>
+                        <b class="price">{{ currency.format(p.salePrice) }}</b>
                     </div>
                     <div class="product-actions">
-                        <button @click="store.addToCart(p, 1)" :style="{width: '100%'}">
+                        <button @click="emit('addToCart', p)" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiCartPlus" />
                             <p>Add to Cart</p>
                         </button>
-                        <button :style="{width: '100%'}">
+                        <button @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiOpenInNew" />
                             <p>View Details</p>
                         </button>
@@ -105,8 +65,7 @@ function productDescription(name) {
     </div>
 
     <div v-else class="products">
-        <div class="product" v-for="p in products" :key="p.sku">
-            <svg-icon class="product-favorite" type="mdi" :path="mdiHeart" :size="40" />
+        <div class="product bg-glass" v-for="p in products" :key="p.sku">
             <img :src="p.image" :alt="p.sku">
             <div class="product-info">
                 <p>{{ productNameBrand(p.name) }}</p>
@@ -114,17 +73,17 @@ function productDescription(name) {
                 <div class="flex-c" style="gap: 0.5rem;">
                     <div class="salePrice" :style="{justifyContent: p.onSale ? 'space-between' : 'end'}">
                         <div v-if="p.onSale">
-                            <s style="color: lightcoral;">{{ p.regularPrice }}</s>
-                            <p style="display: flex; align-items: center; color: lightgreen;"><SvgIcon type="mdi" :path="mdiMinus" :size="11" />{{ p.percentSavings }}</p>
+                            <s style="color: lightcoral;">{{ currency.format(p.regularPrice) }}</s>
+                            <p style="display: flex; align-items: center; color: lightgreen;"><SvgIcon type="mdi" :path="mdiMinus" :size="11" />{{ percentage.format(p.percentSavings/100) }}</p>
                         </div>
-                        <b class="price">{{ p.salePrice }}</b>
+                        <b class="price">{{ currency.format(p.salePrice) }}</b>
                     </div>
                     <div class="product-actions">
-                        <button @click="store.addToCart(p, 1)" :style="{width: '100%'}">
+                        <button @click="emit('addToCart', p)" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiCartPlus" :size="16" />
                             <p>Add to Cart</p>
                         </button>
-                        <button :style="{width: '100%'}">
+                        <button @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiOpenInNew" :size="16" />
                             <p>View Details</p>
                         </button>
@@ -136,12 +95,6 @@ function productDescription(name) {
 </template>
 
 <style lang="scss" scoped>
-.product-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 5px;
-}
-
 .products {
     display: flex;
     flex-wrap: wrap;
@@ -154,7 +107,6 @@ function productDescription(name) {
         height: 330px;
         overflow: hidden;
         border-radius: 10px;
-        background-color: var(--vt-c-black);
         display: flex;
         flex-direction: column;
         font-size: 12px;
@@ -169,7 +121,7 @@ function productDescription(name) {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+            padding: 0.5rem 0.75rem;
             flex-grow: 1;
         }
 
@@ -178,6 +130,14 @@ function productDescription(name) {
             display: flex;
             position: absolute;
             align-self: flex-end;
+        }
+
+        .product-actions {
+            button {
+                height: 1.75rem;
+                font-size: 12px;
+                display: flex;
+            }
         }
     }
 }
@@ -232,6 +192,14 @@ function productDescription(name) {
                 border-radius: 15px;
                 background-color: var(--primaryV);
             }
+
+            .product-actions {
+                gap: 0.5rem;
+                flex-direction: column;
+                button {
+                    height: 2rem;
+                }
+            }
         }
     }
 }
@@ -251,6 +219,19 @@ function productDescription(name) {
                     flex-direction: row;
                     justify-content: space-between;
                 }
+                .product-actions {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    gap: 0.75rem;
+                    
+                    button {
+                        font-size: 15px;
+                        display: flex;
+                        gap: 0.5rem;
+                        height: 3rem;
+                    }
+                }
             }
 
             img {
@@ -259,14 +240,6 @@ function productDescription(name) {
                 border-radius: 15px;
                 height: 34vh;
                 object-fit: contain;
-            }
-            .product-actions {
-                button {
-                    font-size: 15px;
-                    display: flex;
-                    gap: 0.5rem;
-                    height: 3rem;
-                }
             }
         }
     }

@@ -1,41 +1,33 @@
 <script setup>
-import { ref, onBeforeMount } from 'vue';
 import CategoryNav from '@/components/CategoryNav.vue';
-import { categories } from '@/components/BestBuyApi';
 import ProductList from '@/components/ProductList.vue';
+import { bestBuy, categories } from '@/bestBuy';
+import { onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
 
-const mainCategory = ref({});
+const router = useRouter();
 
-const props = defineProps({
-    searchTerm: String,
-    categoryIndex: Number
-})
-
-function handleMainCategoryChange(categoryIndex) {
-    mainCategory.value = categories[categoryIndex];
+function handleCategoryChange(index = 0) {
+    router.push({name: 'shop', params: {categoryId: categories[index].id} });
+    bestBuy.goToCategory(index);
 }
 
-// Before Rendering:
-// - If the parent component supplies a category index, push it through to the product list
-// - else default to the 'all' category
-onBeforeMount(() => {
-    if (props.categoryIndex) {
-        handleMainCategoryChange(props.categoryIndex);
+onBeforeMount(async () => {
+    let categoryIndex = categories.findIndex(x => x.id == router.currentRoute.value.params.categoryId);
+    if (categoryIndex != -1) {
+        handleCategoryChange(categoryIndex);
     }
-    else {
-        mainCategory.value = categories[0];
-    }  
+    else
+        handleCategoryChange();
 })
 </script>
 
 <template>
     <main>
         <div class="shop">
-            <CategoryNav @main-category-change="handleMainCategoryChange" :categories="categories" :main-category="mainCategory" />
+            <CategoryNav @main-category-change="handleCategoryChange" :categories="categories" :main-category="bestBuy.mainCategory" />
             <transition mode="out-in">
-                <Suspense>
-                    <ProductList :key="mainCategory.id + searchTerm" :category-id="mainCategory.id" :search-term="searchTerm" />
-                </Suspense>
+                <ProductList />
             </transition>
         </div>
     </main>

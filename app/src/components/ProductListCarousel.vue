@@ -1,11 +1,12 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import { getTopDealProducts } from './BestBuyApi';
 import { mdiCircle } from '@mdi/js';
 import SvgIcon from '@jamescoyle/vue-icon';
 import Products from './Products.vue';
 import ProductsNav from './ProductsNav.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
+import { bestBuy } from '@/bestBuy';
+import { store } from '@/store';
 
 const productIndex = ref(0);
 const topDealProducts = ref([]);
@@ -30,8 +31,12 @@ function handleCarouselPagination(index) {
     productIndex.value = index;
 }
 
+function handleAddToCart(product, quantity) {
+    store.addToCart(product, quantity);
+}
+
 onBeforeMount(async () => {
-    await getTopDealProducts(10).then((data) => {
+    await bestBuy.getTopDeals(10).then((data) => {
         topDealProducts.value = data.products;
         loading.value = false;
     });
@@ -40,7 +45,7 @@ onBeforeMount(async () => {
 
 <template>
     <ProductsNav @carousel-navigation="handleCarouselNavigation" :carousel="true">
-        <Products v-if="!loading" :products="topDealProducts" :product-index="productIndex" :carousel="true">
+        <Products @add-to-cart="handleAddToCart" v-if="!loading" :products="topDealProducts" :product-index="productIndex" :carousel="true">
             <div class="carousel-pagination">
                 <SvgIcon class="cp-circle" v-for="(p, index) in topDealProducts"
                     @click="handleCarouselPagination(index)"
