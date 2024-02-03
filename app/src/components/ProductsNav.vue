@@ -61,6 +61,7 @@ const prop = defineProps({
     width: 100%;
 
     .pl-nav-info {
+        font-size: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -68,7 +69,6 @@ const prop = defineProps({
     }
 
     input {
-        font-size: 16px;
         appearance: none;
         font: inherit;
         background-color: inherit;
