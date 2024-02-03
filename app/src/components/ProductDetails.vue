@@ -52,7 +52,7 @@ defineProps({
                     <b class="price">{{ currency.format(product.salePrice) }}</b>
                 </div>
                 <div class="product-actions">
-                    <button @click="$emit('addToCart', product)" :style="{width: '100%'}">
+                    <button name="add-to-cart" @click="$emit('addToCart', product)" :style="{width: '100%'}">
                         <svg-icon type="mdi" :path="mdiCartPlus" />
                         <p>Add to Cart</p>
                     </button>

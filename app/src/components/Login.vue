@@ -53,7 +53,7 @@ const onSubmit = handleSubmit(async (values) => {
                     <input :class="{ inputError: errors.password }" type="password" v-model="password" />
                     <span>{{ errors.password }}</span>
                 </div>
-                <button type="submit" style="margin-top: 0.5rem" :disabled="!meta.valid">
+                <button name="login-button" type="submit" style="margin-top: 0.5rem" :disabled="!meta.valid">
                     <svg-icon type="mdi" :path="mdiLoginVariant" :size="25" />
                     <p>{{ isSubmitting ? 'Logging in...' : 'Login' }}</p>
                 </button>
@@ -62,7 +62,7 @@ const onSubmit = handleSubmit(async (values) => {
                     <p>Forgot Password?</p>
                 </button> -->
                 <pre class="separator"> OR </pre>
-                <button type="button" @click="$router.push({ name: 'register' })">
+                <button name="go-to-register" type="button" @click="$router.push({ name: 'register' })">
                     <svg-icon type="mdi" :path="mdiAccountPlus" :size="25" />
                     <p>Register</p>
                 </button>

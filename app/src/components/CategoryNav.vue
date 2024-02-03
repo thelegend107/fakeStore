@@ -39,13 +39,13 @@ function handleCategoryNavigation(num) {
         </h3>
     </div>
     <div class="categories-mobile bg-glass">
-        <button @click="handleCategoryNavigation(-1)">
+        <button name="category-nav-left" @click="handleCategoryNavigation(-1)">
             <svg-icon type="mdi" :path="mdiChevronLeft" />
         </button>
         <h3 class="category" @click="emit('mainCategoryChange', categoryIndex)">
             {{ props.categories[categoryIndex].name }}
         </h3>
-        <button @click="handleCategoryNavigation(1)">
+        <button name="category-nav-right" @click="handleCategoryNavigation(1)">
             <svg-icon type="mdi" :path="mdiChevronRight" />
         </button>
     </div>

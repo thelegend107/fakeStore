@@ -45,16 +45,16 @@ onBeforeRouteUpdate((to) => {
     <div class="searchBox" :style="searchToggle ? style : null">
         <transition name="slide-fade" mode="out-in">
             <div class="searchBar" v-if="searchToggle">
-                <button @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
+                <button name="search" @click="handleSearch(0)"><svg-icon type="mdi" :path="mdiClose" :size="25"></svg-icon></button>
                 <input id="searchInput" @focusout="handleSearch" @keyup.esc="handleSearch(0)" @keyup.enter="handleSearch" v-model="searchInput" length="25" type="text" :placeholder="'enter search keywords...'" />
             </div>
         </transition>
         <transition name="slide-fade">
-            <button @click="handleCancelSearch" v-if="!searchToggle && searchInput">
+            <button name="search-cancel" @click="handleCancelSearch" v-if="!searchToggle && searchInput">
                 <svg-icon type="mdi" :path="mdiCancel" :size="25"></svg-icon>
             </button>
         </transition>
-        <button @click="handleSearchButton">
+        <button name="search-button" @click="handleSearchButton">
             <svg-icon type="mdi" :path="mdiMagnify" :size="25"></svg-icon>
             <transition name="slide-fade">
                 <p v-if="!searchToggle">{{ searchInput ? '"' + searchInput + '"' : "Search" }}</p>

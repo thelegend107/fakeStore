@@ -24,7 +24,7 @@ function onAccordionClick() {
 </script>
 <template>
     <div>
-        <button :class="{active: !showAccordionContent}"  @click="onAccordionClick" class="accordion w-100">
+        <button name="accordion-button" :class="{active: !showAccordionContent}"  @click="onAccordionClick" class="accordion w-100">
             <h3>{{ title }}</h3>
             <svg-icon type="mdi" :path="iconPath" />
         </button>

@@ -22,29 +22,29 @@ const prop = defineProps({
 <template>
     <div class="flex-c" v-if="!carousel" style="gap: 0.75rem;">
         <div class="pl-nav-container bg-glass">
-            <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
+            <button name="page-left-nav" @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info bg-glass">
                 <input inputmode="numeric" v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
-            <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+            <button name="page-right-nav" @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
         </div>
         <slot></slot>
         <div class="pl-nav-container bg-glass">
-            <button @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
+            <button name="page-left-nav" @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
             <div class="pl-nav-info bg-glass">
                 <input inputmode="numeric" v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
-            <button @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
+            <button name="page-right-nav" @click="emit('pageNavigation', 1)"><svg-icon type="mdi" :path="mdiChevronRight" /></button>
         </div>
     </div>
     <div class="carousel" v-else>
-        <button @click="emit('carouselNavigation', -1)">
+        <button name="carousel-left-nav" @click="emit('carouselNavigation', -1)">
             <SvgIcon class="icon" type="mdi" :path="mdiChevronLeft" :size="35" />
         </button>
         <slot></slot>
-        <button @click="emit('carouselNavigation', 1)">
+        <button name="carousel-right-nav" @click="emit('carouselNavigation', 1)">
             <SvgIcon class="icon" type="mdi" :path="mdiChevronRight" :size="35" />
         </button>
     </div>

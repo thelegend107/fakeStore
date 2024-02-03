@@ -16,14 +16,14 @@ defineProps({
             <h1 v-else>There is currently no user session active! Please login or go home.</h1>
 
             <div class="flex-r jc-sb w-100" style="gap: 0.5rem;">
-                <button @click="$router.push({name: 'home'})" class="flex-r ai-c w-100" style="gap: 5px;"><svg-icon type="mdi" :path="mdiHome" />HOME</button>
-                <button @click="$router.push({name: 'account'})" v-if="session && !order" class="flex-r ai-c w-100" style="gap: 5px;">
+                <button name="go-home" @click="$router.push({name: 'home'})" class="flex-r ai-c w-100" style="gap: 5px;"><svg-icon type="mdi" :path="mdiHome" />HOME</button>
+                <button name="go-to-account" @click="$router.push({name: 'account'})" v-if="session && !order" class="flex-r ai-c w-100" style="gap: 5px;">
                     <svg-icon type="mdi" :path="mdiAccount" /> ACCOUNT
                 </button>
-                <button @click="$router.push({name: 'account-orders'})" v-else-if="session && order" class="flex-r ai-c w-100" style="gap: 5px;">
+                <button name="go-to-orders" @click="$router.push({name: 'account-orders'})" v-else-if="session && order" class="flex-r ai-c w-100" style="gap: 5px;">
                     <svg-icon type="mdi" :path="mdiInvoice" /> ACCOUNT ORDERS
                 </button>
-                <button @click="$router.push({name: 'login'})" v-else class="flex-r ai-c w-100" style="gap: 5px;">
+                <button name="go-to-login" @click="$router.push({name: 'login'})" v-else class="flex-r ai-c w-100" style="gap: 5px;">
                     <svg-icon type="mdi" :path="mdiLoginVariant" />LOGIN
                 </button>
             </div>
