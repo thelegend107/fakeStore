@@ -186,5 +186,8 @@ onMounted(async () => {
     </form>
 </template>
 <style lang="scss" scoped>
-
+input, select {
+    width: 0;
+    min-width: 100%
+}
 </style>
