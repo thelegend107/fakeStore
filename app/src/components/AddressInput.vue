@@ -182,7 +182,7 @@ onMounted(async () => {
                 <span>{{ errors.countryId }}</span>
             </div>
         </div>
-        <button name="add-update-address" type="submit" :disabled="!meta.valid" >{{ prop.addressId ? "Update " : "Add " }}Address</button>
+        <button type="submit" :disabled="!meta.valid" >{{ prop.addressId ? "Update " : "Add " }}Address</button>
     </form>
 </template>
 <style lang="scss" scoped>

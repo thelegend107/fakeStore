@@ -48,11 +48,11 @@ defineProps({
                         <b class="price">{{ currency.format(p.salePrice) }}</b>
                     </div>
                     <div class="product-actions">
-                        <button name="addToCart-button" @click="emit('addToCart', p)" :style="{width: '100%'}">
+                        <button @click="emit('addToCart', p)" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiCartPlus" />
                             <p>Add to Cart</p>
                         </button>
-                        <button name="view-product-details-button" @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
+                        <button @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiOpenInNew" />
                             <p>View Details</p>
                         </button>
@@ -79,11 +79,11 @@ defineProps({
                         <b class="price">{{ currency.format(p.salePrice) }}</b>
                     </div>
                     <div class="product-actions">
-                        <button name="addToCart-button" @click="emit('addToCart', p)" :style="{width: '100%'}">
+                        <button @click="emit('addToCart', p)" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiCartPlus" :size="16" />
                             <p>Add to Cart</p>
                         </button>
-                        <button name="view-product-details-button" @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
+                        <button @click="$router.push({name:'product',params:{productId:p.sku}})" :style="{width: '100%'}">
                             <SvgIcon type="mdi" :path="mdiOpenInNew" :size="16" />
                             <p>View Details</p>
                         </button>

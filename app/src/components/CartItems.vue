@@ -28,9 +28,9 @@ const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: '
             <div class="flex-r jc-sb ai-c" style="gap: 0.5rem;">
                 <button @click="store.removeFromCart(ci.product.sku)" class="w-100"><svgIcon type="mdi" :path="mdiTrashCan" /></button>
                 <div class="cartItem-qty flex-r ai-c jc-sb w-100">
-                    <button name="decrement-quantity" @click="store.cartItemQtyDecrement(ci.product.sku)"><svgIcon type="mdi" :path="mdiMinus" /></button>
+                    <button @click="store.cartItemQtyDecrement(ci.product.sku)"><svgIcon type="mdi" :path="mdiMinus" /></button>
                     <p>{{ ci.quantity }}</p>
-                    <button name="increment-quantity" @click="store.cartItemQtyIncrement(ci.product.sku)"><svgIcon type="mdi" :path="mdiPlus" /></button>
+                    <button @click="store.cartItemQtyIncrement(ci.product.sku)"><svgIcon type="mdi" :path="mdiPlus" /></button>
                 </div>
             </div>
         </li>

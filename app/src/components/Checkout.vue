@@ -377,7 +377,7 @@ watch((sameAsShippingAddress), (newVal) => {
                     </div>
                 </Transition>
             </div>
-            <button name="place-order" class="flex-c" style="margin-top: auto; height: 4rem; gap: 0.25rem;" type="submit" :disabled="!meta.valid">
+            <button class="flex-c" style="margin-top: auto; height: 4rem; gap: 0.25rem;" type="submit" :disabled="!meta.valid">
                 <p>Place Order</p>
                 <p class="btn-total">{{ currency.format(store.getCartTotal()) }}</p>
             </button>

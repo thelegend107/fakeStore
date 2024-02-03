@@ -54,7 +54,7 @@ switch (router.currentRoute.value.name) {
             <div>
                 <h3 v-for="(t, index) in h3Texts" :key="index">{{ t }}</h3>
             </div>
-            <button name="go-home-button" class="flex-r ai-c" @click="router.push({ name: 'home' })" style="height: 3rem;">
+            <button class="flex-r ai-c" @click="router.push({ name: 'home' })" style="height: 3rem;">
                 <svg-icon type="mdi" :path="mdiHome"></svg-icon>
                 <p>HOME</p>
             </button>

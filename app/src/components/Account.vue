@@ -46,7 +46,7 @@ async function signOut() {
             </transition>
         </router-view>
         <hr>
-        <button name="logout-button" @click="signOut"><svg-icon type="mdi" :path="mdiLogoutVariant" />{{ signingOut ? 'Logging out...' : 'Logout' }}</button>
+        <button @click="signOut"><svg-icon type="mdi" :path="mdiLogoutVariant" />{{ signingOut ? 'Logging out...' : 'Logout' }}</button>
     </card>
 </template>
 <style lang="scss" scoped>

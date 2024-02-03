@@ -28,7 +28,7 @@ const emit = defineEmits(['closeShoppingCart']);
             <hr>
             <CartItems />
             <div class="cart-footer flex-r jc-c" :class="store.cart.length ? 'ai-e' : 'ai-c h-100'">
-                <button name="checkout-button" v-if="store.cart.length" @click="$router.push({name: 'checkout'}); emit('closeShoppingCart')" class="w-100">Checkout</button>
+                <button v-if="store.cart.length" @click="$router.push({name: 'checkout'}); emit('closeShoppingCart')" class="w-100">Checkout</button>
                 <div v-else class="flex-c ai-c w-100">
                     <p>Your cart is empty</p>
                     <button @click="$router.push({name: 'shop'}); emit('closeShoppingCart')">START SHOPPING</button>
