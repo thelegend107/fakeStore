@@ -2,7 +2,6 @@
 <script setup>
 import { ref } from 'vue';
 import { store } from '@/store';
-import { supabase } from '@/supabase';
 import Card from '@/components/Card.vue';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiAccount, mdiInvoiceCheck, mdiLogoutVariant, mdiMapMarker } from '@mdi/js';
@@ -14,21 +13,12 @@ const routeLinks = [
 ]
 
 const signingOut = ref(false);
+
 async function signOut() {
-    try {
-        signingOut.value = true;
-        const { error } = await supabase.auth.signOut()
-        if (error) throw error
-        else {
-            store.customerClear();
-        }
-    } 
-    catch (error) {
-        alert(error);
-    }
-    finally {
+    signingOut.value = true;
+    await store.signOut().then(() => {
         signingOut.value = false;
-    }
+    });
 }
 </script>
 <template>

@@ -104,6 +104,27 @@ export const store = reactive({
             alert(error.message)
         }
     },
+    async insertAddress(a) {
+        try {
+            const { data, error } = await supabase.from('addresses')
+                .insert({
+                    userId: this.session ? this.session.user.id : null,
+                    address1: a.address1,
+                    address2: a.address2,
+                    city: a.city,
+                    postalCode: a.postalCode,
+                    stateId: a.stateId,
+                    countryId: a.countryId,
+                    deleted: a.deleted,
+                    lastUpdated: new Date()
+                }).select(addressSelect).single();
+            
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            alert(error.message);
+        }
+    },
     async upsertAddress(a) {
         try {
             const { data, error } = await supabase.from('addresses')
@@ -145,6 +166,18 @@ export const store = reactive({
             return { orderData, orderItemsData };
         } catch (error) {
             alert(error.message)
+        }
+    },
+    async signOut() {
+        try {
+            const { error } = await supabase.auth.signOut()
+            if (error) throw error
+            else {
+                this.customerClear();
+            }
+        } 
+        catch (error) {
+            alert(error);
         }
     },
     async getCustomerOrders() {
