@@ -53,7 +53,7 @@ onMounted(async () => {
         <Transition>
             <div class="account-dropdown flex-c" style="gap: 1rem;" v-if="showAccountRoutes">
                 <div class="flex-c" style="gap: 1rem;" v-if="!route.name.includes('account')">
-                    <router-link class="flex-r ai-c" v-for="route in accountRoutes" :key="route.name" :to="route.path" style="gap: 0.5rem;">
+                    <router-link @click="showAccountRoutes = false" class="flex-r ai-c" v-for="route in accountRoutes" :key="route.name" :to="route.path" style="gap: 0.5rem;">
                         <svg-icon type="mdi" :path="route.iconPath"></svg-icon>
                         {{ route.displayName }}
                     </router-link>
