@@ -26,13 +26,24 @@ router.getRoutes().filter((x) => x.name?.includes('account')).forEach((x) => {
 
 accountRoutes = sortBy(accountRoutes, 'displayName');
 
+function toggleAccountRoutes() {
+    showAccountRoutes.value = !showAccountRoutes.value;
+    
+    if (showAccountRoutes.value == true) {
+        setTimeout(() => {
+            let dropDownElement = document.getElementById('account-dropdown');
+            dropDownElement.focus();
+        });
+    }
+}
+
 onMounted(async () => {
     await store.getCustomer();
 })
 </script>
 <template>
     <div>
-        <div @click="showAccountRoutes = !showAccountRoutes" style="gap: 10px" class="h-account bg-glass flex-r ai-c">
+        <div @click="toggleAccountRoutes" style="gap: 10px" class="h-account bg-glass flex-r ai-c">
             <img :src="store.getAvatarUrl(47)" width="25" height="25" />
             <div class="h-account-name flex-r ai-c" style="gap: 3.5px">
                 <p>{{ store.customer.firstname }}</p>
@@ -40,9 +51,9 @@ onMounted(async () => {
             </div>
         </div>
         <Transition>
-            <div class="account-dropdown flex-c" style="gap: 1rem;" v-if="showAccountRoutes">
+            <div id="account-dropdown" @focusout="toggleAccountRoutes" tabindex="0" class="account-dropdown flex-c" style="gap: 1rem;" v-if="showAccountRoutes">
                 <div class="flex-c" style="gap: 1rem;" v-if="!route.name.includes('account')">
-                    <router-link @click="showAccountRoutes = !showAccountRoutes" class="flex-r ai-c" v-for="route in accountRoutes" :key="route.name" :to="route.path" style="gap: 0.5rem;">
+                    <router-link class="flex-r ai-c" v-for="route in accountRoutes" :key="route.name" :to="route.path" style="gap: 0.5rem;">
                         <svg-icon type="mdi" :path="route.iconPath"></svg-icon>
                         {{ route.displayName }}
                     </router-link>
@@ -59,6 +70,10 @@ onMounted(async () => {
 <style lang="scss" scoped>
 a:hover {
     color: white;
+}
+
+.account-dropdown:focus {
+    outline: none;
 }
 
 .account-dropdown {
