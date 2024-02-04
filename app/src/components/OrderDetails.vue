@@ -21,7 +21,7 @@ onBeforeMount(async () => {
 <template>
     <div>
         <div class="flex-c" style="gap: 0.25rem;overflow-x: hidden;overflow-y: scroll;">
-            <div class="action-buttons flex-r jc-sb grid-row ai-c" style="padding: 0.25rem 1rem 0.25rem 0.25rem; color: white;">
+            <div class="action-buttons flex-r jc-sb glass-grid-row ai-c" style="padding: 0.25rem 1rem 0.25rem 0.25rem; color: white;">
                 <div @click="emit('orderDetails-back')" class="flex-r order-action" style="gap: 5px;">
                     <svg-icon type="mdi" :path="mdiArrowLeftBoldCircle" />
                     <p>{{ guest ? 'home' : 'back' }}</p>
@@ -29,7 +29,7 @@ onBeforeMount(async () => {
                 <p>Order #{{ order.id }}</p>
                 <p>{{ new Date(order.createdAt).toLocaleDateString() }}</p>
             </div>
-            <div class="order-details grid-row">
+            <div class="order-details glass-grid-row">
                 <h2>Order Details</h2>
                 <div>
                     <p v-if="order.email">Email: {{ order.email }}</p>
@@ -37,15 +37,15 @@ onBeforeMount(async () => {
                     <p v-else>PO Number: {{ order.referenceId }}</p>
                 </div>
             </div>
-            <div class="billing-information grid-row">
+            <div class="billing-information glass-grid-row">
                 <h2>Billing Address</h2>
                 {{ displayAddress(order.billingAddress) }}
             </div>
-            <div class="shipping-information grid-row">
+            <div class="shipping-information glass-grid-row">
                 <h2>Shipping Address</h2>
                 {{ displayAddress(order.shippingAddress) }}
             </div>
-            <table class="grid-row">
+            <table class="glass-grid-row">
                 <tr style="color: white;"> 
                     <th style="text-align: left;">Product</th>
                     <th>Qty</th>
@@ -66,7 +66,7 @@ onBeforeMount(async () => {
                     <td>{{ currency.format(oi.total) }}</td>
                 </tr>
             </table>
-            <div class="order-total flex-c grid-row" style="text-align: center; gap: 5px;">
+            <div class="order-total flex-c glass-grid-row" style="text-align: center; gap: 5px;">
                 <p>Total</p>
                 <h2>{{ currency.format(order.total) }}</h2>
             </div>
@@ -74,7 +74,7 @@ onBeforeMount(async () => {
     </div>
 </template>
 <style lang="scss" scoped>
-.grid-row {
+.glass-grid-row {
     border-radius: 15px;
     background-color: rgba($color: #ffffff, $alpha: 0.05);
     padding: 1rem;

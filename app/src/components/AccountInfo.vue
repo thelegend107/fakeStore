@@ -56,7 +56,7 @@ const updateCustomer = handleSubmit(async () => {
 </script>
 <template>
     <form @submit.prevent="updateCustomer" class="flex-c jc-sb" style="gap: 1rem;">
-        <div class="bg-glass-rounded flex-c" style="gap: 0.25rem;">
+        <div class="glass-grid-row flex-c" style="gap: 0.25rem;">
             <div class="flex-c">
                 <label for="username">Email: </label>
                 <input :value="store.session.user.email" :disabled="true" style="background-color: #111111;" />

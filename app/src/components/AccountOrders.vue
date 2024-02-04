@@ -40,7 +40,7 @@ onBeforeMount(async () => {
 <template>
     <transition mode="out-in">
         <transition-group v-if="!showDetails && ordersExist" mode="out-in" tag="div" name="list" class="flex-c h-100" style="gap: 0.25rem;overflow-x: hidden; overflow-y:scroll;">
-            <div class="bg-glass-rounded flex-r ai-c jc-sb" v-for="o in customerOrders" :key="o.id">
+            <div class="glass-grid-row flex-r ai-c jc-sb" v-for="o in customerOrders" :key="o.id">
                 <div class="flex-r ai-c" style="gap: 10px;">
                     <p>#{{ o.id }}</p>
                 </div>
@@ -50,7 +50,7 @@ onBeforeMount(async () => {
                 <svg-icon @click="showOrderDetails(o)" class="order-action" type="mdi" :path="mdiInformation" />
             </div>
         </transition-group>
-        <h2 class="bg-glass-rounded" style="padding: 1rem;" v-else-if="!ordersExist">There is no orders to display...</h2>
+        <h2 class="glass-grid-row" style="padding: 1rem;" v-else-if="!ordersExist">There is no orders to display...</h2>
         <order-details @order-details-back="handleBackToOrders" v-else :order="showOrder" style="overflow-y:scroll;"></order-details>
     </transition>
 </template>

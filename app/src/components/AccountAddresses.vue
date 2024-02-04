@@ -83,7 +83,7 @@ onBeforeMount(async () => {
 <template>
     <div class="flex-c jc-sb" style="gap: 1rem;">
         <transition-group mode="out-in" tag="div" name="list" class="flex-c" style="gap: 0.25rem;overflow-x: hidden; overflow-y:scroll;">
-            <div class="bg-glass-rounded flex-r ai-c jc-sb" v-for="a in customerAddresses" :key="a.id">
+            <div class="glass-grid-row flex-r ai-c jc-sb" v-for="a in customerAddresses" :key="a.id">
                 <p>{{ displayAddress(a) }}</p>
                 <div class="flex-r" style="gap: 0.25rem;">
                     <svg-icon @click="addressId = a.id; addressModalShow=true;" class="address-action" type="mdi" :path="mdiPencilCircle" :size="25" />

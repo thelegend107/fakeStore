@@ -24,7 +24,7 @@ async function signOut() {
 <template>
     <card :full-height="true">
         <img :src="store.getAvatarUrl()" width="150" height="150" />
-        <nav class="bg-glass-rounded flex-r ai-c jc-c" style="gap: 1rem;">
+        <nav class="glass-grid-row flex-r ai-c jc-c" style="gap: 1rem;">
             <router-link class="flex-r ai-c" style="gap: 5px;" v-for="route in routeLinks" :to="route.path" :key="route.name">
                 <svg-icon type="mdi" :path="route.iconPath"></svg-icon>
                 <p>{{ route.name }}</p>
@@ -40,7 +40,7 @@ async function signOut() {
     </card>
 </template>
 <style lang="scss" scoped>
-.bg-glass-rounded {
+.glass-grid-row {
     padding: 0px;
 }
 
