@@ -23,6 +23,7 @@
     "sass": "^1.69.5",
     "scss": "^0.2.4",
     "simple-icons": "^11.2.0",
+    "underscore": "^1.13.6",
     "vee-validate": "^4.12.4",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",

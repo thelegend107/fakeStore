@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { mdiCart, mdiLoginVariant } from '@mdi/js';
 import svgIcon from '@jamescoyle/vue-icon';
 import SearchBar from '@/components/SearchBar.vue';
@@ -9,7 +9,6 @@ import HeaderAccount from './components/HeaderAccount.vue';
 import { bestBuy } from '@/bestBuy';
 import { store } from '@/store';
 
-const route = useRoute();
 const router = useRouter();
 const shoppingCartShow = ref(false);
 const navShow = ref(true);
@@ -30,7 +29,7 @@ function handleSearchRequest(searchTerm, searchToggle) {
         <SearchBar @search-request="handleSearchRequest" />
         <transition name="slide-fade">
             <nav v-if="navShow">
-                <HeaderAccount v-if="store.session" @click="if (!route.path.includes('account')) router.push({name: 'account'});" />
+                <HeaderAccount v-if="store.session" />
                 <svg-icon v-else @click="router.push({name: 'login'})" class="header-action" type="mdi" :path="mdiLoginVariant" />
                 <div @click="shoppingCartShow = !shoppingCartShow" class="header-action flex-r ai-c">
                     <svg-icon type="mdi" :path="mdiCart" />
