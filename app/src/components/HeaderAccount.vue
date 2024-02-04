@@ -31,7 +31,7 @@ function toggleAccountRoutes() {
     
     if (showAccountRoutes.value == true) {
         setTimeout(() => {
-            let dropDownElement = document.getElementById('account-dropdown');
+            let dropDownElement = document.getElementById('account-header');
             dropDownElement.focus();
         });
     }
@@ -42,7 +42,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <div>
+    <div @focusout="toggleAccountRoutes" id="account-header" class="account-header" tabindex="0">
         <div @click="toggleAccountRoutes" style="gap: 10px" class="h-account bg-glass flex-r ai-c">
             <img :src="store.getAvatarUrl(47)" width="25" height="25" />
             <div class="h-account-name flex-r ai-c" style="gap: 3.5px">
@@ -51,7 +51,7 @@ onMounted(async () => {
             </div>
         </div>
         <Transition>
-            <div id="account-dropdown" @focusout="toggleAccountRoutes" tabindex="0" class="account-dropdown flex-c" style="gap: 1rem;" v-if="showAccountRoutes">
+            <div class="account-dropdown flex-c" style="gap: 1rem;" v-if="showAccountRoutes">
                 <div class="flex-c" style="gap: 1rem;" v-if="!route.name.includes('account')">
                     <router-link class="flex-r ai-c" v-for="route in accountRoutes" :key="route.name" :to="route.path" style="gap: 0.5rem;">
                         <svg-icon type="mdi" :path="route.iconPath"></svg-icon>
@@ -72,7 +72,7 @@ a:hover {
     color: white;
 }
 
-.account-dropdown:focus {
+.account-header:focus {
     outline: none;
 }
 
