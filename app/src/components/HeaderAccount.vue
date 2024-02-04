@@ -42,7 +42,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <div @focusout="toggleAccountRoutes" id="account-header" class="account-header" tabindex="0">
+    <div @focusout="showAccountRoutes = false" id="account-header" class="account-header" tabindex="0">
         <div @click="toggleAccountRoutes" style="gap: 10px" class="h-account bg-glass flex-r ai-c">
             <img :src="store.getAvatarUrl(47)" width="25" height="25" />
             <div class="h-account-name flex-r ai-c" style="gap: 3.5px">
