@@ -181,6 +181,9 @@ const placeOrder = handleSubmit(async () => {
         let baIndex = customerAddress.value.findIndex(x => x.id == billingAddressId.value);
         let saIndex = customerAddress.value.findIndex(x => x.id == shippingAddressId.value);
 
+        customerAddress.value[baIndex].id = undefined;
+        customerAddress.value[saIndex].id = undefined;
+
         gBillingAddress = await store.upsertAddress(customerAddress.value[saIndex]);
 
         if (!sameAsShippingAddress.value && gBillingAddress)
