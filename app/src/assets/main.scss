@@ -174,22 +174,10 @@ input[type=number] {
     backdrop-filter: blur(25px);
 }
 
-.bg-glass::before {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    content: '';
-    position: absolute;
-    z-index: -1;
+.bg-glass {
     border-radius: 15px;
     backdrop-filter: blur(25px) opacity(1);
     background-color: rgba($color: white, $alpha: 0.1);
-}
-
-.bg-glass {
-    position: relative;
-    border-radius: 15px;
 }
 
 .bg-glass-rounded::before {

@@ -23,7 +23,7 @@ const prop = defineProps({
     <div class="flex-c" v-if="!carousel" style="gap: 0.75rem;">
         <div class="pl-nav-container bg-glass">
             <button aria-label="page-right-navigation" @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-            <div class="pl-nav-info bg-glass">
+            <div class="pl-nav-info">
                 <input inputmode="numeric" v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
@@ -32,7 +32,7 @@ const prop = defineProps({
         <slot></slot>
         <div class="pl-nav-container bg-glass">
             <button aria-label="page-right-navigation" @click="emit('pageNavigation', -1)"><svg-icon type="mdi" :path="mdiChevronLeft" /></button>
-            <div class="pl-nav-info bg-glass">
+            <div class="pl-nav-info">
                 <input inputmode="numeric" v-maska data-maska="NNN" data-maska-tokens="N:[0-9]" v-on:change="emit('pageNavigationInput', $event.target.value)" :value="currentPage" type="number" />
                 <p>/ {{ prop.totalPages }}</p>
             </div>
@@ -61,6 +61,8 @@ const prop = defineProps({
     width: 100%;
 
     .pl-nav-info {
+        border-radius: 15px;
+        background-color: rgba($color: #ffffff, $alpha: 0.1);
         font-size: 16px;
         display: flex;
         align-items: center;
@@ -71,9 +73,9 @@ const prop = defineProps({
     input {
         appearance: none;
         font: inherit;
-        background-color: inherit;
         display: flex;
         text-align: center;
+        background-color: transparent;
         border: none;
         outline: none;
         color: white;
