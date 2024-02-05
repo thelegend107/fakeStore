@@ -49,7 +49,6 @@ const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: '
         gap: 0.6rem;
         padding: 0.5rem;
         background-color: rgba(255,255,255,0.065);
-        backdrop-filter: blur(50px);
         border-radius: 15px;
 
         .cart-item-info {
@@ -78,9 +77,9 @@ const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: '
     }
 
     .cartItem-qty {
+        background-color: rgba($color: #ffffff, $alpha: 0.08);
         border-radius: 15px;
         color: white;
-        backdrop-filter: blur(50px);
     }
 }
 
