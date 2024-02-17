@@ -16,7 +16,7 @@ const navShow = ref(true);
 function handleSearchRequest(searchTerm, searchToggle) {
     navShow.value = !searchToggle;
     if (searchTerm)
-        router.push({name: 'shop'});
+        router.push({ name: 'shop' });
 
     if (searchTerm != bestBuy.searchTerm)
         bestBuy.searchRequest(searchTerm);
@@ -25,12 +25,13 @@ function handleSearchRequest(searchTerm, searchToggle) {
 
 <template>
     <header>
-        <img @click="router.push({name: 'home'})" alt="Vue logo" class="logo" src="@/assets/logo.svg" />
+        <img @click="router.push({ name: 'home' })" alt="Vue logo" class="logo" src="/favicon.ico" />
         <SearchBar @search-request="handleSearchRequest" />
         <transition name="slide-fade">
             <nav v-if="navShow">
                 <HeaderAccount v-if="store.session" />
-                <svg-icon v-else @click="router.push({name: 'login'})" class="header-action" type="mdi" :path="mdiLoginVariant" />
+                <svg-icon v-else @click="router.push({ name: 'login' })" class="header-action" type="mdi"
+                    :path="mdiLoginVariant" />
                 <div @click="shoppingCartShow = !shoppingCartShow" class="header-action flex-r ai-c">
                     <svg-icon type="mdi" :path="mdiCart" />
                     <span v-if="store.cart.length > 0" class='cartCount'>{{ store.getCartItemCount() }}</span>
