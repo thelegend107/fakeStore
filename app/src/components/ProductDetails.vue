@@ -15,7 +15,7 @@ defineProps({
 })
 </script>
 <template>
-    <div class="product-details flex-r h-100" style="gap: 2rem;">
+    <div v-if="product.sku" class="product-details flex-r h-100" style="gap: 2rem;">
         <div class="grid-column flex-c" style="gap: 0.5rem;">
             <img :src="product.image" :alt="product.sku" style="border-radius: 15px; border: 2px solid inherit;">
             <accordion title="Features">
@@ -44,21 +44,24 @@ defineProps({
                 <p>Warranty: {{ product.warrantyLabor }}</p>
             </div>
             <div class="flex-c" style="gap: 0.5rem;margin-top: auto;">
-                <div class="salePrice bg-glass-rounded" :style="{justifyContent: product.onSale ? 'space-between' : 'center'}" style="margin-top: auto;">
+                <div class="salePrice bg-glass-rounded" :style="{ justifyContent: product.onSale ? 'space-between' : 'center' }" style="margin-top: auto;">
                     <div v-if="product.onSale">
                         <s style="color: lightcoral;">{{ currency.format(product.regularPrice) }}</s>
-                        <p style="display: flex; align-items: center; color: lightgreen;"><svg-icon type="mdi" :path="mdiMinus" :size="11" />{{ percentage.format(product.percentSavings/100) }}</p>
+                        <p style="display: flex; align-items: center; color: lightgreen;"><svg-icon type="mdi" :path="mdiMinus" :size="11" />{{ percentage.format(product.percentSavings / 100) }}</p>
                     </div>
                     <b class="price">{{ currency.format(product.salePrice) }}</b>
                 </div>
                 <div class="product-actions">
-                    <button @click="$emit('addToCart', product)" :style="{width: '100%'}">
+                    <button @click="$emit('addToCart', product)" :style="{ width: '100%' }">
                         <svg-icon type="mdi" :path="mdiCartPlus" />
                         <p>Add to Cart</p>
                     </button>
                 </div>
             </div>
         </div>
+    </div>
+    <div v-else style="gap: 2rem; display: flex; justify-content: center; align-items: center; font-size: x-large;">
+        Product does not exist
     </div>
 </template>
 <style lang="scss" scoped>
@@ -92,6 +95,7 @@ img {
     .grid-column {
         width: 50%;
     }
+
     .product-details {
         flex-direction: row;
     }

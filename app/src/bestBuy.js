@@ -4,6 +4,7 @@ import axios from 'axios';
 import { reactive } from "vue";
 import { mdiDesktopTowerMonitor, mdiHeadphones, mdiLaptop, mdiSpeaker, mdiStore, mdiTelevision } from '@mdi/js';
 import debounce from 'lodash.debounce';
+import { supabase } from './supabase';
 
 // API categories of interest
 export const categories = [
@@ -18,7 +19,7 @@ export const categories = [
 // API default values
 const dateFilter = new Date().getFullYear() - 2;
 const baseUrl = 'https://api.bestbuy.com/v1/products'
-const apiKey = 'qhqws47nyvgze2mq3qx4jadt'
+const apiKey = import.meta.env.VITE_BEST_BUY_API_KEY
 const defaultSort = 'sku.desc'
 const defaultFormat = 'json'
 const propertyArray = [
@@ -56,14 +57,14 @@ export const bestBuy = reactive({
     totalPages: 1,
     pageSize: 8,
 
-    async getTopDeals(pageSize=10) {
+    async getTopDeals(pageSize = 10) {
         this.loading = true;
         return await this.callBestBuyProductsAPI(null, categories[0].id, "", "dollarSavings.desc", 1, pageSize, false);
     },
 
     async getProduct(productSku) {
         this.loading = true;
-        return await this.callBestBuyProductsAPI(productSku);
+        return await this.callBestBuyProductsAPI(productSku, undefined, undefined, undefined, undefined, undefined, false);
     },
 
     goToCategory(categoryIndex) {
@@ -108,7 +109,7 @@ export const bestBuy = reactive({
         this.reloadProducts();
     },
 
-    async callBestBuyProductsAPI(productSku=null, category=this.mainCategory.id, searchTerm=this.searchTerm, pSort=defaultSort, page=this.currentPage, pageSize=this.pageSize, primary=true) {
+    async callBestBuyProductsAPI(productSku = null, category = this.mainCategory.id, searchTerm = this.searchTerm, pSort = defaultSort, page = this.currentPage, pageSize = this.pageSize, primary = true) {
         let url = '';
 
         if (productSku) {
@@ -116,19 +117,19 @@ export const bestBuy = reactive({
         }
         else
             url = generateUrl(baseUrl, category, searchTerm);
-    
+
         try {
             const { data } = await axios.get(url, {
                 params: {
-                    apiKey: apiKey,
+                    //apiKey: apiKey,
                     format: defaultFormat,
                     show: defaultShow,
                     sort: pSort,
                     pageSize: pageSize,
                     page: page
-                }
+                },
             })
-    
+
             data.totalPages = data.totalPages == 0 ? 1 : data.totalPages;
 
             if (primary) {
@@ -138,9 +139,102 @@ export const bestBuy = reactive({
             }
 
             return data;
-    
+
         } catch (error) {
-            console.log(error)
+            // Retrieve BackupProducts (also scrapped from Best Buy but was manually put into a Postgres Database)
+
+            // Top Products and Product Details
+            if (!primary) {
+                const { data, error } = await supabase.from('backupProducts').select()
+                    .or(productSku ? `sku.eq.${productSku}` : 'onSale.eq.true')
+                    .order('percentSavings', { ascending: false })
+                    .limit(pageSize)
+
+                if (error) return alert(error)
+
+                const returnValue = {
+                    products: data,
+                    currentPage: 1,
+                    totalPages: Math.ceil(data.length / pageSize)
+                }
+
+                return productSku ? (data.length > 0 ? data[0] : null) : returnValue
+            }
+            // Everything else including search results
+            else {
+                let listOfCategoryIds = []
+                let searchTerms = ''
+
+                if (category == 'all')
+                    listOfCategoryIds = categories.map(x => x.id)
+                else
+                    listOfCategoryIds = categories.filter(x => x.id == category).map(x => x.id)
+
+                if (searchTerm) {
+                    // NOTE: Postgres has built-in functions to handle Full Text Search queries. This is like a "search engine" within Postgres. 
+                    //       https://supabase.com/docs/guides/database/full-text-search?language=js.
+                    let searchTermArray = []
+                    searchTerm = cleanUpSearchTerm(searchTerm)
+                    searchTerm.forEach(term => {
+                        searchTermArray.push('\'' + term + '\'')
+                    });
+
+                    searchTerms = searchTermArray.join(' & ')
+
+                    const { count, error: countError } = await supabase.from('backupProducts')
+                        .select('*', { count: 'exact', head: true })
+                        .textSearch('fts', searchTerms, {
+                            type: 'websearch',
+                            config: 'english'
+                        })
+                        .in('categoryId', listOfCategoryIds)
+                    if (countError) return alert(countError)
+
+                    const { data, error: dataError } = await supabase.from('backupProducts').select()
+                        .in('categoryId', listOfCategoryIds)
+                        .textSearch('fts', searchTerms, {
+                            type: 'plain',
+                            config: 'english'
+                        })
+                        .order('sku', { ascending: false })
+                        .range((this.currentPage - 1) * pageSize, pageSize * this.currentPage - 1)
+                    if (dataError) return alert(dataError)
+
+                    const returnValue = {
+                        products: data,
+                        totalPages: Math.ceil(count / pageSize)
+                    }
+
+                    this.totalPages = returnValue.totalPages
+                    this.products = returnValue.products
+                    this.loading = false
+
+                    return returnValue
+                }
+                else {
+                    const { count, error: countError } = await supabase.from('backupProducts')
+                        .select('*', { count: 'exact', head: true })
+                        .in('categoryId', listOfCategoryIds)
+                    if (countError) return alert(countError)
+
+                    const { data, error: dataError } = await supabase.from('backupProducts').select()
+                        .in('categoryId', listOfCategoryIds)
+                        .order('sku', { ascending: false })
+                        .range((this.currentPage - 1) * pageSize, pageSize * this.currentPage - 1)
+                    if (dataError) return alert(dataError)
+
+                    const returnValue = {
+                        products: data,
+                        totalPages: Math.ceil(count / pageSize)
+                    }
+
+                    this.totalPages = returnValue.totalPages
+                    this.products = returnValue.products
+                    this.loading = false
+
+                    return returnValue
+                }
+            }
         }
     },
     reloadProducts: debounce(async () => {
@@ -152,9 +246,9 @@ export const bestBuy = reactive({
 });
 
 
-function cleanUpSearchTerm(searchTerm){
+function cleanUpSearchTerm(searchTerm) {
     if (searchTerm)
-        return searchTerm.replace(/\s+/g,' ').trim().split(' ');
+        return searchTerm.replace(/\s+/g, ' ').trim().split(' ');
     else
         return searchTerm;
 };
@@ -188,7 +282,7 @@ function generateUrl(baseUrl, categoryId, searchTerm) {
         });
         url += '&(' + searchTermArray.join('&') + ')';
     }
-    
+
     url += ')';
 
     return url;
