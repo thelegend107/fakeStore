@@ -121,7 +121,7 @@ export const bestBuy = reactive({
         try {
             const { data } = await axios.get(url, {
                 params: {
-                    //apiKey: apiKey,
+                    apiKey: apiKey,
                     format: defaultFormat,
                     show: defaultShow,
                     sort: pSort,
