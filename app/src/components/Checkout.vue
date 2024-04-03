@@ -87,7 +87,11 @@ const { meta, errors, defineField, handleSubmit } = useForm({
         }),
         cardNumber: string().when('paymentMethodId', {
             is: 1,
-            then: (schema) => schema.required('card number is required').matches(/^[2,3,4,5]/, 'card has to be VISA, MASTERCARD, or AMEX').matches(/^(\d+ \d+ \d+ \d+)|(\d+ \d+ \d+)/, 'card has to be a number').min(17).max(19)
+            then: (schema) => schema.required('card number is required').matches(/^[2,3,4,5]/, 'card has to be VISA, MASTERCARD, or AMEX').matches(/^(\d+ \d+ \d+ \d+)|(\d+ \d+ \d+)/, 'card has to be a number')
+        }).when('cardIsAmex', {
+            is: true,
+            then: (schema) => schema.length(17),
+            otherwise: (schema) => schema.length(19)
         }),
         cardExpMonth: number().when('paymentMethodId', {
             is: 1,
@@ -107,6 +111,7 @@ const { meta, errors, defineField, handleSubmit } = useForm({
         })
     }),
     initialValues: {
+        cardIsAmex: false,
         guest: prop.guest ? true : false,
         paymentMethodId: prop.guest ? 1 : null,
         billingAddressId: 0,
@@ -120,6 +125,7 @@ const [email] = defineField('email');
 const [billingAddressId] = defineField('billingAddressId');
 const [shippingAddressId] = defineField('shippingAddressId');
 const [paymentMethodId] = defineField('paymentMethodId');
+const [cardIsAmex] = defineField('cardIsAmex');
 const [cardHolderName] = defineField('cardHolderName');
 const [cardNumber] = defineField('cardNumber');
 const [cardExpMonth] = defineField('cardExpMonth');
@@ -254,26 +260,31 @@ const cardCVCPattern = ref('###');
 watch((cardNumber), newVal => {
     switch (newVal[0]) {
         case '2':
+            cardIsAmex.value = false
             paymentMethods.value[0].iconPath = siMastercard.path;
             cardPattern.value = '#### #### #### ####';
             cardCVCPattern.value = '###';
             break;
         case '5':
+            cardIsAmex.value = false
             paymentMethods.value[0].iconPath = siMastercard.path;
             cardPattern.value = '#### #### #### ####';
             cardCVCPattern.value = '###';
             break;
         case '4':
+            cardIsAmex.value = false
             paymentMethods.value[0].iconPath = siVisa.path;
             cardPattern.value = '#### #### #### ####';
             cardCVCPattern.value = '###';
             break;
         case '3':
+            cardIsAmex.value = true
             paymentMethods.value[0].iconPath = siAmericanexpress.path;
             cardPattern.value = '#### ###### #####';
             cardCVCPattern.value = '####';
             break;
         default:
+            cardIsAmex.value = false
             paymentMethods.value[0].iconPath = mdiCreditCard;
             cardPattern.value = '#### #### #### ####';
             cardCVCPattern.value = '###';
