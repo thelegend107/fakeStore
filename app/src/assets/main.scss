@@ -150,11 +150,11 @@ input:focus, select:focus {
     border-color: var(--error);
 }
 
-input {
-    font-size: 16px;
-}
-
 input, select {
+    overflow: hidden;
+    white-space: pre;
+    text-overflow: ellipsis;
+    font-size: 16px;
     color: white;
     background-color: black;
     border: none;

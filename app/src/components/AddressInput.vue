@@ -162,21 +162,21 @@ onMounted(async () => {
             <div class="flex-r" style="gap: 10px; flex-wrap: wrap;">
                 <div class="flex-c" style="flex-grow: 1;">
                     <label for="stateId">State:</label>
-                    <select :class="{ inputError: errors.stateId }" v-model="stateId" >
+                    <select :class="{ inputError: errors.stateId }" v-model="stateId" style="width: 200px; min-width: 100%;">
                         <option :value='0' disabled selected hidden>Please select a state</option>
                         <option  v-for="s in states" :key="s.id" :value="s.id">{{ s.name }}</option>
                     </select>
                     <span>{{ errors.stateId }}</span>
                 </div>
-                <div class="flex-c" style="flex-grow: 1; max-width: 500px;">
+                <div class="flex-c" style="flex-grow: 1;">
                     <label for="postalCode">Postal Code:</label>
-                    <input  :class="{ inputError: errors.postalCode }" type="number" inputmode="numeric" v-model="postalCode">
+                    <input  :class="{ inputError: errors.postalCode }" type="number" inputmode="numeric" v-model="postalCode" style="width: 100px; min-width: 100%;">
                     <span>{{ errors.postalCode ? errors.postalCode.replace(', but the final value was: `NaN` (cast from the value `""`).', '') : null }}</span>
                 </div>
             </div>
             <div class="flex-c w-100">
                 <label for="countryId">Country:</label>
-                <select :class="{ inputError: errors.countryId }" v-on:change="getStates" v-model="countryId">
+                <select :class="{ inputError: errors.countryId }" v-on:change="getStates" v-model="countryId" style="width: 0; min-width: 100%;">
                     <option v-for="c in countries" :key="c.id" :value="c.id">{{ c.emoji + ' ' + c.name }}</option>
                 </select>
                 <span>{{ errors.countryId }}</span>
@@ -186,5 +186,8 @@ onMounted(async () => {
     </form>
 </template>
 <style lang="scss" scoped>
-
+input, select {
+    width: 0;
+    min-width: 100%
+}
 </style>
