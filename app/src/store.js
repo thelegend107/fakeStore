@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { supabase, addressSelect } from './supabase';
+import { resolveSupabaseHostedUrl } from './supabaseUrls';
 import uselocalStorage from './composables/useLocalStorage';
 import useSession from './composables/useSession';
 import { toastPrimary, toastType } from './toast';
@@ -230,7 +231,7 @@ export const store = reactive({
         let url = 'https://ui-avatars.com/api/?name=';
     
         if (this.customer.avatarurl)
-            url = this.customer.avatarurl;
+            url = resolveSupabaseHostedUrl(this.customer.avatarurl);
         else
             url += this.customer.firstname + '+' + this.customer.lastname;
     

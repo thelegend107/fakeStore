@@ -1,19 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
 import { object, string, ref as Ref } from 'yup'
 import { supabase } from '@/supabase';
+import { getAuthRedirectUrl } from '@/supabaseUrls';
 import Card from '@/components/Card.vue';
 import svgIcon from '@jamescoyle/vue-icon';
 import { mdiAccountPlus, mdiLoginVariant } from '@mdi/js';
 import AccountMessage from './AccountMessage.vue';
 
-const router = useRouter();
-const routes = router.getRoutes();
-const loginRouteIndex = routes.findIndex(x => x.name == 'account');
-const emailRedirectTo = window.location.origin + routes[loginRouteIndex].path;
+const emailRedirectTo = getAuthRedirectUrl('/account');
 const accountConfirm = ref(false);
 const accountAlreadyExists = ref(false);
 
